@@ -186,8 +186,8 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
             progressBar.setVisibility(View.GONE);
             storeListMainLayout.setVisibility(View.VISIBLE);
         }
-
     }
+
     @Override
     public void onServiceFailed(ErrorMessageInfo info) {
         progressBar.setVisibility(View.GONE);
