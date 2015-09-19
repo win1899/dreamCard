@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="login_logo_bg">#F5F5F5</color>
+    <color name="login_btn_bg">#DF7A66</color>
+    <color name="sponsored_bg">#BAB1AC</color>
+    <color name="login_forgot_btn_bg">#F0F0F0</color>
+
+    <color name="list_backgound">#ffffff</color>
+    <color name="list_background_pressed">#6C9E25</color>
+    <color name="counter_backgound">#333333</color>
+    <color name="list_divider">@android:color/darker_gray</color>
+    <color name="list_sliding_item">#FFFFFF</color>
+    <color name="blue_like_btn">#0000ff</color>
+    <color name="black">#000000</color>
+    <color name="activation_bg">#F2F2F2</color>
+    <color name="gender_bg">#E1AC60</color>
+    <color name="paging_bg">#3E3B42</color>
+    <color name="agree_bg">#7EB221</color>
+    <color name="stores_bg">#D31111</color>
+    <color name="categories_bg">#FBB70E</color>
+    <color name="location_bg">#9DC02E</color>
+    <color name="latest_offer_bg">#1D95E3</color>
+    <color name="silver">#8E9FA9</color>
+    <color name="gold">#E8B601</color>
+    <color name="list_color_hint">#00000000</color>
+    <color name="button_not_seleted">#e38e0f</color>
+    <color name="button_selected">#8cb722</color>
+    <color name="button_login">#19ba9b</color>
+    <color name="add_comment_bg">#fbca4a</color>
+    <color name="nav_text_hdr">#efc785</color>
+    <color name="selected_offer_status_bg">#27262e</color>
+    <color name="not_selected_offer_status_bg">#38353c</color>
+</resources>

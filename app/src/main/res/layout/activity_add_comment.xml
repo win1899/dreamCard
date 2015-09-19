@@ -1,0 +1,75 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dreamcard.app.view.activity.AddCommentActivity"
+    android:background="#ffffff">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/header_pnl"
+        android:background="#19ba9b">
+
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:layout_centerVertical="true"
+            android:text="@string/cancel"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:id="@+id/btn_cancel"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="25sp"
+            android:textColor="#ffffff"
+            android:text="@string/add_comment_title"/>
+
+        <Button
+            android:layout_width="80dp"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:layout_centerVertical="true"
+            android:text="@string/add"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/btn_add"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/header_pnl">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/comment_edit_text_icon"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="10dp"
+            android:id="@+id/img_comment"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="2dp"
+            android:layout_marginStart="10dp"
+            android:paddingEnd="10dp"
+            android:paddingBottom="20dp"
+            android:id="@+id/txt_comment"
+            android:background="#00000000"
+            android:lines="6"
+            android:inputType="textMultiLine"
+            android:gravity="top"
+            android:hint="@string/add_your_comment"
+            android:layout_toStartOf="@+id/img_comment"/>
+    </RelativeLayout>
+
+</RelativeLayout>

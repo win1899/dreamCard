@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+    Layout alias to replace the single-pane version of the layout with a
+    two-pane version on Large screens.
+
+    For more on layout aliases, see:
+    http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
+    -->
+    <item name="fragment_categorieslistfragment" type="layout">@layout/fragment_categorieslistfragment_list</item>
+    <item name="fragment_latestofferlist" type="layout">@layout/fragment_latestofferlist_list</item>
+    <item name="fragment_storeslist" type="layout">@layout/fragment_storeslist_list</item>
+
+    <!--
+    Layout alias to replace the single-pane version of the layout with a
+    two-pane version on Large screens.
+
+    For more on layout aliases, see:
+    http://developer.android.com/training/multiscreen/screensizes.html#TaskUseAliasFilters
+    -->
+    <item name="fragment_faq" type="layout">@layout/fragment_faq_list</item>
+
+</resources>

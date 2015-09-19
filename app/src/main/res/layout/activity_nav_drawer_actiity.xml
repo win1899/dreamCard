@@ -1,0 +1,189 @@
+<!-- A DrawerLayout is intended to be used as the top-level content view using match_parent for both width and height to consume the full space available. -->
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dreamcard.app.view.activity.NavDrawerActiity">
+
+    <!-- As the main content view, the view below consumes the entire
+         space available using match_parent in both dimensions. -->
+    <FrameLayout android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+
+        <!-- This holds our content-->
+        <LinearLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@drawable/dashboard_background_gray"
+            android:layout_marginBottom="-5dp">
+
+            <!-- This acts as Actionbar -->
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="60dp"
+                android:background="@color/button_login"
+                android:id="@+id/main_header_pnl">
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="10dp">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@drawable/filter_icon"
+                        android:background="@null"
+                        android:id="@+id/btn_notifications"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true" />
+                </RelativeLayout>
+
+
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/logo_header"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/img_menu_logo"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textColor="#ffffff"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/txt_menu_title"/>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="10dp">
+
+                    <ImageButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:onClick="toggleMenu"
+                        android:src="@drawable/menu_icon"
+                        android:background="@null"
+                        android:id="@+id/activity_main_content_button_menu"
+                        android:layout_centerVertical="true"
+                        android:layout_centerHorizontal="true"/>
+
+                </RelativeLayout>
+
+
+            </RelativeLayout>
+
+            <!-- This is where fragment will show up -->
+            <FrameLayout
+                android:id="@+id/activity_main_content_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight=".86"
+                android:background="@drawable/dashboard_background_gray"
+                android:layout_marginTop="-5dp">
+            </FrameLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="horizontal"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:layout_weight=".14">
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".25"
+                    android:background="@drawable/location_button_bg"
+                    android:drawableTop="@drawable/main_icon_location"
+                    android:textColor="#ffffff"
+                    android:text="@string/locations"
+                    android:textSize="15sp"
+                    android:id="@+id/btn_location"
+                    android:paddingTop="10dp" />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".25"
+                    android:background="@drawable/store_button_bg"
+                    android:drawableTop="@drawable/main_icon_stores"
+                    android:textColor="#ffffff"
+                    android:text="@string/stores"
+                    android:textSize="15sp"
+                    android:id="@+id/btn_store"
+                    android:paddingTop="10dp" />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".25"
+                    android:background="@drawable/category_button_bg"
+                    android:drawableTop="@drawable/main_icon_categories"
+                    android:textColor="#ffffff"
+                    android:text="@string/categories"
+                    android:textSize="15sp"
+                    android:id="@+id/btn_category"
+                    android:paddingTop="10dp" />
+
+                <Button
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight=".25"
+                    android:background="@drawable/latest_offer_button_bg"
+                    android:drawableTop="@drawable/main_icon_sales"
+                    android:textColor="#ffffff"
+                    android:text="@string/latest_offers"
+                    android:textSize="15sp"
+                    android:id="@+id/btn_browse"
+                    android:paddingTop="10dp"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+    <!-- android:layout_gravity="start" tells DrawerLayout to treat
+         this as a sliding drawer on the left side for left-to-right
+         languages and on the right side for right-to-left languages.
+         If you're not building against API 17 or higher, use
+         android:layout_gravity="left" instead. -->
+    <!-- The drawer is given a fixed width in dp and extends the full height of
+         the container. -->
+    <fragment android:id="@+id/navigation_drawer"
+        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:name="com.dreamcard.app.view.activity.NavigationDrawerFragment"
+        android:layout_marginTop="53dp"
+        tools:layout="@layout/fragment_navigation_drawer" />
+
+    <fragment android:id="@+id/left_navigation_drawer"
+        android:layout_width="@dimen/navigation_drawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:name="com.dreamcard.app.view.fragments.LeftNavDrawerFragment"
+        android:layout_marginTop="53dp"
+        tools:layout="@layout/fragment_left_nav_drawer" />
+
+</android.support.v4.widget.DrawerLayout>

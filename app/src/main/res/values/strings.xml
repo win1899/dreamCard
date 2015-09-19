@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Dreamcard</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="login_text">الرجاء ادخال اسم المستخدم وكلمة المرور</string>
+    <string name="username">الايميل/اسم المستخدم</string>
+    <string name="password">كلمة السر</string>
+    <string name="login">تسجيل الدخول</string>
+    <string name="forgot_password">نسيت كلمة المرور</string>
+    <string name="activation_form_btn">تفعيل الحساب</string>
+    <string name="activation_form">تفعيل البطاقة</string>
+    <string name="sponsored_by">Sponsored By</string>
+    <string name="username_not_valid">يرجى ادخال اسم المستخدم</string>
+    <string name="password_not_valid">يرجى ادخال كلمة السر</string>
+    <string name="activation_card_empty">يرجى ادخال رقم البطاقة</string>
+    <string name="activation_card_not_valid">الرجاء ادخال رقم بطاقة صالحة للاستمرار</string>
+    <string name="card_not_valid_title">البطاقة غير صالحة</string>
+    <string name="title_activity_slider_menu">Dream Card</string>
+    <string name="desc_list_item_icon">Item Icon</string>
+    <string name="notifications">الفعاليات</string>
+    <string name="latest_offers">اخر العروض</string>
+    <string name="categories">الاقسام</string>
+    <string name="stores">المحلات</string>
+    <string name="locations">الموقع</string>
+    <string name="last_used">اخر استخدام</string>
+    <string name="total_shop">مجموع التسوق</string>
+    <string name="you_saved"><b><u>لقد وفرت</u></b></string>
+    <string name="store_name">اسم المحل</string>
+    <string name="error_in_connection">حدث مشكلة بالاتصال بالانترنت</string>
+    <string name="not_connected">غير متصل</string>
+    <string name="error_in_login">فشل تسجيل الدخول</string>
+    <string name="please_insert_username_password_valid">الرجاء ادخال اسم مستخدم و كلمة مرور صحيحة</string>
+    <string name="error_in_connect_server">حدث خطأ بالاتصال بالسيرفر</string>
+    <string name="error_in_access_server">يوجد خطأ بالبيانات</string>
+    <string name="other_offer_from_store">عروض اخرى من متجر</string>
+    <string name="comments"><b>تعليقات</b></string>
+    <string name="num_of_likes">الاعجابات</string>
+    <string name="card_num">الرجاء ادخال رقم الكرت الذي تريد تفعيلة</string>
+    <string name="card_num_lbl">قم البطاقة</string>
+    <string name="validate_num">التحقق من الرقم</string>
+    <string name="card_num_not_valid">رقم البطاقة غير صحيح</string>
+    <string name="personal_info"><b>المعلومات الشخصية</b></string>
+    <string name="first_name">الاسم الاول</string>
+    <string name="last_name">الاسم الاخير</string>
+    <string name="full_name">الاسم الكامل</string>
+    <string name="work">الوظيفة</string>
+    <string name="six">الجنس</string>
+    <string name="birth_day">تاريخ الميلاد</string>
+    <string name="male">ذكر</string>
+    <string name="female">انثى</string>
+    <string name="pick_date">اختر تاريخ</string>
+    <string name="call_info"><b>معلومات الاتصال</b></string>
+    <string name="email">البريد الالكتروني</string>
+    <string name="phone">الهاتف</string>
+    <string name="mobile">الموبايل</string>
+    <string name="web_site">موقع الويب</string>
+    <string name="facebook">الفيسبوك</string>
+    <string name="city">المدينة</string>
+    <string name="register">تسجيل</string>
+    <string name="card_num_not_active">البطاقة غير فعالة</string>
+    <string name="user_name_or_password_not_valid">اسم المستخدم او كلمة السر غير صحيحة</string>
+    <string name="card_number_desc">يرجى ادخال رقم البطاقة</string>
+    <string name="activation_num_txt_lbl">ادخل رقم البطاقة</string>
+    <string name="information">المعلومات</string>
+    <string name="user_name_activation">اسم المستخدم</string>
+    <string name="repeat_password">تاكيد كلمة السر</string>
+    <string name="back">السابق</string>
+    <string name="next">التالي</string>
+    <string name="tearms_of_condition">الشروط و الخصوصية</string>
+    <string name="agree">موافق</string>
+    <string name="first_name_empty">يرجى ادخال الاسم الاول</string>
+    <string name="last_name_empty">يرجى ادخال الاسم الاخير</string>
+    <string name="password_not_equal_repeat_pass">تاكيد كلمة السر غير مطابقة لكلمة السر</string>
+    <string name="setting">الاعدادات</string>
+    <string name="receive_notifications">استقبال الاشعارات</string>
+    <string name="choose_from_list">اختر قائمة المفضلة</string>
+    <string name="thank_you">شكرا لك</string>
+    <string name="thanks_details">لقد تم ارسال رسالة الى بريدك الالكتروني الرجاء الضغط على الرابط المرفق فيها لتفعيل حسابك</string>
+    <string name="finish">انهاء</string>
+    <string name="date">التاريخ</string>
+    <string name="location">الموقع</string>
+    <string name="details">التفاصيل</string>
+    <string name="other_offers">عروض اخرى من </string>
+    <string name="add_comment">اضف تعليق</string>
+    <string name="add">اضافة</string>
+    <string name="cancel">الغاء</string>
+    <string name="add_comment_title">اضافة تعليق</string>
+    <string name="no_comments">لا يوجد تعليقات …</string>
+    <string name="offers">عروض</string>
+    <string name="send_rating">ارسال التقييم</string>
+    <string name="rate_business">تقييم المحل</string>
+    <string name="rate_business_successfully">تم ارسال التقييم بنجاح</string>
+    <string name="rate_business_not_sent">حدث خطا في ارسال التقييم</string>
+    <string name="comment_added_successfully">تم اضافة التعليق بنجاح</string>
+    <string name="comment_not_added">حدث خطا في اضافة التعليق</string>
+    <string name="email_already_available">الايميل المدخل موجود مسبقا</string>
+    <string name="gender">الجنس</string>
+    <string name="choose_from_category">اختر من الاقسام</string>
+    <string name="save">حفظ</string>
+    <string name="information_save_successfully">تم تعديل البيانات بنجاح</string>
+    <string name="ils">₪</string>
+    <string name="usd">$</string>
+    <string name="ok">موافق</string>
+    <string name="please_approve_terms">الرجاء الموافقة على الشروط و الخصوصية للاستمرار</string>
+    <string name="start">البدأ</string>
+    <string name="add_rate">اضف تقييم</string>
+    <string name="rate_offer">تقييم العرض</string>
+    <string name="notification_desc_1">لقد حصلت على خصم </string>
+    <string name="notification_desc_2">من محل </string>
+    <string name="add_your_comment">اضف تعليقك</string>
+    <string name="personal_information">المعلومات الشخصية</string>
+    <string name="purchases_list">قائمة المشتريات</string>
+    <string name="discount_rate">نسبة الخصم</string>
+    <string name="rate">التقييم</string>
+    <string name="select_city">اختر مدينة</string>
+    <string name="select_disc_rate">اختر خصم</string>
+    <string name="send">ارسال</string>
+    <string name="add_your_feedback">ملاحظاتك</string>
+    <string name="we_love_to_hear_from_you">يسرنا ان نسمع ملاحظاتك</string>
+    <string name="feedback_sent_successfully">تم ارسال ملاحظاتك بنجاح</string>
+    <string name="feedback_not_sent">حدث خطا في ارسال البيانات</string>
+    <string name="please_insert_your_feedback">يرجى ادخال ملاحظاتك</string>
+    <string name="about_us">عن البرنامج</string>
+    <string name="faq">الاسئلة الاكثر شيوعا</string>
+    <string name="condition">شروط الاستخدام</string>
+    <string name="country">الدولة</string>
+    <string name="id">رقم الهوية</string>
+    <string name="address">العنوان</string>
+    <string name="education">المستوى التعليمي</string>
+    <string name="select_country">اختر الدولة</string>
+    <string name="edit">تعديل</string>
+    <string name="no_purchases">لا يوجد مشتريات …</string>
+    <string name="coming_soon">قادم قريبا</string>
+    <string name="clear">مسح</string>
+
+    <!-- font -->
+    <string name="like"></string>
+    <string name="left_arrow"></string>
+    <string name="right_arrow"></string>
+    <string name="comment_icon"></string>
+
+    <!-- Nav Drawer Menu Items -->
+    <string-array name="nav_drawer_items">
+        <item>الرئيسية</item>
+        <item>اخر العروض</item>
+        <item>الاقسام</item>
+        <item>المحلات</item>
+        <item>الموقع</item>
+        <item>حسابي</item>
+        <item>الأسئلة الاكثر شيوعا</item>
+        <item>عن البرنامج</item>
+        <item>ارائكم واقتراحاتكم</item>
+        <item>تسجيل خروج</item>
+    </string-array>
+
+    <!-- Nav Drawer List Item Icons -->
+    <!-- Keep them in order as the titles are in -->
+    <array name="nav_drawer_icons">
+        <item>@drawable/icon_home</item>
+        <item>@drawable/icon_latest_offers</item>
+        <item>@drawable/icon_section</item>
+        <item>@drawable/icon_stores</item>
+        <item>@drawable/icon_map_marker</item>
+        <item>@drawable/icon_account</item>
+        <item>@drawable/icon_faq</item>
+        <item>@drawable/icon_about</item>
+        <item>@drawable/feedback_menu</item>
+        <item>@drawable/icon_signout</item>
+    </array>
+
+    <string-array name="categories">
+        <item>Restaurants</item>
+        <item>Clothes</item>
+        <item>Sport</item>
+    </string-array>
+    <string-array name="latest_offers">
+        <item>Salmon Steak</item>
+        <item>T-Shirts</item>
+    </string-array>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_sliding_menu">SlidingMenuActivity</string>
+    <string name="title_activity_store_details">StoreDetails</string>
+    <string name="title_activity_offer_details">OfferDetailsActivity</string>
+    <string name="title_activity_validate_card">ValidateCardActivity</string>
+    <string name="title_activity_activation_form">ActivationFormActivity</string>
+    <string name="title_activity_main_activation_form">MainActivationFormActivity</string>
+
+    <!-- Google map key -->
+    <string name="map_key">AIzaSyBkv_C3qM5FfAFNsTpdtPA9bNls8_m7GnY</string>
+    <string name="title_activity_rate_business">RateBusinessActivity</string>
+    <string name="title_activity_splash">SplashActivity</string>
+    <string name="title_activity_setting">SettingActivity</string>
+    <string name="title_activity_test">TestActivity</string>
+    <string name="title_activity_image_viewer">ImageViewerActivity</string>
+    <string name="title_activity_nav_drawer_actiity">NavDrawerActiity</string>
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_example">Example action</string>
+    <string name="title_activity_add_comment">AddCommentActivity</string>
+    <string name="title_activity_feedback">FeedbackActivity</string>
+    <string name="title_activity_login">LoginActivity</string>
+
+</resources>

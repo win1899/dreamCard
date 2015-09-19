@@ -1,0 +1,267 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dashboard_background_gray"
+    android:orientation="vertical"
+    tools:context=".view.activity.DashboardActivity">
+
+    <TextView
+        android:id="@+id/txt_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="7dp"
+        android:gravity="center_horizontal"
+        android:text="User name"
+        android:textColor="#ffffff"
+        android:textSize="25sp" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="7dp"
+        android:layout_weight=".41"
+        android:background="@drawable/main_blue_backgorund">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:src="@drawable/cicle" />
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="25dp"
+            android:text="@string/last_used"
+            android:textColor="#ffffff"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/txt_last_used"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:textColor="#ffffff"
+            android:textSize="23sp" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="25dp"
+            android:layout_height="20dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="5dp"
+            android:layout_marginTop="25dp"
+            android:src="@drawable/arrows" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="25dp"
+            android:text="@string/total_shop"
+            android:textColor="#ffffff"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/txt_total_shop"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/txt_last_used"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="5dp"
+            android:textColor="#ffffff"
+            android:textSize="23sp" />
+
+
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/textView3"
+            android:layout_centerHorizontal="true"
+            android:text="@string/you_saved"
+            android:textColor="#ffffff"
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/txt_total_saved"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="5dp"
+            android:textColor="#ffffff"
+            android:textSize="40sp" />
+
+        <!--  <ImageView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:id="@+id/imageView3"
+              android:src="@drawable/cash"
+              android:layout_alignBottom="@+id/txt_total_saved"
+              android:layout_toRightOf="@+id/txt_total_saved"
+              android:layout_marginLeft="5dp"/>-->
+
+    </RelativeLayout>
+    <!--   <ImageView
+           android:layout_width="match_parent"
+           android:layout_height="0dp"
+           android:layout_weight=".42"
+           android:src="@drawable/dashboard_icon_3"
+           android:adjustViewBounds="true"
+           android:scaleType="centerCrop"/>-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="2dp"
+        android:layout_weight=".11">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginBottom="40dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="2dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_total"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".3"
+                android:background="@drawable/test_shape"
+                android:drawableLeft="@drawable/plus"
+                android:paddingStart="5dp"
+                android:text="Total"
+                android:textColor="#ffffff" />
+
+            <TextView
+                style="?android:listSeparatorTextViewStyle"
+                android:layout_width="1dp"
+                android:layout_height="41dp"
+                android:background="@android:color/darker_gray"
+                android:gravity="center_vertical" />
+
+            <Button
+                android:id="@+id/btn_wataniya"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".3"
+                android:background="@drawable/dashboard_total_btn_bg"
+                android:drawableLeft="@drawable/wataniya_new"
+                android:paddingStart="5dp"
+                android:text="Wataniya"
+                android:textColor="#ffffff" />
+
+            <TextView
+                style="?android:listSeparatorTextViewStyle"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#f09620"
+                android:gravity="center_vertical" />
+
+            <Button
+                android:id="@+id/btn_gas"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".2"
+                android:background="@drawable/dashboard_total_btn_bg"
+                android:drawableLeft="@drawable/gas"
+                android:paddingStart="5dp"
+                android:text="Gas"
+                android:textColor="#ffffff" />
+
+            <TextView
+                style="?android:listSeparatorTextViewStyle"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/btn_special"
+                android:background="#f09620" />
+
+            <Button
+                android:id="@+id/btn_cash"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".2"
+                android:background="@drawable/cash_shape"
+                android:drawableLeft="@drawable/cash"
+                android:paddingStart="5dp"
+                android:text="Cash"
+                android:textColor="#ffffff" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- android:background="#DC3900"-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".32"
+        android:maxWidth="380dp"
+        android:orientation="vertical">
+
+        <TextView
+            style="?android:listSeparatorTextViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/btn_special"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="1dp"
+            android:background="@android:color/darker_gray" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:gravity="center"
+            android:text="@string/notifications"
+            android:textColor="#ffffff"
+            android:textSize="20sp" />
+
+        <GridView
+            android:id="@+id/notifications_grid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal|center_vertical"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:layout_marginTop="2dp"
+            android:gravity="center"
+            android:numColumns="1"
+            android:verticalSpacing="10dp" />
+
+    </LinearLayout>
+
+    <!--  <ImageView
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_weight=".34"
+          android:maxWidth="380dp"
+          android:src="@drawable/notifications"/>-->
+
+
+</LinearLayout>

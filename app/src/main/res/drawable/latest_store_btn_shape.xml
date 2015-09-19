@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid
+        android:width="3dp"
+        android:color="@color/not_selected_offer_status_bg" />
+
+    <padding
+        android:bottom="0dp"
+        android:left="0dp"
+        android:right="3dp"
+        android:top="0dp" />
+    <corners
+        android:bottomLeftRadius="0dp"
+        android:bottomRightRadius="5dp"
+        android:radius="1dp"
+        android:topLeftRadius="0dp"
+        android:topRightRadius="5dp" />
+</shape>

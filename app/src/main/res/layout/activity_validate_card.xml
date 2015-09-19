@@ -1,0 +1,43 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    tools:context=".view.activity.ValidateCardActivity"
+    android:orientation="vertical"
+    android:background="@color/activation_bg"
+    android:layoutDirection="rtl"
+    android:textDirection="rtl"
+    android:layout_gravity="right"
+    android:gravity="right">
+
+    <TextView
+        android:text="@string/card_num"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textDirection="rtl"
+        android:layoutDirection="rtl"
+        android:textColor="#000000"
+        android:textSize="20sp"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="16"
+        android:layout_marginTop="10dp"
+        android:id="@+id/txt_card_num"
+        android:inputType="text"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:textColor="#0000ff"
+        android:background="@null"
+        android:text="@string/validate_num"
+        android:textDirection="rtl"
+        android:layoutDirection="rtl"
+        android:id="@+id/btn_validate_card_num"
+        android:layout_marginTop="20dp"/>
+
+</LinearLayout>

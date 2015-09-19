@@ -1,0 +1,83 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragments.ActivationCardNumFragment"
+    android:background="@drawable/background_gray"
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".85"
+        android:minHeight="370dp"
+        android:orientation="vertical"
+        android:background="#ffffff"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:id="@+id/main_content_pnl"
+        android:layout_gravity="center_vertical|center_horizontal"
+        android:gravity="center_horizontal|center_vertical">
+
+        <!--     <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:layout_marginTop="20dp"
+                  android:layout_marginLeft="20dp"
+                  android:textColor="#000000"
+                  android:textSize="30sp"
+                  android:text="@string/card_num_lbl"
+                  android:id="@+id/card_num_lbl"
+                  android:gravity="right"
+                  android:layout_alignParentRight="true"/>
+
+              <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:textColor="#000000"
+                  android:textSize="20sp"
+                  android:text="@string/card_number_desc"
+                  android:layout_marginLeft="20dp"
+                  android:layout_marginTop="40dp"
+                  android:layout_below="@+id/card_num_lbl"
+                  android:id="@+id/txt_activation_1_desc"
+                  android:gravity="right"/>-->
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/dc_card"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".15"
+        android:minHeight="60dp"
+        android:layout_below="@+id/main_content_pnl"
+        android:ems="16"
+        android:layout_centerInParent="true"
+        android:background="#ffffff"
+        android:hint="@string/activation_num_txt_lbl"
+        android:layout_marginTop="20dp"
+        android:id="@+id/txt_card_num"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:inputType="phone"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>

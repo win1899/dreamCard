@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#ffffff">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/txt_store_name"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:text="Store name"
+            android:layout_gravity="end"
+            android:gravity="end"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/list_divider"
+            android:textSize="18sp"
+            android:text="Ramallah - 1/1/2015"
+            android:layout_marginTop="5dp"
+            android:id="@+id/txt_city"/>
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/pdf_icon"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="20dp"
+        android:id="@+id/img_pdf"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/txt_amount"
+        android:text="500"
+        android:textSize="20sp"
+        android:textColor="@color/button_login"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@+id/img_pdf"
+        android:layout_marginStart="25dp"/>
+
+
+</RelativeLayout>

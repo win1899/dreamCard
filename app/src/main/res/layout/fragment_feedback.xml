@@ -1,0 +1,72 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.dreamcard.app.view.fragments.FeedbackFragment"
+    android:background="#ffffff"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/feedback_screen"
+        android:layout_marginTop="20dp"
+        android:id="@+id/img_feedback_icon"
+        android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/button_not_seleted"
+            android:textSize="22sp"
+            android:text="@string/we_love_to_hear_from_you"
+            android:layout_below="@+id/img_feedback_icon"
+            android:layout_marginTop="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:id="@+id/txt_love_hear"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:text="@string/add_your_feedback"
+            android:layout_below="@+id/txt_love_hear"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/txt_feedback_label"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:id="@+id/txt_feedback"
+            android:lines="5"
+            android:inputType="textMultiLine"
+            android:layout_below="@+id/txt_feedback_label"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/btn_send"
+            android:textColor="#ffffff"
+            android:text="@string/send"
+            android:textSize="22sp"
+            android:layout_below="@+id/txt_feedback"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:paddingStart="40dp"
+            android:paddingEnd="40dp"
+            android:background="#1dbb1e"/>
+
+    </RelativeLayout>
+</LinearLayout>
