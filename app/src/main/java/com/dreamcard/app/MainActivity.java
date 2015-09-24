@@ -117,8 +117,7 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.btn_login) {
-            // handleLogin();
-            onServiceSuccess(null, 1);
+            handleLogin();
         }else if(view.getId()==R.id.btn_forgot_pass) {
             forgotPass();
         }else if(view.getId()==R.id.activation_pnl) {
