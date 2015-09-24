@@ -26,7 +26,7 @@ import java.util.Vector;
 /**
  * Created by Moayed on 6/25/2014.
  */
-public class LikesNumAsync extends AsyncTask<Object, Void, Object> {
+public class LikesNumAsync extends AbstractAsyncTask<Object, Void, Object> {
 
     private Context context;
     private IServiceListener listener;
@@ -44,7 +44,7 @@ public class LikesNumAsync extends AsyncTask<Object, Void, Object> {
         this.offerPosition=offerPosition;
     }
 
-    protected Object doInBackground(Object... data) {
+    protected Object doInBackgroundSafe(Object... data) {
         this.context= (Context) data[0];
         if(!SystemOperation.isOnline(this.context)){
             ErrorMessageInfo bean=new ErrorMessageInfo();
@@ -162,7 +162,7 @@ public class LikesNumAsync extends AsyncTask<Object, Void, Object> {
         return request;
     }
 
-    protected void onPostExecute(Object serviceResponse) {
+    protected void onPostExecuteSafe(Object serviceResponse) {
         if(serviceResponse!=null) {
             if (serviceResponse instanceof ErrorMessageInfo) {
                 this.listener.onServiceFailed((ErrorMessageInfo) serviceResponse);
