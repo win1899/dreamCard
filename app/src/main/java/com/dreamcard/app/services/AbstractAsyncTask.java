@@ -15,8 +15,6 @@ public abstract class AbstractAsyncTask<Params, Progress, Result> extends AsyncT
     abstract void onPostExecuteSafe(Object serviceResponse);
 
     @Override
-    public void
-    @Override
     protected Object doInBackground(Object[] objects) {
         this.context= (Context) objects[0];
         return doInBackgroundSafe(objects);
