@@ -197,36 +197,6 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
                         .show();
             }
         }
-        else {
-            SharedPreferences pref = getSharedPreferences(Params.APP_DATA, MODE_PRIVATE);
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putString(Params.USER_INFO_ID, "1");
-            editor.putString(Params.USER_INFO_EMAIL, "walid511@hotmail.com");
-            editor.putString(Params.USER_INFO_NAME, "Walid");
-            editor.putString(Params.USER_INFO_PASSWORD,"1234");
-            editor.putString(Params.USER_INFO_FIRST_NAME,"WIN");
-            editor.putString(Params.USER_INFO_LAST_NAME,"EID");
-            editor.putString(Params.USER_INFO_MOBILE,"0598576421");
-            editor.putString(Params.USER_INFO_GENDER,"Male");
-            editor.putString(Params.USER_INFO_WORK,"dsada");
-            editor.putString(Params.USER_INFO_BIRTHDAY,"05/11/2014");
-            editor.putString(Params.USER_INFO_CITY,"Nablus");
-            editor.putString(Params.USER_INFO_COUNTRY,"Palestine");
-            editor.putString(Params.USER_INFO_PHONE,"ddd");
-            editor.putString(Params.USER_INFO_ID_NUM, "1");
-            editor.putString(Params.USER_INFO_ADDRESS, "2231");
-            editor.putString(Params.USER_INFO_EDUCATION, "Master");
-            editor.putString(Params.USER_INFO_FULL_NAME, "InfoFullName");
-            editor.putString(Params.USER_INFO_CARD_NUMBER, "512");
-            editor.commit();
-
-            DatabaseController.getInstance(this).saveLogin(txtUsername.getText().toString()
-                    ,txtPassword.getText().toString());
-
-            Intent intent = new Intent(this, NavDrawerActiity.class);
-            startActivity(intent);
-            overridePendingTransition( R.anim.push_right_in, R.anim.push_right_out );
-        }
     }
 
     @Override
