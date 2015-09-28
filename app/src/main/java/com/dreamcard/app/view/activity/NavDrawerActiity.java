@@ -263,18 +263,6 @@ public class NavDrawerActiity extends FragmentActivity
                 btnStores.setBackground(getResources().getDrawable(R.drawable.store_button_bg));
                 btnLocations.setBackground(getResources().getDrawable(R.drawable.location_active));
 
-//                android.app.FragmentManager fragmentManager = getFragmentManager();
-//                android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.activity_main_content_fragment, fragment2,fragmentTag).addToBackStack(fragmentTag);
-//                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//                fragmentTransaction.commit();
-//                android.app.FragmentManager fragmentManager = getFragmentManager();
-//                fragmentManager.beginTransaction()
-//                        .replace(R.id.activity_main_content_fragment, fragment2).addToBackStack(fragmentTag).commit();
-//
-//                lvMenu.setItemChecked(position, true);
-//                lvMenu.setSelection(position);
-//                this.currentMenu=navMenuTitles[position];
                 break;
             case 5:
                 intent=new Intent(this,SettingActivity.class);
@@ -318,25 +306,9 @@ public class NavDrawerActiity extends FragmentActivity
         if(fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.activity_main_content_fragment, fragment, fragmentTag).addToBackStack(fragmentTag);
+            fragmentTransaction.replace(R.id.activity_main_content_fragment, fragment, fragmentTag);
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             fragmentTransaction.commitAllowingStateLoss();
-//            fragmentManager.beginTransaction()
-//                    .replace(R.id.activity_main_content_fragment, fragment,fragmentTag).addToBackStack(fragmentTag).commit();
-
-//            lvMenu.setItemChecked(position, true);
-//            lvMenu.setSelection(position);
-//            this.currentMenu=navMenuTitles[position];
-
-
-//            tvTitle.setText(this.currentMenu);
-//            if(position==0){
-//                tvTitle.setVisibility(View.GONE);
-//                imgLogo.setVisibility(View.VISIBLE);
-//            }else{
-//                tvTitle.setVisibility(View.VISIBLE);
-//                imgLogo.setVisibility(View.GONE);
-//            }
         }
     }
 
@@ -353,13 +325,6 @@ public class NavDrawerActiity extends FragmentActivity
                 break;
         }
     }
-
-//    public void restoreActionBar() {
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-//        actionBar.setDisplayShowTitleEnabled(true);
-//        actionBar.setTitle(mTitle);
-//    }
 
 
     @Override
@@ -410,18 +375,9 @@ public class NavDrawerActiity extends FragmentActivity
             startActivityForResult(intent, 1);
             overridePendingTransition( R.anim.push_right_in, R.anim.push_right_out );
 
-//            OfferDetailsFragment frag=new OfferDetailsFragment().newInstance(bean);
-//            android.app.FragmentManager fragmentManager = getFragmentManager();
-//            fragmentManager.beginTransaction()
-//                    .replace(R.id.activity_main_content_fragment, frag).addToBackStack(Params.FRAGMENT_OFFER_DETAILS).commit();
-
         }else if(fragment.equalsIgnoreCase(Params.FRAGMENT_CATEGORIES)){
             Categories bean= (Categories) b;
 
-//            if(bean.getParentId() == null || bean.getParentId().equalsIgnoreCase("null")){
-//                Fragment fragmentObject = CategoriesListFragment.newInstance(null, "");
-//                String fragmentTag=Params.FRAGMENT_CATEGORIES;
-//            }
             FrameLayout mainFrameLayout=(FrameLayout)findViewById(R.id.activity_main_content_fragment);
             mainFrameLayout.setBackgroundColor(getResources().getColor(R.color.categories_bg));
 
@@ -432,12 +388,8 @@ public class NavDrawerActiity extends FragmentActivity
             fragmentManager.beginTransaction()
                     .replace(R.id.activity_main_content_fragment, subCategoryFragment)
                     .addToBackStack(Params.FRAGMENT_SUB_CATEGORY).commit();
+            fragmentManager.executePendingTransactions();
 
-//            mNavigationDrawerFragment.selectItem(1);
-//            String currentMenu=getResources().getString(R.string.offers)+" "+bean.getTitle();
-//            tvTitle.setText(currentMenu);
-//            tvTitle.setVisibility(View.VISIBLE);
-//            imgLogo.setVisibility(View.GONE);
         }else if(fragment.equalsIgnoreCase(Params.FRAGMENT_STORES)){
             Stores bean= (Stores) b;
             Intent intent=new Intent(this,StoreDetailsActivity.class);
@@ -526,16 +478,6 @@ public class NavDrawerActiity extends FragmentActivity
 
     private void callSetting() {
         mDrawer.openDrawer(Gravity.LEFT);
-
-//        Intent intent=new Intent(this,SettingActivity.class);
-//        startActivity(intent);
-//        overridePendingTransition( R.anim.push_down_in, R.anim.push_down_in );
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        Fragment fragment=new SettingFragment();
-//        fragmentTransaction.replace(R.id.activity_main_content_fragment,fragment,Params.FRAGMENT_SETTING).addToBackStack(Params.FRAGMENT_SETTING);
-//        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//        fragmentTransaction.commit();
     }
 
     @Override
@@ -566,7 +508,6 @@ public class NavDrawerActiity extends FragmentActivity
                     });
                 }
             }else if(resultCode == 100){
-//                onNavigationDrawerItemSelected(1);
                 LatestOfferListFragment f= LatestOfferListFragment.newInstance(Params.TYPE_OFFER, "");
                 f.referesh();
             }else if(resultCode == Params.STATUS_MOVE_TO_DASHBOARD){
@@ -625,34 +566,14 @@ public class NavDrawerActiity extends FragmentActivity
 
     @Override
     public void onBackPressed() {
-//        if (mainLayout.isMenuShown()) {
-//            mainLayout.toggleMenu();
-//        }
-//        else {
-            FragmentManager manager = getSupportFragmentManager();
-        int x=manager.getBackStackEntryCount();
-            if (manager.getBackStackEntryCount() > 1) {
-                int i=manager.getBackStackEntryCount();
-                Log.d("", "" + i);
-
-//                if (getSupportFragmentManager().getFragments().get(i).getTag().toString()== Params.FRAGMENT_SUB_CATEGORY){
-//                    getSupportFragmentManager().popBackStackImmediate();
-//                    getSupportFragmentManager().popBackStackImmediate();
-//
-//                    //Get your first fragment that you loaded in the beginning.
-//                    Fragment first = getSupportFragmentManager().findFragmentByTag(Params.FRAGMENT_CATEGORIES);
-//                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//                    transaction.replace(R.id.activity_main_content_fragment, first);
-//                    transaction.commit();
-//                    return;
-//                }
-                super.onBackPressed();
-            }else if(manager.getBackStackEntryCount()<=1){
-                finish();
-            }
-
-
-//        }
+        FragmentManager manager = getSupportFragmentManager();
+        if (manager.getBackStackEntryCount() > 1) {
+            int i=manager.getBackStackEntryCount();
+            Log.d("", "" + i);
+            super.onBackPressed();
+        }else if(manager.getBackStackEntryCount()<=1){
+            finish();
+        }
     }
 
 }
