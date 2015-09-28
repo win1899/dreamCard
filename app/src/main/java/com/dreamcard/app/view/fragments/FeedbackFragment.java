@@ -2,9 +2,11 @@ package com.dreamcard.app.view.fragments;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,7 +22,6 @@ import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.services.FeedbackAsyncTask;
-import com.dreamcard.app.services.RegisterConsumerAsync;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
 
@@ -53,7 +54,7 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,I
 
     private Activity activity;
 
-
+    private FeedbackAsyncTask feedbackAsyncTask;
 
     /**
      * Use this factory method to create a new instance of
@@ -124,6 +125,9 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,I
     @Override
     public void onDetach() {
         super.onDetach();
+        if (feedbackAsyncTask != null && feedbackAsyncTask.getStatus().equals(AsyncTask.Status.RUNNING)) {
+            feedbackAsyncTask.cancel(true);
+        }
         mListener = null;
     }
 
@@ -135,16 +139,20 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,I
                 handler.postDelayed(runnable, 5000);
                 SharedPreferences prefs = this.activity.getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
                 String id = prefs.getString(Params.USER_INFO_ID, "");
-                FeedbackAsyncTask async = new FeedbackAsyncTask(this
+                feedbackAsyncTask = new FeedbackAsyncTask(this
                         , ServicesConstants.getFeedbackRequestParams(id, txtFeedback.getText().toString())
                         , Params.SERVICE_PROCESS_1);
-                async.execute(this.activity);
+                feedbackAsyncTask.execute(this.activity);
             }
         }
     }
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         if(processType==Params.SERVICE_PROCESS_1){
             progress.dismiss();
             MessageInfo info= (MessageInfo) b;
@@ -157,6 +165,10 @@ public class FeedbackFragment extends Fragment implements View.OnClickListener,I
 
     @Override
     public void onServiceFailed(ErrorMessageInfo info) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         progress.dismiss();
         Toast.makeText(this.activity, getResources().getString(R.string.feedback_not_sent), Toast.LENGTH_LONG).show();
     }

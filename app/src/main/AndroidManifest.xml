@@ -102,7 +102,7 @@
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
-            android:name=".view.activity.NavDrawerActiity"
+            android:name=".view.activity.NavDrawerActivity"
             android:label="@string/title_activity_nav_drawer_actiity"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>

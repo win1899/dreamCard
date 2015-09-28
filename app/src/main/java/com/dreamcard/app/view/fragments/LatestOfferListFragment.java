@@ -9,13 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ListAdapter;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamcard.app.R;
@@ -23,19 +18,12 @@ import com.dreamcard.app.R;
 import com.dreamcard.app.common.DatabaseController;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
-import com.dreamcard.app.entity.Categories;
-import com.dreamcard.app.entity.ConsumerInfo;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.SearchCriteria;
 import com.dreamcard.app.entity.ServiceRequest;
-import com.dreamcard.app.services.AllOffersAsync;
-import com.dreamcard.app.services.LikesNumAsync;
 import com.dreamcard.app.services.OffersByFilterAsync;
-import com.dreamcard.app.view.adapters.CategoriesListAdapter;
-import com.dreamcard.app.view.adapters.CustomGridViewAdapterButton;
 import com.dreamcard.app.view.adapters.LatestOffersListAdapter;
-import com.dreamcard.app.view.fragments.dummy.DummyContent;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
 
@@ -152,11 +140,16 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
     @Override
     public void onDetach() {
         super.onDetach();
+        allOffersAsync.cancel(true);
         mListener = null;
     }
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         if (processType == Params.SERVICE_PROCESS_1) {
             ArrayList<Offers> list = (ArrayList<Offers>) b;
             this.list = list;
@@ -171,6 +164,10 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onServiceFailed(ErrorMessageInfo info) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         if (this.process == Params.SERVICE_PROCESS_1) {
             progressBar.setVisibility(View.GONE);
             grid.setVisibility(View.VISIBLE);

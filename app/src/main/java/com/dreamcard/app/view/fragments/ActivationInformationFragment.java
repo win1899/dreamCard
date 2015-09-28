@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -86,6 +87,9 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
 
     private int gender;
 
+    private CitiesAsyncTask citiesAsyncTask;
+    private CountryAsyncTask countriesAsyncTask;
+
     public static ActivationInformationFragment newInstance(String param1, String param2) {
         ActivationInformationFragment fragment = new ActivationInformationFragment();
         Bundle args = new Bundle();
@@ -147,11 +151,11 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
         btnMale.setOnClickListener(this);
         btnFemale.setOnClickListener(this);
 
-        CitiesAsyncTask citiesAsyncTask=new CitiesAsyncTask(this, new ArrayList<ServiceRequest>()
+        citiesAsyncTask=new CitiesAsyncTask(this, new ArrayList<ServiceRequest>()
                 , Params.SERVICE_PROCESS_1);
         citiesAsyncTask.execute(getActivity());
 
-        CountryAsyncTask countriesAsyncTask=new CountryAsyncTask(this, new ArrayList<ServiceRequest>()
+        countriesAsyncTask=new CountryAsyncTask(this, new ArrayList<ServiceRequest>()
                 , Params.SERVICE_PROCESS_2);
         countriesAsyncTask.execute(getActivity());
 
@@ -178,6 +182,8 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
     @Override
     public void onDetach() {
         super.onDetach();
+        citiesAsyncTask.cancel(true);
+        countriesAsyncTask.cancel(true);
         mListener = null;
     }
 
@@ -306,6 +312,10 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         if(processType==Params.SERVICE_PROCESS_1){
             ArrayList<City> list= (ArrayList<City>) b;
             this.citiesList=list;

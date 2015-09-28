@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,25 +26,19 @@ import android.widget.TextView;
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
-import com.dreamcard.app.entity.ConsumerDiscount;
 import com.dreamcard.app.entity.ConsumerInfo;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.ServiceRequest;
-import com.dreamcard.app.services.AllOffersAsync;
-import com.dreamcard.app.services.CategoriesAsync;
 import com.dreamcard.app.services.ConsumerDiscountAsyncTask;
 import com.dreamcard.app.services.TotalSavingAsync;
 import com.dreamcard.app.view.adapters.NotificationGridAdapter;
-import com.dreamcard.app.view.adapters.StoreOffersGridAdapter;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-
-import info.hoang8f.android.segmented.SegmentedGroup;
 
 /**
  * A simple {@link} subclass.
@@ -71,6 +66,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
     private NotificationGridAdapter adapter;
 
     private TotalSavingAsync totalSavingAsync;
+    private ConsumerDiscountAsyncTask consumerDiscountAsyncTask;
     private ArrayList<Offers> notificationList = new ArrayList<Offers>();
     private Button btnTotal;
     private Button btnGas;
@@ -131,10 +127,10 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
                 , Params.SERVICE_PROCESS_1);
         totalSavingAsync.execute(getActivity());
 
-        ConsumerDiscountAsyncTask totalSavingAsync = new ConsumerDiscountAsyncTask(this
+        consumerDiscountAsyncTask = new ConsumerDiscountAsyncTask(this
                 , ServicesConstants.getTotalSavingRequestList(id)
                 , Params.SERVICE_PROCESS_3);
-        totalSavingAsync.execute(getActivity());
+        consumerDiscountAsyncTask.execute(getActivity());
 
         ArrayList<ServiceRequest> list = ServicesConstants.getLatestOfferRequestList("100");
         return view;
@@ -155,6 +151,8 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onDetach() {
         super.onDetach();
+        totalSavingAsync.cancel(true);
+        consumerDiscountAsyncTask.cancel(true);
         mListener = null;
     }
 
@@ -225,6 +223,10 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         if (processType == Params.SERVICE_PROCESS_1) {
             ConsumerInfo bean = (ConsumerInfo) b;
             txtYouSaved.setText(bean.getTotalSaving() + getResources().getString(R.string.ils));

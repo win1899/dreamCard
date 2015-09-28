@@ -43,7 +43,7 @@ public class ServicesConstants {
     public static final String WS_METHOD_BUSINESS_COMMENTS="SelectCommentsByBusiness";
     public static final String WS_METHOD_IS_BUSINESS_LIKED="IsBusinessLikedByConsumer";
     public static final String WS_METHOD_RATE_BUSINESS="RateBusiness";
-    public static final String WS_METHOD_ADD_BUSINESS_COMMENT="AddBusinessComment";
+    public static final String WS_METHOD_ADD_BUSINESS_COMMENT="AddBusinessCommentAsync";
     public static final String WS_METHOD_ADD_INTEREST_CATEGORY="AddCategoryTointerestListForConsumer";
     public static final String WS_METHOD_REMOVE_INTEREST_CATEGORY="RemoveCategoryFromInterestListForConsumer";
     public static final String WS_METHOD_ADD_OFFER_COMMENT="AddOfferComment";

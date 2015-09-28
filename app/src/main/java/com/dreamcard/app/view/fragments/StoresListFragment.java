@@ -2,9 +2,6 @@ package com.dreamcard.app.view.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -20,7 +16,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
@@ -33,20 +28,14 @@ import com.dreamcard.app.R;
 
 import com.dreamcard.app.components.TransparentProgressDialog;
 import com.dreamcard.app.constants.Params;
-import com.dreamcard.app.entity.Categories;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.GridItem;
 import com.dreamcard.app.entity.ItemButton;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.services.AllBusinessAsync;
-import com.dreamcard.app.services.AllOffersAsync;
-import com.dreamcard.app.utils.ButtonImageLoader;
 import com.dreamcard.app.utils.ImageViewLoader;
-import com.dreamcard.app.view.adapters.CategoriesListAdapter;
-import com.dreamcard.app.view.adapters.CustomGridViewAdapterButton;
 import com.dreamcard.app.view.adapters.RegularStoresGridAdapter;
-import com.dreamcard.app.view.adapters.StoresListAdapter;
 import com.dreamcard.app.view.fragments.dummy.DummyContent;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
@@ -89,9 +78,6 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
     HashMap<String,Stores> storesMap=new HashMap<String,Stores>();
 
     private AllBusinessAsync allBusinessAsync;
-    private TransparentProgressDialog progress;
-    private Runnable runnable;
-    private Handler handler;
     private Activity activity;
     private ProgressBar progressBar;
     private LinearLayout storeListMainLayout;
@@ -157,6 +143,7 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
     @Override
     public void onDetach() {
         super.onDetach();
+        allBusinessAsync.cancel(true);
         mListener = null;
     }
 
@@ -172,6 +159,10 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         if(processType == Params.SERVICE_PROCESS_1) {
             ArrayList<Stores> list = (ArrayList<Stores>) b;
             this.list = list;
@@ -190,6 +181,10 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
 
     @Override
     public void onServiceFailed(ErrorMessageInfo info) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         progressBar.setVisibility(View.GONE);
         storeListMainLayout.setVisibility(View.VISIBLE);
         Toast.makeText(this.activity, info.getMessage(), Toast.LENGTH_LONG).show();

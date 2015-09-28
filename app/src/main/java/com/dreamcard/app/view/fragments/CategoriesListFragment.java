@@ -5,16 +5,12 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ListAdapter;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamcard.app.R;
@@ -26,11 +22,9 @@ import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.GridItem;
 import com.dreamcard.app.entity.ItemButton;
 import com.dreamcard.app.entity.ServiceRequest;
-import com.dreamcard.app.services.AllBusinessAsync;
 import com.dreamcard.app.services.CategoriesAsync;
 import com.dreamcard.app.view.adapters.CategoriesListAdapter;
 import com.dreamcard.app.view.adapters.CustomGridViewAdapterButton;
-import com.dreamcard.app.view.fragments.dummy.DummyContent;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
 
@@ -120,16 +114,28 @@ public class CategoriesListFragment extends Fragment implements View.OnClickList
     @Override
     public void onDetach() {
         super.onDetach();
+        categoriesAsync.cancel(true);
         mListener = null;
     }
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         ArrayList<Categories> list = (ArrayList<Categories>) b;
         this.list = list;
         ArrayList<GridItem> gridArray = new ArrayList<GridItem>();
         for (Categories trans : this.list) {
             gridArray.add(new ItemButton(trans.getLogo(), trans.getTitle(), trans.getId(), trans.getPosition()));
+        }
+        if (getActivity() == null) {
+            Log.e("Debug", "Activity is null ");
+            return;
+        }
+        if (gridArray == null) {
+            Log.e("Debug", "GridArray is null");
         }
         customGridAdapter = new CustomGridViewAdapterButton(getActivity(), R.layout.row_grid_button
                 , gridArray, this, null);
@@ -140,6 +146,10 @@ public class CategoriesListFragment extends Fragment implements View.OnClickList
 
     @Override
     public void onServiceFailed(ErrorMessageInfo info) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         progressBar.setVisibility(View.GONE);
         grid.setVisibility(View.VISIBLE);
         Toast.makeText(getActivity(), info.getMessage(), Toast.LENGTH_LONG).show();

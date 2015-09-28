@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.services.ContentBySlagAsync;
-import com.dreamcard.app.services.FeedbackAsyncTask;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
 
@@ -47,6 +47,8 @@ public class AboutUsFragment extends Fragment implements IServiceListener{
     private TransparentProgressDialog progress;
     private Runnable runnable;
     private Handler handler;
+
+    private ContentBySlagAsync contentBySlagAsync;
 
     /**
      * Use this factory method to create a new instance of
@@ -98,10 +100,10 @@ public class AboutUsFragment extends Fragment implements IServiceListener{
 
         progress.show();
         handler.postDelayed(runnable, 5000);
-        ContentBySlagAsync async = new ContentBySlagAsync(this
+        contentBySlagAsync = new ContentBySlagAsync(this
                 , ServicesConstants.getContentSlagRequestParams(Params.ABOUT_US_SLAG)
                 , Params.SERVICE_PROCESS_1);
-        async.execute(this.activity);
+        contentBySlagAsync.execute(this.activity);
 
         return view;
     }
@@ -121,11 +123,16 @@ public class AboutUsFragment extends Fragment implements IServiceListener{
     @Override
     public void onDetach() {
         super.onDetach();
+        contentBySlagAsync.cancel(true);
         mListener = null;
     }
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         if(processType==Params.SERVICE_PROCESS_1){
             progress.dismiss();
             MessageInfo info= (MessageInfo) b;
@@ -135,6 +142,10 @@ public class AboutUsFragment extends Fragment implements IServiceListener{
 
     @Override
     public void onServiceFailed(ErrorMessageInfo info) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         progress.dismiss();
         Toast.makeText(this.activity, getResources().getString(R.string.feedback_not_sent), Toast.LENGTH_LONG).show();
     }

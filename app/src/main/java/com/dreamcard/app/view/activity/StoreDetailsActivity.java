@@ -1,21 +1,16 @@
 package com.dreamcard.app.view.activity;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
@@ -24,7 +19,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,7 +27,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Toast;
 
 import com.androidquery.AQuery;
@@ -45,23 +38,16 @@ import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.BusinessComment;
 import com.dreamcard.app.entity.Comments;
-import com.dreamcard.app.entity.ConsumerInfo;
 import com.dreamcard.app.entity.ErrorMessageInfo;
-import com.dreamcard.app.entity.LikeOfferBusiness;
 import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.entity.Stores;
-import com.dreamcard.app.services.AddBusinessComment;
+import com.dreamcard.app.services.AddBusinessCommentAsync;
 import com.dreamcard.app.services.AllOffersAsync;
 import com.dreamcard.app.services.CommentsAsync;
-import com.dreamcard.app.services.DislikeOfferBusinessAsyncTask;
-import com.dreamcard.app.services.IsOfferLikedAyncTask;
-import com.dreamcard.app.services.LikeOfferBusinessAsyncTask;
-import com.dreamcard.app.services.LikesNumAsync;
-import com.dreamcard.app.utils.ImageViewLoader;
+import com.dreamcard.app.services.IsOfferLikedAsyncTask;
 import com.dreamcard.app.view.adapters.CommentsAdapter;
-import com.dreamcard.app.view.adapters.LatestOffersListAdapter;
 import com.dreamcard.app.view.adapters.StoreOffersGridAdapter;
 import com.dreamcard.app.view.interfaces.AddCommentListener;
 import com.dreamcard.app.view.interfaces.IServiceListener;
@@ -118,7 +104,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         SharedPreferences prefs = getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
         String id = prefs.getString(Params.USER_INFO_ID, "");
 
-        IsOfferLikedAyncTask asyncTask = new IsOfferLikedAyncTask(this
+        IsOfferLikedAsyncTask asyncTask = new IsOfferLikedAsyncTask(this
                 , ServicesConstants.getIsBusinessLikedRequestList(id, this.bean.getId())
                 , Params.SERVICE_PROCESS_6, Params.TYPE_BUSINESS);
         asyncTask.execute(this);
@@ -496,7 +482,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         bean.Comment = comment;
         bean.BusinessID = 22;
 
-        AddBusinessComment asyncTask = new AddBusinessComment(this
+        AddBusinessCommentAsync asyncTask = new AddBusinessCommentAsync(this
                 , ServicesConstants.getAddBusinessCommentRequestList(id, this.bean.getId(), comment)
                 , Params.SERVICE_PROCESS_3, Params.TYPE_BUSINESS);
         asyncTask.execute(this);

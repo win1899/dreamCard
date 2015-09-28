@@ -3,20 +3,17 @@ package com.dreamcard.app.view.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.location.Criteria;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -26,7 +23,6 @@ import android.widget.TextView;
 import com.dreamcard.app.R;
 import com.dreamcard.app.common.DatabaseController;
 import com.dreamcard.app.constants.Params;
-import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.Categories;
 import com.dreamcard.app.entity.City;
 import com.dreamcard.app.entity.ErrorMessageInfo;
@@ -35,8 +31,6 @@ import com.dreamcard.app.entity.SearchCriteria;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.services.CategoriesAsync;
 import com.dreamcard.app.services.CitiesAsyncTask;
-import com.dreamcard.app.services.InterestCategoriesAsyncTask;
-import com.dreamcard.app.view.adapters.CommentsAdapter;
 import com.dreamcard.app.view.adapters.FilterCategoryAdapter;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
@@ -88,6 +82,9 @@ public class LeftNavDrawerFragment extends Fragment implements View.OnClickListe
     private SearchCriteria criteria = null;
 
     private OnFragmentInteractionListener mListener;
+
+    private CitiesAsyncTask citiesAsyncTask;
+    private CategoriesAsync categoriesAsync;
 
     /**
      * Use this factory method to create a new instance of
@@ -163,11 +160,11 @@ public class LeftNavDrawerFragment extends Fragment implements View.OnClickListe
         txtDiscRate.setOnClickListener(this);
         ratingBar = (RatingBar) view.findViewById(R.id.rating_bar);
 
-        CitiesAsyncTask citiesAsyncTask = new CitiesAsyncTask(this, new ArrayList<ServiceRequest>()
+        citiesAsyncTask = new CitiesAsyncTask(this, new ArrayList<ServiceRequest>()
                 , Params.SERVICE_PROCESS_1);
         citiesAsyncTask.execute(this.activity);
 
-        CategoriesAsync categoriesAsync = new CategoriesAsync(this, new ArrayList<ServiceRequest>()
+        categoriesAsync = new CategoriesAsync(this, new ArrayList<ServiceRequest>()
                 , Params.SERVICE_PROCESS_2, Params.TYPE_ALL_CATEGORY);
         categoriesAsync.execute(this.activity);
 
@@ -232,6 +229,8 @@ public class LeftNavDrawerFragment extends Fragment implements View.OnClickListe
     @Override
     public void onDetach() {
         super.onDetach();
+        citiesAsyncTask.cancel(true);
+        categoriesAsync.cancel(true);
         mListener = null;
     }
 
@@ -348,6 +347,10 @@ public class LeftNavDrawerFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         if (processType == Params.SERVICE_PROCESS_1) {
             ArrayList<City> list = (ArrayList<City>) b;
             this.citiesList = list;

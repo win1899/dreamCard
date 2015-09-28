@@ -7,12 +7,8 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -22,12 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dreamcard.app.MainActivity;
@@ -50,7 +44,7 @@ import com.dreamcard.app.view.fragments.StoresListFragment;
 import com.dreamcard.app.view.fragments.SubcategoryFragment;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
 
-public class NavDrawerActiity extends FragmentActivity
+public class NavDrawerActivity extends FragmentActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,View.OnClickListener,OnFragmentInteractionListener {
 
     /**
@@ -307,9 +301,26 @@ public class NavDrawerActiity extends FragmentActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             fragmentTransaction.replace(R.id.activity_main_content_fragment, fragment, fragmentTag);
+            if (fragment instanceof FAQFragment || fragment instanceof AboutUsFragment) {
+                fragmentTransaction.addToBackStack(fragmentTag);
+            }
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             fragmentTransaction.commitAllowingStateLoss();
         }
+    }
+
+    public String getActiveFragment() {
+
+        if (getFragmentManager().getBackStackEntryCount() == 0) {
+            return null;
+        }
+
+        String tag = getFragmentManager()
+                .getBackStackEntryAt(getFragmentManager()
+                        .getBackStackEntryCount() - 1)
+                .getName();
+
+        return tag;
     }
 
     public void onSectionAttached(int number) {
@@ -559,19 +570,31 @@ public class NavDrawerActiity extends FragmentActivity
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
-            ((NavDrawerActiity) activity).onSectionAttached(
+            ((NavDrawerActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
 
     @Override
     public void onBackPressed() {
+        if (mDrawer.isDrawerOpen(Gravity.RIGHT)) {
+            Log.i(this.getClass().getName(), "Drawer opened ... closing");
+            mDrawer.closeDrawer(Gravity.RIGHT);
+            return;
+        }
+
+        if (mDrawer.isDrawerOpen(Gravity.LEFT)) {
+            Log.i(this.getClass().getName(), "Drawer on left is open ... closing");
+            mDrawer.closeDrawer(Gravity.LEFT);
+            return;
+        }
+
         FragmentManager manager = getSupportFragmentManager();
-        if (manager.getBackStackEntryCount() > 1) {
+        if (manager.getBackStackEntryCount() > 0) {
             int i=manager.getBackStackEntryCount();
             Log.d("", "" + i);
-            super.onBackPressed();
-        }else if(manager.getBackStackEntryCount()<=1){
+            manager.popBackStackImmediate();
+        }else {
             finish();
         }
     }

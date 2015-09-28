@@ -6,7 +6,6 @@ import android.os.AsyncTask;
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
-import com.dreamcard.app.entity.BusinessComment;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.entity.ServiceRequest;
@@ -25,9 +24,9 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 /**
- * Created by Moayed on 8/9/2014.
+ * Created by Moayed on 8/1/2014.
  */
-public class AddBusinessComment extends AbstractAsyncTask<Object, Void, Object> {
+public class IsOfferLikedAsyncTask extends AbstractAsyncTask<Object, Void, Object> {
 
     private Context context;
     private IServiceListener listener;
@@ -35,7 +34,7 @@ public class AddBusinessComment extends AbstractAsyncTask<Object, Void, Object> 
     private int processType;
     private int type;
 
-    public AddBusinessComment(IServiceListener listener,ArrayList<ServiceRequest> list,int processType,int type){
+    public IsOfferLikedAsyncTask(IServiceListener listener, ArrayList<ServiceRequest> list, int processType, int type){
         this.listener=listener;
         this.processType=processType;
         this.requestList=list;
@@ -55,9 +54,9 @@ public class AddBusinessComment extends AbstractAsyncTask<Object, Void, Object> 
         Object result=null;
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
 
-        String method= ServicesConstants.WS_METHOD_ADD_BUSINESS_COMMENT;
-        if(this.type==Params.TYPE_OFFER)
-            method= ServicesConstants.WS_METHOD_ADD_OFFER_COMMENT;
+        String method=ServicesConstants.WS_METHOD_IS_OFFER_LIKED;
+        if(this.type==Params.TYPE_BUSINESS)
+            method=ServicesConstants.WS_METHOD_IS_BUSINESS_LIKED;
 
         envelope.setOutputSoapObject(createRequest(method));
         envelope.dotNet = true;

@@ -39,7 +39,6 @@ import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -74,6 +73,7 @@ public class LocationFragment extends Fragment implements IServiceListener, View
     private double latitude;
     private double longitude;
     private Activity activity;
+    private AllBusinessAsync allBusinessAsync;
 
 
     public static LocationFragment newInstance(LocationInfo param1, String param2) {
@@ -126,7 +126,7 @@ public class LocationFragment extends Fragment implements IServiceListener, View
                 loadStoreInfo(marker);
             }
         });
-        AllBusinessAsync allBusinessAsync = new AllBusinessAsync(this, new ArrayList<ServiceRequest>()
+        allBusinessAsync = new AllBusinessAsync(this, new ArrayList<ServiceRequest>()
                 , Params.SERVICE_PROCESS_1);
         allBusinessAsync.execute(getActivity());
         return view;
@@ -176,6 +176,7 @@ public class LocationFragment extends Fragment implements IServiceListener, View
     @Override
     public void onDetach() {
         super.onDetach();
+        allBusinessAsync.cancel(true);
         mListener = null;
     }
 
@@ -250,6 +251,10 @@ public class LocationFragment extends Fragment implements IServiceListener, View
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         if (processType == Params.SERVICE_PROCESS_1) {
             ArrayList<Stores> list = (ArrayList<Stores>) b;
 

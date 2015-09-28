@@ -25,8 +25,7 @@ import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.UserInfo;
 import com.dreamcard.app.services.LoginAsync;
 import com.dreamcard.app.view.activity.MainActivationFormActivity;
-import com.dreamcard.app.view.activity.NavDrawerActiity;
-import com.dreamcard.app.view.activity.SlidingMenuActivity;
+import com.dreamcard.app.view.activity.NavDrawerActivity;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
 
@@ -182,7 +181,7 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
                 DatabaseController.getInstance(this).saveLogin(txtUsername.getText().toString()
                         ,txtPassword.getText().toString());
 
-                Intent intent = new Intent(this, NavDrawerActiity.class);
+                Intent intent = new Intent(this, NavDrawerActivity.class);
                 startActivity(intent);
                 overridePendingTransition( R.anim.push_right_in, R.anim.push_right_out );
             } else {

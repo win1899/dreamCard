@@ -3,13 +3,10 @@ package com.dreamcard.app.view.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.net.Uri;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,27 +14,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.androidquery.AQuery;
 import com.dreamcard.app.R;
-import com.dreamcard.app.components.CustomImageView;
-import com.dreamcard.app.components.CustomImageViewer;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.OffersRecordHolder;
-import com.dreamcard.app.entity.RecordHolder;
-import com.dreamcard.app.services.DownloadImageTask;
-import com.dreamcard.app.utils.ImageLoader;
-import com.dreamcard.app.utils.ImageUtil;
-import com.dreamcard.app.utils.ImageViewLoader;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.squareup.picasso.Picasso;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
