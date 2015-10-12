@@ -57,6 +57,7 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
 
 
     private TextView txtOfferPeriod;
+    private TextView txtOfferValidFrom;
     private TextView txtMobile;
     private TextView txtPhone;
     private TextView txtCity;
@@ -130,7 +131,8 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
         imgTakeMeThere.setOnClickListener(this);
         txtDescription = (TextView) findViewById(R.id.txt_description);
         txtMobile = (TextView) findViewById(R.id.txt_mobile);
-        txtOfferPeriod = (TextView) findViewById(R.id.txt_offer_period);
+        txtOfferPeriod = (TextView) findViewById(R.id.txt_offer_period_until);
+        txtOfferValidFrom = (TextView) findViewById(R.id.txt_offer_period);
         txtPhone = (TextView) findViewById(R.id.txt_phone);
         imgOfferLogo = (ImageView) findViewById(R.id.img_offer_logo);
         imgOfferLogo.setOnClickListener(this);
@@ -238,7 +240,7 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
         if (bean.getDescription() == null || bean.getDescription().equalsIgnoreCase("null"))
             txtDescription.setText("");
         else
-            txtDescription.setText(bean.getTitle());
+            txtDescription.setText(bean.getDescription());
 
         if (bean.getCity() == null || bean.getCity().equalsIgnoreCase("null"))
             txtCity.setText("");
@@ -326,6 +328,12 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
 
         String x = df.format("dd/MM/yyyy", c.getTime()).toString();
         txtOfferPeriod.setText(x);
+
+        Date validUntil = new Date(Long.parseLong(bean.getValidFrom().replaceAll(".*?(\\d+).*", "$1")));
+        Calendar valid = Calendar.getInstance();
+        valid.setTime(validUntil);
+        String v = df.format("dd/MM/yyyy", valid.getTime()).toString();
+        txtOfferValidFrom.setText(v);
 
         if (bean.getType().equalsIgnoreCase("" + Params.OFFER_TYPE_EVENT)) {
             txtNewPrice.setVisibility(View.GONE);

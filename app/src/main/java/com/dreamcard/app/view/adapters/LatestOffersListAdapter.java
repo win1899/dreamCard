@@ -92,10 +92,10 @@ public class LatestOffersListAdapter extends BaseAdapter {
         Offers bean = this.data.get(position);
 
         if (bean.getDescription() != null && !bean.getDescription().equalsIgnoreCase("null")) {
-            if (bean.getDescription().length() > 30) {
-                bean.setDescription(bean.getDescription().substring(0, 30) + "...");
+            if (bean.getTitle().length() > 30) {
+                bean.setTitle(bean.getTitle().substring(0, 30) + "...");
             }
-            holder.getTxtDesc().setText(bean.getDescription());
+            holder.getTxtDesc().setText(bean.getTitle());
         }
 
         if (bean.getSaleOldPrice().contains(".")) {
