@@ -78,14 +78,12 @@ public class NavDrawerActivity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav_drawer_actiity);
 
-//        headerPnl=(RelativeLayout)findViewById(R.id.main_header_pnl);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
         leftNavDrawerFragment = (LeftNavDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.left_navigation_drawer);
 
-//        mTitle = getTitle();
 
         mDrawer=(DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -125,11 +123,6 @@ public class NavDrawerActivity extends FragmentActivity
         btnLatestOffers.setOnClickListener(this);
         btnLocations.setOnClickListener(this);
         btnStores.setOnClickListener(this);
-
-//        btnCategories.setFocusableInTouchMode(true);
-//        btnLatestOffers.setFocusableInTouchMode(true);
-//        btnLocations.setFocusableInTouchMode(true);
-//        btnStores.setFocusableInTouchMode(true);
 
         btnStores.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
