@@ -111,12 +111,30 @@
 
                     <LinearLayout
                         android:id="@+id/rating_pnl"
-                        android:layout_width="20dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        android:layout_centerVertical="true"
-                        android:layout_alignParentEnd="true"
-                        android:background="#000000">
+                        android:background="#000000"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="الخصم السنوي"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:layout_margin="5dp"
+                            android:textStyle="bold"/>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="20%"
+                            android:textColor="#FFFFFF"
+                            android:textSize="16sp"
+                            android:layout_gravity="center"
+                            android:textStyle="bold"
+                            android:id="@+id/annual_discount"/>
+
                     </LinearLayout>
 
                 </RelativeLayout>

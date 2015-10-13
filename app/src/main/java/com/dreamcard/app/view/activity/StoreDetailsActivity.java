@@ -60,6 +60,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     private ImageView imgOfferLogo;
     private TextView txtNumOfLikes;
     private TextView txtLikeBtn;
+    private TextView txtAnnualDiscount;
     private ListView commentsListView;
     private ImageView btnAddComment;
     private AddCommentDialog commentDialog;
@@ -124,6 +125,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     private void buildUI() {
         txtBusinessName = (TextView) findViewById(R.id.txt_business_name);
         imgOfferLogo = (ImageView) findViewById(R.id.img_offer_logo);
+        txtAnnualDiscount = (TextView) findViewById(R.id.annual_discount);
         imgOfferLogo.setOnClickListener(this);
         scroll = (ScrollView) findViewById(R.id.scroll);
         commentsListView = (ListView) findViewById(android.R.id.list);
@@ -194,7 +196,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         this.bean = bean;
 
         txtBusinessName.setText(bean.getStoreName());
-
+        // TODO: txtAnnualDiscount.setText(bean.get);
         if (bean.getOurMessage() != null && !bean.getOurMessage().isEmpty() && !bean.getOurMessage().equalsIgnoreCase("null")) {
             if (bean.getOurMessage().length() > 100) {
                 bean.setOurMessage(bean.getOurMessage().substring(0, 100) + "...");
