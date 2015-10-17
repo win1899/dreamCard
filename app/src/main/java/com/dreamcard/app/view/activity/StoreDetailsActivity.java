@@ -64,7 +64,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     private ListView commentsListView;
     private ImageView btnAddComment;
     private AddCommentDialog commentDialog;
-    private LinearLayout ratingPnl;
+    private RelativeLayout ratingPnl;
     private ExpandableHeightGridView grid;
     private StoreOffersGridAdapter adapter;
     private ProgressBar progressBar;
@@ -152,7 +152,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         });
         btnAddComment = (ImageView) findViewById(R.id.img_add_comment);
         btnAddComment.setOnClickListener(this);
-        ratingPnl = (LinearLayout) findViewById(R.id.rating_pnl);
+        ratingPnl = (RelativeLayout) findViewById(R.id.rating_pnl);
         grid = (ExpandableHeightGridView) findViewById(R.id.offers_grid);
         progressBar = (ProgressBar) findViewById(R.id.progress);
         noCommentPnl = (RelativeLayout) findViewById(R.id.no_comments_pnl);
@@ -217,8 +217,10 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         AQuery aq = new AQuery(this);
         aq.id(R.id.img_offer_logo).progress(R.id.store_detail_progress).image(bean.getWideLogo(), true
                 , true, imgOfferLogo.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
-        setRating(bean.getRating());
-        ratingPnl.setOnClickListener(this);
+
+        // TODO: Check about that ?
+        //setRating(bean.getRating());
+        // ratingPnl.setOnClickListener(this);
 
         if (bean.getLogo() != null && bean.getLogo().length() > 0 && bean.getLogo().contains("http")) {
             aq.id(imgStoreLogo).image(bean.getLogo(), true, true

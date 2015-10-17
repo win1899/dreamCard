@@ -28,36 +28,6 @@
                     android:layout_height="wrap_content"
                     android:background="@color/button_login" >
 
-               <!--     <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/txt_arrow"
-                        android:textSize="30sp"
-                        android:text="@string/right_arrow"
-                        android:textColor="#000000"
-                        android:layout_marginRight="10dp"
-                        android:layout_alignParentEnd="true"
-                        android:layout_centerVertical="true"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#000000"
-                        android:textSize="20sp"
-                        android:text="@string/back"
-                        android:layout_centerVertical="true"
-                        android:layout_toLeftOf="@+id/txt_arrow"
-                        android:layout_marginRight="7dp"
-                        android:id="@+id/txt_back"/>-->
-
-                   <!-- <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/txt_title"
-                        android:textSize="25sp"
-                        android:textColor="#000000"
-                        android:layout_centerVertical="true"
-                        android:layout_centerHorizontal="true"
-                        android:text="@string/details"/>-->
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -85,31 +55,42 @@
                 android:layout_below="@+id/header"
                 android:id="@+id/title_pnl">
 
-                <RelativeLayout
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="60dp">
+                    android:layout_height="150dp"
+                    >
 
 
-                    <TextView
+                    <RelativeLayout
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#000000"
-                        android:textSize="25sp"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:id="@+id/txt_business_name"/>
+                        android:layout_height="match_parent"
+                        android:layout_weight="3">
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#000000"
+                            android:textSize="25sp"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerVertical="true"
+                            android:layout_toRightOf="@+id/img_store_logo"
+                            android:layout_marginLeft="5dp"
+                            android:id="@+id/txt_business_name"/>
 
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerHorizontal="true"
-                        android:layout_centerVertical="true"
-                        android:id="@+id/img_store_logo"
-                        android:adjustViewBounds="true"
-                        android:layout_marginTop="5dp"
-                        android:layout_marginBottom="5dp"/>
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/img_store_logo"
+                            android:adjustViewBounds="true"
+                            android:src="@drawable/facebook"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="5dp"
+                            />
+                    </RelativeLayout>
 
-                    <LinearLayout
+
+                    <RelativeLayout
                         android:id="@+id/rating_pnl"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -124,7 +105,9 @@
                             android:textColor="#FFFFFF"
                             android:textSize="16sp"
                             android:layout_margin="5dp"
-                            android:textStyle="bold"/>
+                            android:textStyle="bold"
+                            android:layout_above="@+id/annual_discount"
+                            android:id="@+id/discount_txt_view"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -133,11 +116,12 @@
                             android:textSize="16sp"
                             android:layout_gravity="center"
                             android:textStyle="bold"
+                            android:layout_centerInParent="true"
                             android:id="@+id/annual_discount"/>
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
-                </RelativeLayout>
+                </LinearLayout>
                 <TextView
                     style="?android:listSeparatorTextViewStyle"
                     android:layout_width="match_parent"
