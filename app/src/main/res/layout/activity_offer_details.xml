@@ -29,26 +29,6 @@
             android:background="@color/button_login"
             android:id="@+id/header_pnl">
 
-              <!--  <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/txt_arrow"
-                    android:textSize="30sp"
-                    android:text="@string/right_arrow"
-                    android:textColor="#000000"
-                    android:layout_marginRight="10dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_centerVertical="true"/>
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:textSize="20sp"
-                android:text="@string/back"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/txt_arrow"
-                android:layout_marginRight="7dp"
-                android:id="@+id/txt_back"/>-->
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -74,36 +54,6 @@
             android:layout_width="match_parent"
             android:layout_height="65dp"
             android:background="#edf1f4">
-            <!--<RelativeLayout-->
-                <!--android:layout_width="50dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:id="@+id/class_pnl">-->
-                <!--<ImageView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_alignParentStart="true"-->
-                    <!--android:id="@+id/img_class"/>-->
-
-                <!--<TextView-->
-                    <!--style="?android:listSeparatorTextViewStyle"-->
-                    <!--android:layout_width="40dp"-->
-                    <!--android:layout_height="1dp"-->
-                    <!--android:layout_marginTop="2dp"-->
-                    <!--android:background="@android:color/white"-->
-                    <!--android:layout_below="@+id/img_class"-->
-                    <!--android:layout_centerHorizontal="true"-->
-                    <!--android:id="@+id/class_line"/>-->
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:textColor="#ffffff"-->
-                    <!--android:textSize="12dp"-->
-                    <!--android:layout_centerHorizontal="true"-->
-                    <!--android:id="@+id/txt_percentage_off"-->
-                    <!--android:layout_below="@+id/class_line"/>-->
-
-
-                <!--</RelativeLayout>-->
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -130,14 +80,13 @@
         </RelativeLayout>
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="250dp">
 
-            <ImageView
+            <android.support.v4.view.ViewPager
+                android:id="@+id/offer_details_pager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/img_offer_logo"
-                android:adjustViewBounds="true"
-                android:scaleType="fitCenter"/>
+                android:layout_height="match_parent"
+                android:layout_weight="1" />
 
             <ProgressBar
                 android:id="@+id/offer_detail_progress"
@@ -146,45 +95,6 @@
                 android:layout_centerInParent="true"
                 android:visibility="gone"
                 />
-
-            <RelativeLayout
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_centerVertical="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true">
-
-            <!--<ImageView-->
-                <!--android:layout_width="120dp"-->
-                <!--android:layout_height="120dp"-->
-                <!--android:id="@+id/imageView"-->
-                <!--android:src="@drawable/price_product_background"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_alignParentLeft="true"-->
-                <!--android:layout_alignParentStart="true" />-->
-
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="2000"-->
-                <!--android:id="@+id/txt_new_price"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_centerHorizontal="true"-->
-                <!--android:textColor="#ffffff"-->
-                <!--android:textSize="25sp"-->
-                <!--android:layout_marginTop="10dp"/>-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="1500"-->
-                <!--android:id="@+id/txt_old_price"-->
-                <!--android:layout_centerVertical="true"-->
-                <!--android:layout_centerHorizontal="true"-->
-                <!--android:textColor="#ffffff"-->
-                <!--android:textSize="20sp"-->
-                <!--android:layout_below="@+id/txt_new_price"/>-->
-
-            </RelativeLayout>
         </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -529,7 +439,8 @@
                 android:layout_marginEnd="10dp"
                 android:text="@string/location"
                 android:id="@+id/txt_city"
-                android:layout_toStartOf="@+id/img_marker_icon"/>
+                android:layout_toStartOf="@+id/img_marker_icon"
+                android:layout_toRightOf="@+id/img_take_me_there"/>
 
             <ImageView
                 android:layout_width="wrap_content"

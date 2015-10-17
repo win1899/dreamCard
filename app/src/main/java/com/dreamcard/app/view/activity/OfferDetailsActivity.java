@@ -11,6 +11,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.view.ViewPager;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.Gravity;
@@ -45,6 +47,7 @@ import com.dreamcard.app.services.AllOffersAsync;
 import com.dreamcard.app.services.CommentsAsync;
 import com.dreamcard.app.utils.ImageViewLoader;
 import com.dreamcard.app.view.adapters.CommentsAdapter;
+import com.dreamcard.app.view.adapters.ImagePagerAdapter;
 import com.dreamcard.app.view.adapters.OtherOffersAdapter;
 import com.dreamcard.app.view.interfaces.AddCommentListener;
 import com.dreamcard.app.view.interfaces.IServiceListener;
@@ -53,8 +56,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class OfferDetailsActivity extends Activity implements IServiceListener, View.OnClickListener, AddCommentListener {
-
+public class OfferDetailsActivity extends Activity
+        implements IServiceListener, View.OnClickListener, AddCommentListener {
 
     private TextView txtOfferPeriod;
     private TextView txtOfferValidFrom;
@@ -64,7 +67,6 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
     private TextView txtYouSaveLbl;
     private TextView txtNewPrice;
     private TextView txtBusinessName;
-    private ImageView imgOfferLogo;
     private TextView txtDescription;
     private TextView txtOtherOfferBusiness;
     private ListView commentsListView;
@@ -75,6 +77,8 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
     private ImageView imgCircle;
     private TextView txtOfferDiscount;
     private RelativeLayout noCommentPnl;
+    private ImagePagerAdapter imgAdapter;
+    private ViewPager imgPager;
 
     private TransparentProgressDialog progress;
     private Runnable runnable;
@@ -102,6 +106,9 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
     private ImageView imgLogo;
     private ScrollView scroll;
     private ImageView imgStoreLogo;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,8 +141,6 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
         txtOfferPeriod = (TextView) findViewById(R.id.txt_offer_period_until);
         txtOfferValidFrom = (TextView) findViewById(R.id.txt_offer_period);
         txtPhone = (TextView) findViewById(R.id.txt_phone);
-        imgOfferLogo = (ImageView) findViewById(R.id.img_offer_logo);
-        imgOfferLogo.setOnClickListener(this);
         txtNewPrice = (TextView) findViewById(R.id.txt_new_price);
         txtYouSaveLbl = (TextView) findViewById(R.id.txt_you_save_lbl);
         txtOfferDiscount = (TextView) findViewById(R.id.txt_offer_discount);
@@ -148,6 +153,8 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
         imgStoreLogo = (ImageView) findViewById(R.id.img_store_logo);
         imgLogo = (ImageView) findViewById(R.id.img_menu_logo);
         imgLogo.setOnClickListener(this);
+
+        imgPager = (ViewPager) findViewById(R.id.offer_details_pager);
 
         handler = new Handler();
         progress = new TransparentProgressDialog(this, R.drawable.loading);
@@ -232,9 +239,10 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
     public void setData() {
         Intent intent = getIntent();
         Offers bean = intent.getParcelableExtra(Params.DATA);
+        bean.setPicturesList(intent.getStringArrayExtra(Params.PICTURE_LIST));
         this.bean = bean;
-        txtBusinessName.setText(bean.getBusinessName());
-        if (bean.getBusinessName().length() > 12) {
+        txtBusinessName.setText(bean.getTitle());
+        if (bean.getTitle().length() > 12) {
             txtBusinessName.setTextSize(18);
         }
         if (bean.getDescription() == null || bean.getDescription().equalsIgnoreCase("null"))
@@ -310,7 +318,10 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
             }
         }
         AQuery aq = new AQuery(this);
-        aq.id(R.id.img_offer_logo).progress(R.id.offer_detail_progress).image(bean.getOfferMainPhoto(), true, true, imgOfferLogo.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+        //aq.id(R.id.img_offer_logo).progress(R.id.offer_detail_progress).image(bean.getOfferMainPhoto(), true, true, imgOfferLogo.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+
+        imgAdapter = new ImagePagerAdapter(this, bean);
+        imgPager.setAdapter(imgAdapter);
 
         setRating(bean.getOfferRating());
         txtRatingPercentage.setText(String.valueOf(bean.getOfferRating()));
@@ -477,6 +488,7 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
             if (info != null) {
                 Intent intent = new Intent(this, OfferDetailsActivity.class);
                 intent.putExtra(Params.DATA, info);
+                intent.putExtra(Params.PICTURE_LIST, info.getPicturesList());
                 startActivityForResult(intent, 1);
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
             }

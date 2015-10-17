@@ -372,6 +372,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
             if (info != null) {
                 Intent intent = new Intent(this, OfferDetailsActivity.class);
                 intent.putExtra(Params.DATA, info);
+                intent.putExtra(Params.PICTURE_LIST, info.getPicturesList());
                 startActivity(intent);
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
             }

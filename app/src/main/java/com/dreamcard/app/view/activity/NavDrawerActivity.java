@@ -376,6 +376,7 @@ public class NavDrawerActivity extends FragmentActivity
             Offers bean= (Offers) b;
             Intent intent=new Intent(this,OfferDetailsActivity.class);
             intent.putExtra(Params.DATA,bean);
+            intent.putExtra(Params.PICTURE_LIST, bean.getPicturesList());
             startActivityForResult(intent, 1);
             overridePendingTransition( R.anim.push_right_in, R.anim.push_right_out );
 

@@ -87,6 +87,7 @@ public class Params {
     public static final int STATUS_NOTHING=-100;
 
     public static final String DATA="DATA";
+    public static final String PICTURE_LIST = "PictureList";
     public static String BUSINESS_ID=null;
 
     public static final int STATUS_FAILED=1;
