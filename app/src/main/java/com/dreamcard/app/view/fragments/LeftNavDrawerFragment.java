@@ -272,7 +272,7 @@ public class LeftNavDrawerFragment extends Fragment implements View.OnClickListe
 
     private void showDiscountDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this.activity);
-        builder.setTitle("Select Imput Type");
+        builder.setTitle("Select Input Type");
 
         AlertDialog levelDialog = null;
 
