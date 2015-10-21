@@ -13,6 +13,7 @@ import android.os.Handler;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.view.Gravity;
@@ -49,6 +50,7 @@ import com.dreamcard.app.utils.ImageViewLoader;
 import com.dreamcard.app.view.adapters.CommentsAdapter;
 import com.dreamcard.app.view.adapters.ImagePagerAdapter;
 import com.dreamcard.app.view.adapters.OtherOffersAdapter;
+import com.dreamcard.app.view.fragments.LeftNavDrawerFragment;
 import com.dreamcard.app.view.interfaces.AddCommentListener;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
@@ -474,6 +476,7 @@ public class OfferDetailsActivity extends Activity
         } else if (view.getId() == R.id.img_menu_logo) {
             Intent intent = new Intent();
             setResult(Params.STATUS_MOVE_TO_DASHBOARD, intent);
+            LeftNavDrawerFragment.setDrawerMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             finish();
         } else {
             Offers info = null;
