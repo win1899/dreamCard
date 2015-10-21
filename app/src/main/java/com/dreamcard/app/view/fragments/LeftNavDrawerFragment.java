@@ -56,7 +56,7 @@ public class LeftNavDrawerFragment extends Fragment implements View.OnClickListe
     private String mParam1;
     private String mParam2;
 
-    private DrawerLayout mDrawerLayout;
+    private static  DrawerLayout mDrawerLayout;
     private View mFragmentContainerView;
     private TextView txtCity;
     private TextView txtDiscRate;
@@ -186,12 +186,18 @@ public class LeftNavDrawerFragment extends Fragment implements View.OnClickListe
     public void setUp(int fragmentId, DrawerLayout drawerLayout) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
-
+mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
 //        setData();
 
+    }
+
+    public static void setDrawerMode(int lockMode) {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.setDrawerLockMode(lockMode);
+        }
     }
 
     private void setData() {

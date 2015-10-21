@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -135,6 +136,7 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        LeftNavDrawerFragment.setDrawerMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     @Override
@@ -142,6 +144,7 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
         super.onDetach();
         allOffersAsync.cancel(true);
         mListener = null;
+        LeftNavDrawerFragment.setDrawerMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     @Override
