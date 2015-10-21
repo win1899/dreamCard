@@ -399,6 +399,7 @@ public class NavDrawerActivity extends FragmentActivity
             Stores bean= (Stores) b;
             Intent intent=new Intent(this,StoreDetailsActivity.class);
             intent.putExtra(Params.DATA,bean);
+            intent.putExtra(Params.PICTURE_LIST, bean.getPictures());
             startActivityForResult(intent,2);
             overridePendingTransition( R.anim.push_down_in, R.anim.push_down_in );
         }else if(fragment.equalsIgnoreCase(Params.FRAGMENT_LEFT_DRAWER)){

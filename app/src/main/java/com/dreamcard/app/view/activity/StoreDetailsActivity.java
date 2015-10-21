@@ -12,6 +12,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -48,6 +49,8 @@ import com.dreamcard.app.services.AllOffersAsync;
 import com.dreamcard.app.services.CommentsAsync;
 import com.dreamcard.app.services.IsOfferLikedAsyncTask;
 import com.dreamcard.app.view.adapters.CommentsAdapter;
+import com.dreamcard.app.view.adapters.ImagePagerAdapter;
+import com.dreamcard.app.view.adapters.StoreImagePagerAdapter;
 import com.dreamcard.app.view.adapters.StoreOffersGridAdapter;
 import com.dreamcard.app.view.interfaces.AddCommentListener;
 import com.dreamcard.app.view.interfaces.IServiceListener;
@@ -82,7 +85,8 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     private CommentsAsync commentsAsync;
     private ArrayList<Comments> commentsList;
     private ArrayList<Offers> offersList;
-    private ImageView imgStoreLogo;
+    private StoreImagePagerAdapter imgAdapter;
+    private ViewPager imgPager;
     private ImageButton btnFacebook;
     private ImageButton btnPhone;
     private ImageButton btnEmail;
@@ -158,7 +162,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         noCommentPnl = (RelativeLayout) findViewById(R.id.no_comments_pnl);
         imgLogo = (ImageView) findViewById(R.id.img_menu_logo);
         imgLogo.setOnClickListener(this);
-        imgStoreLogo = (ImageView) findViewById(R.id.img_store_logo);
+        imgPager = (ViewPager) findViewById(R.id.img_store_pager);
 
         handler = new Handler();
         progress = new TransparentProgressDialog(this, R.drawable.loading);
@@ -193,10 +197,12 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     public void setData() {
         Intent intent = getIntent();
         Stores bean = intent.getParcelableExtra(Params.DATA);
+        bean.setPictures(intent.getStringArrayExtra(Params.PICTURE_LIST));
         this.bean = bean;
 
         txtBusinessName.setText(bean.getStoreName());
-        // TODO: txtAnnualDiscount.setText(bean.get);
+        txtAnnualDiscount.setText(Double.toString(bean.getDiscountPrecentage()) + "%");
+
         if (bean.getOurMessage() != null && !bean.getOurMessage().isEmpty() && !bean.getOurMessage().equalsIgnoreCase("null")) {
             if (bean.getOurMessage().length() > 100) {
                 bean.setOurMessage(bean.getOurMessage().substring(0, 100) + "...");
@@ -214,21 +220,8 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
             txtAbout.setText(bean.getVision());
         }
 
-        AQuery aq = new AQuery(this);
-        aq.id(R.id.img_offer_logo).progress(R.id.store_detail_progress).image(bean.getWideLogo(), true
-                , true, imgOfferLogo.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
-
-        // TODO: Check about that ?
-        //setRating(bean.getRating());
-        // ratingPnl.setOnClickListener(this);
-
-        if (bean.getLogo() != null && bean.getLogo().length() > 0 && bean.getLogo().contains("http")) {
-            aq.id(imgStoreLogo).image(bean.getLogo(), true, true
-                    , imgStoreLogo.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
-            txtBusinessName.setVisibility(View.GONE);
-        } else {
-            imgStoreLogo.setVisibility(View.GONE);
-        }
+        imgAdapter = new StoreImagePagerAdapter(this, bean);
+        imgPager.setAdapter(imgAdapter);
     }
 
     private void setRating(int rating) {

@@ -1,0 +1,25 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item>
+        <shape android:shape="rectangle">
+            <stroke
+                android:width="3dp"
+                android:color="#000000" />
+
+            <solid
+                android:color="@color/button_login"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"/>
+        </shape>
+    </item>
+
+    <item android:top="5dp" android:right="3dp" android:left="3dp">
+        <shape>
+            <solid android:color="@android:color/transparent" />
+            <stroke
+                android:width="5dp"
+                android:color="@color/button_login" />
+        </shape>
+
+    </item>
+</layer-list>

@@ -14,8 +14,26 @@ public class Stores implements Parcelable{
     private String ourMessage;
     private String mission;
     private String vision;
+    private String[] pictures;
+    private double discountPrecentage;
 
     public Stores() {
+    }
+
+    public void setPictures(String[] pics) {
+        pictures = pics;
+    }
+
+    public String[] getPictures() {
+        return pictures;
+    }
+
+    public void setDiscountPrecentage(Double precentage) {
+        discountPrecentage = precentage;
+    }
+
+    public double getDiscountPrecentage() {
+        return discountPrecentage;
     }
 
     public Stores(Parcel in) {
@@ -217,6 +235,7 @@ public class Stores implements Parcelable{
         parcel.writeString(ourMessage);
         parcel.writeString(mission);
         parcel.writeString(vision);
+        parcel.writeDouble(discountPrecentage);
     }
 
 
@@ -242,6 +261,7 @@ public class Stores implements Parcelable{
         ourMessage = in.readString();
         mission = in.readString();
         vision = in.readString();
+        discountPrecentage = in.readDouble();
     }
     public static final Creator<Stores> CREATOR = new Creator<Stores>() {
         public Stores createFromParcel(Parcel in) {

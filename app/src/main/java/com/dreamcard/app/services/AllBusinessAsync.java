@@ -2,6 +2,7 @@ package com.dreamcard.app.services;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
@@ -119,6 +120,22 @@ public class AllBusinessAsync extends AbstractAsyncTask<Object, Void, Object> {
                                 if(!rating.equalsIgnoreCase("null") && rating.length()>0)
                                     bean.setRating(Integer.parseInt(rating.substring(0,1)));
                             }
+
+                            String pictures=oneObject.getString("Pictures");
+                            if (pictures != null && !pictures.equalsIgnoreCase("null") && pictures.length() > 0) {
+                                bean.setPictures(pictures.split(";"));
+                            }
+
+                            String discountString = oneObject.optString("DiscountPercentage");
+                            double discount = 0.0;
+                            try {
+                                discount = Double.parseDouble(discountString);
+                            }
+                            catch (Exception e) {
+                                Log.i(AllBusinessAsync.class.getName(), e.getMessage());
+                            }
+                            bean.setDiscountPrecentage(discount);
+
                             bean.setPosition(index);
                             index++;
                             list.add(bean);

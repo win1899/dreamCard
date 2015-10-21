@@ -353,6 +353,7 @@ public class SlidingMenuActivity extends FragmentActivity implements FragmentMai
             Stores bean= (Stores) b;
             Intent intent=new Intent(this,StoreDetailsActivity.class);
             intent.putExtra(Params.DATA,bean);
+            intent.putExtra(Params.PICTURE_LIST, bean.getPictures());
             startActivityForResult(intent,2);
             overridePendingTransition( R.anim.push_down_in, R.anim.push_down_in );
         }
