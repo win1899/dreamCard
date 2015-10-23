@@ -222,6 +222,11 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
 
         imgAdapter = new StoreImagePagerAdapter(this, bean);
         imgPager.setAdapter(imgAdapter);
+
+
+        if (bean.getLogo() == null && bean.getPictures() == null) {
+            txtBusinessName.setVisibility(View.VISIBLE);
+        }
     }
 
     private void setRating(int rating) {

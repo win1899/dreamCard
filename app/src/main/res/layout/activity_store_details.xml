@@ -73,6 +73,7 @@
                             android:layout_centerHorizontal="true"
                             android:layout_centerVertical="true"
                             android:layout_toRightOf="@+id/img_store_logo"
+                            android:visibility="gone"
                             android:layout_marginLeft="5dp"
                             android:id="@+id/txt_business_name"/>
 
