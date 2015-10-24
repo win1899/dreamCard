@@ -11,11 +11,11 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -329,24 +329,29 @@ public class OfferDetailsActivity extends Activity
         txtRatingPercentage.setText(String.valueOf(bean.getOfferRating()));
         txtRatingTotal.setText(String.valueOf(bean.getRatingCount()));
 
-        Date date = new Date(Long.parseLong(bean.getValidFrom().replaceAll(".*?(\\d+).*", "$1")));
-        android.text.format.DateFormat df = new android.text.format.DateFormat();
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        String period = bean.getValidationPeriod();
-        if (period != null) {
-            if (!period.equalsIgnoreCase("null") && period.length() > 0)
-                c.add(Calendar.DATE, Integer.parseInt(period));
+        try {
+            Date date = new Date(Long.parseLong(bean.getValidFrom().replaceAll(".*?(\\d+).*", "$1")));
+            android.text.format.DateFormat df = new android.text.format.DateFormat();
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            String period = bean.getValidationPeriod();
+            if (period != null) {
+                if (!period.equalsIgnoreCase("null") && period.length() > 0)
+                    c.add(Calendar.DATE, Integer.parseInt(period));
+            }
+
+            String x = df.format("dd/MM/yyyy", c.getTime()).toString();
+            txtOfferPeriod.setText(x);
+
+            Date validUntil = new Date(Long.parseLong(bean.getValidFrom().replaceAll(".*?(\\d+).*", "$1")));
+            Calendar valid = Calendar.getInstance();
+            valid.setTime(validUntil);
+            String v = df.format("dd/MM/yyyy", valid.getTime()).toString();
+            txtOfferValidFrom.setText(v);
         }
-
-        String x = df.format("dd/MM/yyyy", c.getTime()).toString();
-        txtOfferPeriod.setText(x);
-
-        Date validUntil = new Date(Long.parseLong(bean.getValidFrom().replaceAll(".*?(\\d+).*", "$1")));
-        Calendar valid = Calendar.getInstance();
-        valid.setTime(validUntil);
-        String v = df.format("dd/MM/yyyy", valid.getTime()).toString();
-        txtOfferValidFrom.setText(v);
+        catch (Exception e) {
+            Log.e(OfferDetailsActivity.class.getName(), "Parsing error on date ...");
+        }
 
         if (bean.getType().equalsIgnoreCase("" + Params.OFFER_TYPE_EVENT)) {
             txtNewPrice.setVisibility(View.GONE);
