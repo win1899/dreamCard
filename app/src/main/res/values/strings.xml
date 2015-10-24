@@ -189,7 +189,7 @@
     <string name="title_activity_main_activation_form">MainActivationFormActivity</string>
 
     <!-- Google map key -->
-    <string name="map_key">AIzaSyBkv_C3qM5FfAFNsTpdtPA9bNls8_m7GnY</string>
+    <string name="map_key">AIzaSyB2umPBfDIUoxBQEE07Neemqk_uMNfY_ZU</string>
     <string name="title_activity_rate_business">RateBusinessActivity</string>
     <string name="title_activity_splash">SplashActivity</string>
     <string name="title_activity_setting">SettingActivity</string>
