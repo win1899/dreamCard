@@ -16,6 +16,7 @@ public class Params {
     public static final String FRAGMENT_LOCATIONS="FRAGMENT_LOCATIONS";
     public static final String FRAGMENT_STORES="FRAGMENT_STORES";
     public static final String FRAGMENT_CATEGORIES="CATEGORIES";
+    public static final String FRAGMENT_OFFER_INVOICE_PDF = "FRAGMENT_OFFER_INVOICE_PDF";
     public static final String FRAGMENT_OFFER_DETAILS="FRAGMENT_OFFER_DETAILS";
     public static final String FRAGMENT_ACTIVATION_1="FRAGMENT_ACTIVATION_1";
     public static final String FRAGMENT_ACTIVATION_2="FRAGMENT_ACTIVATION_2";

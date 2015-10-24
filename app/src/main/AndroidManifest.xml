@@ -96,6 +96,12 @@
             android:label="@string/title_activity_test" >
         </activity>
         <activity
+            android:name=".view.activity.OfferInvoicePdfActivity"
+            android:label="@string/title_activity_offer_invoice_pdf"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+        <activity
             android:name=".view.activity.ImageViewerActivity"
             android:label="@string/title_activity_image_viewer"
             android:screenOrientation="portrait"

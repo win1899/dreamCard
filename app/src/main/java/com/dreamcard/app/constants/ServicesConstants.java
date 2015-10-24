@@ -33,6 +33,7 @@ public class ServicesConstants {
     public static final String WS_METHOD_LIKE_OFFER="LikeOffer";
     public static final String WS_METHOD_DISLIKE_OFFER="DislikeOffer";
     public static final String WS_METHOD_LATEST_OFFERS="SelectLatestOffers";
+    public static final String WS_METHOD_INVOICE_PDF="GetInvoiceForOfferUsage";
     public static final String WS_METHOD_IS_CARD_AVAILABLE="IsCardNumberAvailable";
     public static final String WS_METHOD_REGISTER_CONSUMER="RegisterConsumer";
     public static final String WS_METHOD_OFFER_BY_CATEGORY="SelectOffersByCategoryID";
@@ -62,6 +63,7 @@ public class ServicesConstants {
     public static final String CONSUMER_ID="consumerID";
     public static final String OFFER_ID="offerID";
     public static final String BUSINESS_ID="businessID";
+    public static final String OFFER_USAGE_ID = "OfferUsageID";
     public static final String EMAIL="email";
     public static final String PASSWORD="password";
     public static final String COUNT="count";
@@ -366,6 +368,19 @@ public class ServicesConstants {
 
         return list;
     }
+
+    public static ArrayList<ServiceRequest> getOfferInvoicePdfRequestList(int offerUsageId) {
+        ArrayList<ServiceRequest> list=new ArrayList<ServiceRequest>();
+
+        ServiceRequest bean = new ServiceRequest();
+        bean.setName(OFFER_USAGE_ID);
+        bean.setType(PropertyInfo.INTEGER_CLASS);
+        bean.setValue(offerUsageId);
+        list.add(bean);
+
+        return list;
+    }
+
     public static ArrayList<ServiceRequest> getLikeBusinessRequestList(String id,String businessId){
         ArrayList<ServiceRequest> list=new ArrayList<ServiceRequest>();
 

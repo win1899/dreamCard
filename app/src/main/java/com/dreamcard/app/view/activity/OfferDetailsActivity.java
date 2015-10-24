@@ -110,7 +110,12 @@ public class OfferDetailsActivity extends Activity
     private ImageView imgStoreLogo;
 
 
-
+    @Override
+    protected void onPause() {
+        commentsAsync.cancel(true);
+        otherOfferAsync.cancel(true);
+        super.onPause();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
