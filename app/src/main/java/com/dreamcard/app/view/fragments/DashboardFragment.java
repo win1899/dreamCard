@@ -166,7 +166,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
             }
         }
         if (info != null) {
-            mListener.doAction(info, Params.FRAGMENT_OFFER_INVOICE_PDF);
+            mListener.doAction(info, Params.FRAGMENT_LATEST_OFFERS);
         }
 
         if (view.getId() == R.id.btn_cash) {

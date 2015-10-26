@@ -97,7 +97,7 @@ public class ConsumerDiscountAsyncTask extends AbstractAsyncTask<Object, Void, O
                                 JSONObject offerObject = oneObject.getJSONObject("OfferUsage");
                                 bean.setDate(offerObject.getString("UsageDate"));
                                 bean.setAmount(offerObject.getString("TotalAmount"));
-                                bean.setOfferId(offerObject.getInt("OfferID"));
+                                bean.setOfferId(offerObject.getInt("Id"));
 
                                 if(offerObject.getString("TotalAfterDiscount")!=null
                                         && !offerObject.getString("TotalAfterDiscount").equalsIgnoreCase("null")){

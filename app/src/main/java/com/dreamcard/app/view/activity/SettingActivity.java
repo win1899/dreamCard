@@ -2,10 +2,10 @@ package com.dreamcard.app.view.activity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.DialogFragment;
@@ -14,15 +14,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,7 +40,6 @@ import com.dreamcard.app.entity.UserInfo;
 import com.dreamcard.app.services.AddRemoveInterestCatAsync;
 import com.dreamcard.app.services.CategoriesAsync;
 import com.dreamcard.app.services.CitiesAsyncTask;
-import com.dreamcard.app.services.ConsumerDiscountAsyncTask;
 import com.dreamcard.app.services.CountryAsyncTask;
 import com.dreamcard.app.services.InterestCategoriesAsyncTask;
 import com.dreamcard.app.services.LoginAsync;
@@ -118,6 +115,15 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
     HashMap<String, String> selectedCategories = new HashMap();
     private int genderIndex;
     String selectedGender;
+
+    private CategoriesAsync categoriesAsync;
+    private CitiesAsyncTask citiesAsyncTask;
+    private CountryAsyncTask countriesAsyncTask;
+    private InterestCategoriesAsyncTask interestCategoriesAsync;
+    private LoginAsync loginAsync;
+    private AddRemoveInterestCatAsync async;
+    private RegisterConsumerAsync registerConsumerAsync;
+    private AddRemoveInterestCatAsync addRemoveInterestCatAsync;
 
     private ActivationSettingFragment.RecordListener recordListener = new ActivationSettingFragment.RecordListener() {
         @Override
@@ -210,21 +216,51 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
 
         setData();
 
-        CategoriesAsync categoriesAsync = new CategoriesAsync(this, new ArrayList<ServiceRequest>()
+        categoriesAsync = new CategoriesAsync(this, new ArrayList<ServiceRequest>()
                 , Params.SERVICE_PROCESS_1, Params.TYPE_ALL_CATEGORY);
         categoriesAsync.execute(this);
 
         progress.show();
         handler.postDelayed(runnable, 5000);
 
-        CitiesAsyncTask citiesAsyncTask = new CitiesAsyncTask(this, new ArrayList<ServiceRequest>()
+        citiesAsyncTask = new CitiesAsyncTask(this, new ArrayList<ServiceRequest>()
                 , Params.SERVICE_PROCESS_7);
         citiesAsyncTask.execute(this);
 
-        CountryAsyncTask countriesAsyncTask = new CountryAsyncTask(this, new ArrayList<ServiceRequest>()
+        countriesAsyncTask = new CountryAsyncTask(this, new ArrayList<ServiceRequest>()
                 , Params.SERVICE_PROCESS_8);
         countriesAsyncTask.execute(this);
 
+    }
+
+    @Override
+    protected void onPause() {
+        if (categoriesAsync != null && categoriesAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            categoriesAsync.cancel(true);
+        }
+        if (citiesAsyncTask != null && citiesAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
+            citiesAsyncTask.cancel(true);
+        }
+        if (countriesAsyncTask != null && countriesAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
+            countriesAsyncTask.cancel(true);
+        }
+        if (interestCategoriesAsync != null && interestCategoriesAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            interestCategoriesAsync.cancel(true);
+        }
+        if (loginAsync != null && loginAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            loginAsync.cancel(true);
+        }
+        if (async != null && async.getStatus() == AsyncTask.Status.RUNNING) {
+            async.cancel(true);
+        }
+        if (registerConsumerAsync != null && registerConsumerAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            registerConsumerAsync.cancel(true);
+        }
+        if (addRemoveInterestCatAsync != null && addRemoveInterestCatAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            addRemoveInterestCatAsync.cancel(true);
+        }
+
+        super.onPause();
     }
 
 
@@ -350,6 +386,20 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
             } else {
                 PurchasesListAdapter adapter = new PurchasesListAdapter(this, Params.DISCOUNT_LIST);
                 purchasesListView.setAdapter(adapter);
+
+                int totalHeight = purchasesListView.getPaddingTop() + purchasesListView.getPaddingBottom();
+                for (int i = 0; i < adapter.getCount(); i++) {
+                    View listItem = adapter.getView(i, null, purchasesListView);
+                    if (listItem instanceof ViewGroup) {
+                        listItem.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+                    }
+                    listItem.measure(0, 0);
+                    totalHeight += listItem.getMeasuredHeight();
+                }
+
+                ViewGroup.LayoutParams params = purchasesListView.getLayoutParams();
+                params.height = totalHeight + (purchasesListView.getDividerHeight() * (adapter.getCount() - 1));
+                purchasesListView.setLayoutParams(params);
             }
         }
     }
@@ -396,9 +446,9 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
             this.gridList = list;
 
 
-            InterestCategoriesAsyncTask categoriesAsync = new InterestCategoriesAsyncTask(this
+            interestCategoriesAsync = new InterestCategoriesAsyncTask(this
                     , ServicesConstants.getInterestCatRequestList(userId), Params.SERVICE_PROCESS_5);
-            categoriesAsync.execute(this);
+            interestCategoriesAsync.execute(this);
         } else if (processType == Params.SERVICE_PROCESS_2) {
             progress.dismiss();
             holder.getImgSelected().setVisibility(View.GONE);
@@ -414,7 +464,7 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
             this.selectedCategory.setSelected(true);
             this.selectedCategories.put(this.selectedCategory.getId(), this.selectedCategory.getTitle());
         } else if (processType == Params.SERVICE_PROCESS_4) {
-            LoginAsync loginAsync = new LoginAsync(this, ServicesConstants.getLoginRequestList(txtEmail.getText().toString()
+            loginAsync = new LoginAsync(this, ServicesConstants.getLoginRequestList(txtEmail.getText().toString()
                     , txtPassword.getText().toString())
                     , Params.SERVICE_PROCESS_6);
             loginAsync.execute(this);
@@ -605,7 +655,7 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
                     progress.show();
                     handler.postDelayed(runnable, 5000);
 
-                    AddRemoveInterestCatAsync async = new AddRemoveInterestCatAsync(this
+                    async = new AddRemoveInterestCatAsync(this
                             , ServicesConstants.getAddRemoveCategoryRequestList(data.getId(), userId)
                             , Params.SERVICE_PROCESS_2, Params.TYPE_REMOVE_CATEGORY);
                     async.execute(this);
@@ -616,10 +666,10 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
                     progress.show();
                     handler.postDelayed(runnable, 5000);
 
-                    AddRemoveInterestCatAsync async = new AddRemoveInterestCatAsync(this
+                    addRemoveInterestCatAsync = new AddRemoveInterestCatAsync(this
                             , ServicesConstants.getAddRemoveCategoryRequestList(data.getId(), userId)
                             , Params.SERVICE_PROCESS_3, Params.TYPE_ADD_CATEGORY);
-                    async.execute(this);
+                    addRemoveInterestCatAsync.execute(this);
                 }
             }
         }
@@ -762,9 +812,9 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
     private void saveData() {
         progress.show();
         handler.postDelayed(runnable, 5000);
-        RegisterConsumerAsync async = new RegisterConsumerAsync(this
+        registerConsumerAsync = new RegisterConsumerAsync(this
                 , ServicesConstants.getActivationInformationList(getData())
                 , Params.SERVICE_PROCESS_4);
-        async.execute(this);
+        registerConsumerAsync.execute(this);
     }
 }

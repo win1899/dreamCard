@@ -380,15 +380,7 @@ public class NavDrawerActivity extends FragmentActivity
             startActivityForResult(intent, 1);
             overridePendingTransition( R.anim.push_right_in, R.anim.push_right_out );
 
-        }
-        else if(fragment.equalsIgnoreCase(Params.FRAGMENT_OFFER_INVOICE_PDF)) {
-            Offers bean = (Offers) b;
-            Intent intent = new Intent(this, OfferInvoicePdfActivity.class);
-            intent.putExtra(Params.DATA, bean);
-            startActivityForResult(intent, 8);
-            overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
-        }
-        else if(fragment.equalsIgnoreCase(Params.FRAGMENT_CATEGORIES)){
+        }else if(fragment.equalsIgnoreCase(Params.FRAGMENT_CATEGORIES)){
             Categories bean= (Categories) b;
 
             FrameLayout mainFrameLayout=(FrameLayout)findViewById(R.id.activity_main_content_fragment);

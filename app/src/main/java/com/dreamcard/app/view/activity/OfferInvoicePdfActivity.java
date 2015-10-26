@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 
@@ -42,7 +43,6 @@ public class OfferInvoicePdfActivity extends Activity
     private void buildUI() {
         mWebView = (WebView) findViewById(R.id.webView);
         mWebView.getSettings().setJavaScriptEnabled(true);
-        mWebView.loadUrl("http://www.dream-card.net/");
     }
 
     public void setData() {
@@ -53,7 +53,10 @@ public class OfferInvoicePdfActivity extends Activity
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
-
+        Log.i(OfferInvoicePdfActivity.class.getName(), "OnServiceSucceeded with: " + b.toString());
+        if (b != null) {
+            mWebView.loadUrl("https://docs.google.com/gview?embedded=true&url=" + b.toString());
+        }
     }
 
     @Override

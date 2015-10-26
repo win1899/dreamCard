@@ -1,15 +1,19 @@
 package com.dreamcard.app.services;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.ErrorMessageInfo;
+import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.utils.SystemOperation;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.PropertyInfo;
@@ -50,7 +54,14 @@ public class GetInvoiceForOfferAsync extends AbstractAsyncTask<Object, Void, Obj
 
     @Override
     void onPostExecuteSafe(Object serviceResponse) {
-
+        Log.i(GetInvoiceForOfferAsync.class.getName(), "OnPostExecute with: " + serviceResponse.toString());
+        if (serviceResponse != null) {
+            if (serviceResponse instanceof ErrorMessageInfo) {
+                this.listener.onServiceFailed((ErrorMessageInfo) serviceResponse);
+            } else {
+                this.listener.onServiceSuccess(serviceResponse, 0);
+            }
+        }
     }
 
 
@@ -84,17 +95,9 @@ public class GetInvoiceForOfferAsync extends AbstractAsyncTask<Object, Void, Obj
             try {
                 if (envelope.getResponse() instanceof SoapPrimitive) {
                     String str = envelope.getResponse().toString();
-
-                } else {
-                    if (envelope.getResponse() instanceof Vector) {
-                        Vector response = (Vector) envelope.getResponse();
-
-                    } else {
-                        SoapObject soapObject = (SoapObject) envelope.getResponse();
-
-                    }
+                    str = str.replaceAll("\"", "");
+                    return str;
                 }
-
             } catch (SoapFault soapFault) {
                 ErrorMessageInfo bean = new ErrorMessageInfo();
                 bean.setMessage(this.context.getString(R.string.error_in_access_server));
