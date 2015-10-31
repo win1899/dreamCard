@@ -65,7 +65,7 @@ public class Params {
         public static final String USD=""+1;
     }
 
-    public static final int TIME_OUT=2000;
+    public static final int TIME_OUT=5000;
     public static final int SERVICE_REQUEST_COUNT=1;
 
     public static final int TYPE_OFFER=1;
