@@ -162,6 +162,7 @@ public class NavDrawerActivity extends FragmentActivity
         if(btnSetting!=null) {
             btnSetting.setVisibility(View.GONE);
         }
+        currentFragment=0;
 //        onNavigationDrawerItemSelected(0);
     }
 
@@ -194,6 +195,7 @@ public class NavDrawerActivity extends FragmentActivity
                 if(imgLogo !=null) {
                     imgLogo.setVisibility(View.VISIBLE);
                 }
+                currentFragment = 0;
                 break;
             case 1:
                 LatestOfferListFragment.getType();
