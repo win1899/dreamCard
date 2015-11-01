@@ -62,17 +62,13 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
     private OffersByFilterAsync allOffersAsync;
 
     public static LatestOfferListFragment newInstance(int type, String param2) {
+        typeParam = type;
 
-        if (type == Params.TYPE_OFFERS_BY_CAT) {
-            fragment = null;
-        }
-        if (fragment == null) {
-            fragment = new LatestOfferListFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_PARAM1, type);
-            args.putString(ARG_PARAM2, param2);
-            fragment.setArguments(args);
-        }
+        fragment = new LatestOfferListFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_PARAM1, type);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
 
         return fragment;
     }
