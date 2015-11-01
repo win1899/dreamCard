@@ -167,11 +167,11 @@
                 android:id="@+id/btn_wataniya"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".3"
+                android:layout_weight=".25"
                 android:background="@drawable/dashboard_total_btn_bg"
-                android:drawableLeft="@drawable/wataniya_new"
+                android:drawableLeft="@drawable/mobile_icon"
                 android:paddingStart="5dp"
-                android:text="Wataniya"
+                android:text="Mobile"
                 android:textColor="#ffffff" />
 
             <TextView
