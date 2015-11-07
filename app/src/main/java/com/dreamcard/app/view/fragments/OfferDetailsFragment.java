@@ -87,7 +87,7 @@ public class OfferDetailsFragment extends Fragment {
         txtPhone=(TextView)view.findViewById(R.id.txt_phone);
         txtPercentage=(TextView)view.findViewById(R.id.txt_percentage_off);
         imgOfferLogo=(ImageView)view.findViewById(R.id.img_offer_logo);
-        txtNewPrice=(TextView)view.findViewById(R.id.txt_new_price);
+        txtNewPrice=(TextView)view.findViewById(R.id.txt_discount);
         txtOldPrice=(TextView)view.findViewById(R.id.txt_old_price);
         return view;
     }

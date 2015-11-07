@@ -98,10 +98,10 @@
         </RelativeLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="63dp"
+            android:layout_height="54dp"
             android:background="@drawable/offer_detail_background">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
@@ -109,66 +109,70 @@
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:src="@drawable/dc_logo_offer"
-                android:layout_marginStart="15dp"
-                android:layout_gravity="center_vertical"/>
+                android:layout_gravity="center_vertical"
+                android:id="@+id/imageView3"
+                android:layout_centerVertical="true"
+                android:layout_alignParentStart="true" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/offer_page_slice"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="6dp"/>
+                android:gravity="center"
+                android:id="@+id/imageView4"
+                android:layout_centerVertical="true"
+                android:paddingLeft="20dp"
+                android:layout_toEndOf="@+id/txt_discount" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_vertical"
-                android:text="22"
-                android:textColor="#e3853d"
-                android:layout_marginStart="20dp"
-                android:textSize="23sp"
-                android:id="@+id/txt_offer_discount"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/offer_page_slice"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="12dp"/>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    android:layout_gravity="center_horizontal|center_vertical"
-                    android:gravity="center_horizontal|center_vertical"
-                    android:layout_marginStart="8dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:gravity="center_horizontal"
                 android:text="200"
-                android:textSize="21sp"
+                android:textSize="22sp"
                 android:textColor="#2b7b02"
-                android:id="@+id/txt_new_price"/>
+                android:id="@+id/txt_new_price"
+                android:layout_marginEnd="22dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignEnd="@+id/txt_you_save_lbl" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="you save"
-                        android:textSize="15sp"
-                        android:textColor="@android:color/holo_red_light"
-                        android:id="@+id/txt_you_save_lbl"
-                        android:textStyle="bold"
-                        android:layout_gravity="center_horizontal"
-                        android:gravity="center_horizontal" />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/offer_page_slice"
+                android:id="@+id/imageView5"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/txt_discount"
+                android:layout_marginEnd="20dp" />
 
-                </LinearLayout>
 
-            <!--<TextView-->
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+
+                    android:id="@+id/txt_discount"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    android:text="22"
+                    android:textColor="#e3853d"
+                    android:textSize="23sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="you save"
+                    android:textSize="15sp"
+                    android:textColor="@android:color/holo_red_light"
+                    android:id="@+id/txt_you_save_lbl"
+                    android:textStyle="bold"
+                    android:layout_gravity="center_horizontal"
+                    android:gravity="center_horizontal"
+                    android:layout_below="@+id/txt_new_price"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginEnd="16dp"
+                    android:paddingBottom="5dp"/>
+
+                <!--<TextView-->
                 <!--style="?android:listSeparatorTextViewStyle"-->
                 <!--android:layout_width="1dp"-->
                 <!--android:layout_height="match_parent"-->
@@ -177,46 +181,8 @@
                 <!--android:layout_below="@+id/btn_special"-->
                 <!--android:layout_marginStart="10dp"/>-->
 
-            </LinearLayout>
+            </RelativeLayout>
 
-            <!--<LinearLayout-->
-                <!--android:layout_width="0dp"-->
-                <!--android:layout_height="match_parent"-->
-                <!--android:layout_weight=".27"-->
-                <!--android:layout_gravity="center_horizontal|center_vertical"-->
-                <!--android:gravity="center_horizontal|center_vertical"-->
-                <!--android:orientation="vertical">-->
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:layout_gravity="center_horizontal|center_vertical"-->
-                    <!--android:gravity="center_horizontal|center_vertical"-->
-                    <!--android:text="300"-->
-                    <!--android:textSize="16sp"-->
-                    <!--android:textColor="#000000"-->
-                    <!--android:textStyle="bold"-->
-                    <!--android:id="@+id/txt_old_price" />-->
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="you save"-->
-                    <!--android:textSize="15sp"-->
-                    <!--android:textColor="#e3853d"-->
-                    <!--android:id="@+id/txt_you_save_lbl"-->
-                    <!--android:layout_gravity="center_horizontal"-->
-                    <!--android:gravity="center_horizontal" />-->
-
-                <!--<TextView-->
-                    <!--android:layout_width="wrap_content"-->
-                    <!--android:layout_height="wrap_content"-->
-                    <!--android:text="you save"-->
-                    <!--android:textSize="15sp"-->
-                    <!--android:textColor="#e3853d"-->
-                    <!--android:id="@+id/txt_you_save"-->
-                    <!--android:layout_gravity="center_horizontal"-->
-                    <!--android:gravity="center_horizontal" />-->
-
-            <!--</LinearLayout>-->
 
          </LinearLayout>
         <LinearLayout

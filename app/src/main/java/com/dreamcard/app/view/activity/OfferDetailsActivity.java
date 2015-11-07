@@ -150,7 +150,7 @@ public class OfferDetailsActivity extends Activity
         txtPhone = (TextView) findViewById(R.id.txt_phone);
         txtNewPrice = (TextView) findViewById(R.id.txt_new_price);
         txtYouSaveLbl = (TextView) findViewById(R.id.txt_you_save_lbl);
-        txtOfferDiscount = (TextView) findViewById(R.id.txt_offer_discount);
+        txtOfferDiscount = (TextView) findViewById(R.id.txt_discount);
         txtRatingPercentage = (TextView) findViewById(R.id.txt_per_rating);
         txtRatingTotal = (TextView) findViewById(R.id.txt_total_num_rating);
         txtRatingTotalPer = (TextView) findViewById(R.id.txt_total_per_rating);
