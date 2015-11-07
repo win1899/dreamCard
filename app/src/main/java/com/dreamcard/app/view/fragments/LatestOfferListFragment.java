@@ -62,7 +62,6 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
     private OffersByFilterAsync allOffersAsync;
 
     public static LatestOfferListFragment newInstance(int type, String param2) {
-        typeParam = type;
 
         fragment = new LatestOfferListFragment();
         Bundle args = new Bundle();
@@ -108,7 +107,7 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
         grid.setVisibility(View.GONE);
         this.process = Params.SERVICE_PROCESS_1;
         ArrayList<ServiceRequest> list = ServicesConstants.getLatestOfferRequestList("100");
-        if (this.typeParam == Params.TYPE_OFFERS_BY_CAT) {
+        if (typeParam == Params.TYPE_OFFERS_BY_CAT) {
             list = ServicesConstants.getOffersByCategoryRequestList(this.mParam2);
         } else {
             SearchCriteria criteria = DatabaseController.getInstance(getActivity()).getCriteria();

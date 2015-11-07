@@ -23,7 +23,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.dreamcard.app.MainActivity;
 import com.dreamcard.app.R;
@@ -435,12 +434,20 @@ public class NavDrawerActivity extends FragmentActivity
             tvTitle.setVisibility(View.VISIBLE);
             imgLogo.setVisibility(View.GONE);
         }else if(fragment.equalsIgnoreCase(Params.FRAGMANT_CATEGORY_EMPTY)){
+            Categories bean = (Categories) b;
+
+            FrameLayout mainFrameLayout=(FrameLayout)findViewById(R.id.activity_main_content_fragment);
+            mainFrameLayout.setBackgroundColor(getResources().getColor(R.color.categories_bg));
+            currentFragment = R.id.btn_browse;
+            LatestOfferListFragment fragment1=LatestOfferListFragment.newInstance(Params.TYPE_OFFERS_BY_CAT,bean.getId());
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.activity_main_content_fragment, fragment1)
+                    .commit();
             btnCategories.setBackground(getResources().getDrawable(R.drawable.categories_bg));
             btnLatestOffers.setBackground(getResources().getDrawable(R.drawable.latest_offers_active_bg));
 
-            mNavigationDrawerFragment.selectItem(2);
-
-            Toast.makeText(this, "لم يتم ايجاد اقسام بهذه المواصفات", 5).show();
+            String currentMenu=getResources().getString(R.string.offers)+" "+bean.getTitle();
 
             tvTitle.setVisibility(View.GONE);
             imgLogo.setVisibility(View.VISIBLE);
