@@ -46,13 +46,70 @@
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
                 android:background="#000000"
+                android:id="@+id/first_spe"
                 android:layout_below="@+id/header"/>
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_below="@+id/first_spe"
+                android:id="@+id/store_header">
+                <RelativeLayout
+                    android:layout_width="70dp"
+                    android:layout_height="60dp"
+                    android:background="#DBA901"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    android:id="@+id/rating_pnl">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FFFFFF"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:text="10%"
+                        android:layout_centerHorizontal="true"
+                        android:id="@+id/annual_discount"/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Off"
+                        android:textColor="#FFFFFF"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:id="@+id/discount_txt_view"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_below="@+id/annual_discount"
+                        android:layout_centerInParent="true" />
+
+                </RelativeLayout>
+
+                <ImageView
+                    android:layout_width="68dp"
+                    android:layout_height="68dp"
+                    android:paddingTop="1dp"
+                    android:id="@+id/main_store_icon"
+                    android:src="@drawable/dream_card_app"
+                    android:scaleType="centerInside"
+                    android:layout_alignBottom="@+id/rating_pnl"
+                    android:layout_centerHorizontal="true" />
+            </RelativeLayout>
+
+            <TextView
+                style="?android:listSeparatorTextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="#000000"
+                android:id="@+id/second_spe"
+                android:layout_below="@+id/store_header"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_below="@+id/header"
+                android:layout_below="@+id/second_spe"
                 android:id="@+id/title_pnl">
 
                 <LinearLayout
@@ -87,41 +144,6 @@
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="5dp"
                             />
-                    </RelativeLayout>
-
-
-                    <RelativeLayout
-                        android:id="@+id/rating_pnl"
-                        android:layout_width="90dp"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:background="@drawable/discount_store_background"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true">
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="#FFFFFF"
-                            android:textSize="30sp"
-                            android:textStyle="bold"
-                            android:paddingTop="40dp"
-                            android:layout_centerHorizontal="true"
-                            android:id="@+id/annual_discount"/>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Off"
-                            android:textColor="#FFFFFF"
-                            android:textSize="20sp"
-                            android:textStyle="bold"
-                            android:id="@+id/discount_txt_view"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginRight="5dp"
-                            android:layout_below="@+id/annual_discount"
-                            android:layout_centerInParent="true" />
-
-
                     </RelativeLayout>
 
                 </LinearLayout>
