@@ -374,6 +374,12 @@ public class NavDrawerActivity extends FragmentActivity
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        leftNavDrawerFragment.setDrawerMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
+    @Override
     public void doAction(Object b, String fragment) {
         if(fragment.equalsIgnoreCase(Params.FRAGMENT_LATEST_OFFERS)){
             Offers bean= (Offers) b;

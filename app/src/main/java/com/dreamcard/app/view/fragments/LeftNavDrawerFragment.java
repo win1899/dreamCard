@@ -186,7 +186,7 @@ public class LeftNavDrawerFragment extends Fragment implements View.OnClickListe
     public void setUp(int fragmentId, DrawerLayout drawerLayout) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
-mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
@@ -196,7 +196,7 @@ mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
     public static void setDrawerMode(int lockMode) {
         if (mDrawerLayout != null) {
-            mDrawerLayout.setDrawerLockMode(lockMode);
+            mDrawerLayout.setDrawerLockMode(lockMode, Gravity.LEFT);
         }
     }
 
