@@ -83,7 +83,7 @@ public class NotificationGridAdapter extends BaseAdapter {
         holder.getTxtName().setText(title);
 
         ImageViewLoader imgLoader = new ImageViewLoader(this.activity);
-        imgLoader.DisplayImage(bean.getOfferMainPhoto(), holder.getImgOffer(), this.activity.getResources());
+        imgLoader.DisplayImage(bean.getBusinessLogo(), holder.getImgOffer(), this.activity.getResources());
 
         return vi;
     }
