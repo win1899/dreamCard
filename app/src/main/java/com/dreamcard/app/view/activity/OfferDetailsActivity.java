@@ -9,6 +9,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -43,9 +44,11 @@ import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.LocationInfo;
 import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.entity.Offers;
+import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.services.AddBusinessCommentAsync;
 import com.dreamcard.app.services.AllOffersAsync;
 import com.dreamcard.app.services.CommentsAsync;
+import com.dreamcard.app.services.GetBussinesByIdAsync;
 import com.dreamcard.app.utils.ImageViewLoader;
 import com.dreamcard.app.view.adapters.CommentsAdapter;
 import com.dreamcard.app.view.adapters.ImagePagerAdapter;
@@ -109,11 +112,21 @@ public class OfferDetailsActivity extends Activity
     private ScrollView scroll;
     private ImageView imgStoreLogo;
 
+    private Stores offerStore;
+
+    private GetBussinesByIdAsync getBussinesByIdAsync;
 
     @Override
     protected void onPause() {
-        commentsAsync.cancel(true);
-        otherOfferAsync.cancel(true);
+        if (commentsAsync != null && commentsAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            commentsAsync.cancel(true);
+        }
+        if (otherOfferAsync != null && otherOfferAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            otherOfferAsync.cancel(true);
+        }
+        if (getBussinesByIdAsync != null && getBussinesByIdAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            getBussinesByIdAsync.cancel(true);
+        }
         super.onPause();
     }
 
@@ -135,6 +148,10 @@ public class OfferDetailsActivity extends Activity
                 , ServicesConstants.getOffersByBusinessRequestList(this.bean.getBusinessId())
                 , Params.SERVICE_PROCESS_7, Params.TYPE_OFFERS_BY_BUSINESS);
         otherOfferAsync.execute(this);
+
+        getBussinesByIdAsync = new GetBussinesByIdAsync(this, ServicesConstants.getBusinessById(bean.getBusinessId()),
+                Params.SERVICE_PROCESS_9);
+        getBussinesByIdAsync.execute(this);
     }
 
     private void buildUI() {
@@ -366,6 +383,21 @@ public class OfferDetailsActivity extends Activity
         aq.id(imgStoreLogo).image(bean.getBusinessLogo(), true, true
                 , imgStoreLogo.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
 
+        imgStoreLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (offerStore == null) {
+                    return;
+                }
+                Intent intent=new Intent(OfferDetailsActivity.this, StoreDetailsActivity.class);
+                intent.putExtra(Params.DATA, offerStore);
+                intent.putExtra(Params.PICTURE_LIST, offerStore.getPictures());
+                startActivity(intent);
+                overridePendingTransition( R.anim.push_down_in, R.anim.push_down_in );
+                finish();
+            }
+        });
+
         if (bean.getBusinessLogo() != null && bean.getBusinessLogo().length() > 0 && bean.getBusinessLogo().contains("http")) {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) txtBusinessName.getLayoutParams();
             params.addRule(RelativeLayout.END_OF, R.id.img_store_logo);
@@ -449,6 +481,20 @@ public class OfferDetailsActivity extends Activity
                         continue;
                     otherOfferGallery.addView(insertPhoto(bean.getPosition(), bean.getOfferMainPhoto()
                             , bean.getSaleNewPrice(), 170, 150));
+                }
+            }
+        }
+        else if (processType == Params.SERVICE_PROCESS_9) {
+            ArrayList<Stores> list = (ArrayList<Stores>) b;
+            if (list != null && list.size() == 1) {
+                this.offerStore = list.get(0);
+            }
+            else {
+                for (Stores s : list) {
+                    if (s.getId().equalsIgnoreCase(this.bean.getBusinessId())) {
+                        offerStore = s;
+                        return;
+                    }
                 }
             }
         }

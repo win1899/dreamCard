@@ -102,6 +102,7 @@ public class Params {
     public static final int SERVICE_PROCESS_6=6;
     public static final int SERVICE_PROCESS_7=7;
     public static final int SERVICE_PROCESS_8=8;
+    public static final int SERVICE_PROCESS_9=9;
 
     public static final String DREAMCARD_URL="http://www.dream-card.net/";
 

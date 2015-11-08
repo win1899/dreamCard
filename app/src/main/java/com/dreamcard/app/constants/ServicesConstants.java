@@ -756,4 +756,16 @@ public class ServicesConstants {
 
         return list;
     }
+
+    public static ArrayList<ServiceRequest> getBusinessById(String businessId) {
+        ArrayList<ServiceRequest> list=new ArrayList<ServiceRequest>();
+
+        ServiceRequest bean = new ServiceRequest();
+        bean.setName("businessID");
+        bean.setType(PropertyInfo.STRING_CLASS);
+        bean.setValue(businessId);
+        list.add(bean);
+
+        return list;
+    }
 }
