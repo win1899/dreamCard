@@ -91,6 +91,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     private ImageButton btnPhone;
     private ImageButton btnEmail;
     private ImageButton btnWebsite;
+    private ImageView storeIcon;
     private Button btnAll;
     private Button btnLatest;
     private boolean firstLoad = true;
@@ -133,6 +134,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         imgOfferLogo.setOnClickListener(this);
         scroll = (ScrollView) findViewById(R.id.scroll);
         commentsListView = (ListView) findViewById(android.R.id.list);
+        storeIcon = (ImageView) findViewById(R.id.main_store_icon);
         commentsListView.setOnTouchListener(new ListView.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -231,6 +233,9 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         imgAdapter = new StoreImagePagerAdapter(this, bean);
         imgPager.setAdapter(imgAdapter);
 
+        AQuery aq = new AQuery(StoreDetailsActivity.this);
+        aq.id(storeIcon).image(bean.getLogo(), true, true
+                , storeIcon.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
 
         if (bean.getLogo() == null && bean.getPictures() == null) {
             txtBusinessName.setVisibility(View.VISIBLE);
