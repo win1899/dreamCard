@@ -2,6 +2,7 @@ package com.dreamcard.app.view.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -14,10 +15,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dreamcard.app.R;
+import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.OffersRecordHolder;
 import com.dreamcard.app.utils.ImageUtil;
 import com.dreamcard.app.utils.ImageViewLoader;
+import com.dreamcard.app.view.activity.OfferInvoicePdfActivity;
 
 import java.util.ArrayList;
 
@@ -29,12 +32,10 @@ public class NotificationGridAdapter extends BaseAdapter {
     private Activity activity;
     private ArrayList<Offers> data;
     private static LayoutInflater inflater = null;
-    private View.OnClickListener listener;
 
-    public NotificationGridAdapter(Activity a, ArrayList<Offers> list, View.OnClickListener listener) {
+    public NotificationGridAdapter(Activity a, ArrayList<Offers> list) {
         this.activity = a;
         this.data = list;
-        this.listener = listener;
         this.inflater = (LayoutInflater) activity.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -64,10 +65,10 @@ public class NotificationGridAdapter extends BaseAdapter {
             holder = (OffersRecordHolder) convertView.getTag();
 
 
-        Offers bean = this.data.get(position);
+        final Offers bean = this.data.get(position);
         holder.getRelativeLayout().setId(bean.getPosition());
-        holder.getRelativeLayout().setOnClickListener(this.listener);
-        holder.getImgOffer().setOnClickListener(this.listener);
+        //holder.getRelativeLayout().setOnClickListener(this.listener);
+        //holder.getImgOffer().setOnClickListener(this.listener);
 
         double discount = bean.getAmountBeforeDicount() - bean.getAmountAfterDiscount();
         String discSt = String.valueOf(discount);
@@ -84,6 +85,16 @@ public class NotificationGridAdapter extends BaseAdapter {
 
         ImageViewLoader imgLoader = new ImageViewLoader(this.activity);
         imgLoader.DisplayImage(bean.getBusinessLogo(), holder.getImgOffer(), this.activity.getResources());
+
+        vi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(activity, OfferInvoicePdfActivity.class);
+                intent.putExtra(Params.DATA, bean);
+                activity.startActivityForResult(intent, 8);
+                activity.overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+            }
+        });
 
         return vi;
     }

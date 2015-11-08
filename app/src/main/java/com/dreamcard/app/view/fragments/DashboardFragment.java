@@ -270,7 +270,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
                         break;
                 }
                 adapter = null;
-                adapter = new NotificationGridAdapter(getActivity(), this.notificationList, this);
+                adapter = new NotificationGridAdapter(getActivity(), this.notificationList);
                 grid.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
             }
