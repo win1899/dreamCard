@@ -38,7 +38,7 @@
                 android:hint="@string/username"
                 android:textColorHint="#a29d99"
                 android:id="@+id/txt_username"
-                android:inputType="text"
+                android:inputType="textEmailAddress"
                 android:background="#00000000"
                 android:ellipsize="end"/>
 
