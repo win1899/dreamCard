@@ -6,21 +6,16 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.dreamcard.app.R;
@@ -72,6 +67,8 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
     private Button btnGas;
     private Button btnWataniya;
     private Button btnCash;
+
+    private double totalSave = 0.0;
 
     public static DashboardFragment newInstance(String param1, String param2) {
         DashboardFragment fragment = new DashboardFragment();
@@ -178,7 +175,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
             btnWataniya.setBackgroundColor(getResources().getColor(R.color.button_not_seleted));
             btnGas.setBackgroundColor(getResources().getColor(R.color.button_not_seleted));
 
-            comingSoonDialog();
+            showSavedAmountDialog("Cash saved", totalSave);
         } else if (view.getId() == R.id.btn_gas) {
             GradientDrawable bgShape = (GradientDrawable) btnCash.getBackground();
             bgShape.setColor(getResources().getColor(R.color.button_not_seleted));
@@ -196,7 +193,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
             totalShape.setColor(getResources().getColor(R.color.button_selected));
             btnWataniya.setBackgroundColor(getResources().getColor(R.color.button_not_seleted));
             btnGas.setBackgroundColor(getResources().getColor(R.color.button_not_seleted));
-            comingSoonDialog();
+            showSavedAmountDialog("Total saved", totalSave);
         } else if (view.getId() == R.id.btn_wataniya) {
             GradientDrawable bgShape = (GradientDrawable) btnCash.getBackground();
             bgShape.setColor(getResources().getColor(R.color.button_not_seleted));
@@ -208,6 +205,20 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
             comingSoonDialog();
         }
     }
+
+    private void showSavedAmountDialog(String title, double amount) {
+        new AlertDialog.Builder(this.getActivity())
+                .setTitle(title)
+                .setMessage(amount + getResources().getString(R.string.ils))
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .show();
+
+    }
+
 
     private void comingSoonDialog() {
         new AlertDialog.Builder(this.getActivity())
@@ -230,6 +241,12 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
         if (processType == Params.SERVICE_PROCESS_1) {
             ConsumerInfo bean = (ConsumerInfo) b;
             txtYouSaved.setText(bean.getTotalSaving() + getResources().getString(R.string.ils));
+            try {
+                totalSave = Double.parseDouble(bean.getTotalSaving());
+            }
+            catch (Exception e) {
+                Log.e(DashboardFragment.class.getName(), "Unable to parse double: " + bean.getTotalSaving());
+            }
         } else if (processType == Params.SERVICE_PROCESS_3) {
             ArrayList<Offers> list = (ArrayList<Offers>) b;
             Params.DISCOUNT_LIST = list;
