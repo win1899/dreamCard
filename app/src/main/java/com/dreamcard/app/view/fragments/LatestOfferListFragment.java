@@ -161,6 +161,12 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        LeftNavDrawerFragment.setDrawerMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    @Override
     public void onServiceFailed(ErrorMessageInfo info) {
         if (getActivity() == null) {
             Log.e(this.getClass().getName(), "Activity is null, avoid callback");

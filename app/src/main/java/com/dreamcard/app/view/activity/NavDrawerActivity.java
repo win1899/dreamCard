@@ -415,6 +415,12 @@ public class NavDrawerActivity extends FragmentActivity
             if(this.isOfferListSelected){
                 LatestOfferListFragment.getType();
                 LatestOfferListFragment f= LatestOfferListFragment.newInstance(Params.TYPE_OFFER, "");
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.activity_main_content_fragment, f)
+                        .commit();
+                fragmentManager.executePendingTransactions();
+
                 f.referesh();
 
             }
