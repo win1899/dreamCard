@@ -182,34 +182,38 @@
                     android:layout_marginEnd="10dp">
 
                     <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/facebook_2"
+                        android:layout_width="30dp"
+                        android:layout_height="25dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/facebook_last"
                         android:background="@null"
                         android:id="@+id/btn_facebook"/>
 
                     <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/email_2"
+                        android:layout_width="30dp"
+                        android:layout_height="25dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/email_last"
                         android:background="@null"
-                        android:layout_marginStart="14dp"
+                        android:layout_marginStart="6dp"
                         android:id="@+id/btn_email"/>
 
                     <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/phone_2"
+                        android:layout_width="15dp"
+                        android:layout_height="25dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/phone_last"
                         android:background="@null"
                         android:layout_marginStart="14dp"
                         android:id="@+id/btn_phone"/>
 
                     <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@drawable/website_2"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/website_last"
                         android:background="@null"
-                        android:layout_marginStart="14dp"
+                        android:layout_marginStart="12dp"
                         android:id="@+id/btn_website"/>
 
 
