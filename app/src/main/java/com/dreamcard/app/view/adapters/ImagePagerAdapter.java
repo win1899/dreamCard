@@ -60,10 +60,18 @@ public class ImagePagerAdapter extends PagerAdapter {
 
         }
         else {
-            aq.id(imageView).image(mOffer.getPicturesList()[position], true, true
-                    , imageView.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+            if (position == 0) {
+                aq.id(imageView).image(mOffer.getOfferMainPhoto(), true, true
+                        , imageView.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+                intent.putExtra("imageURL", mOffer.getOfferMainPhoto());
+            }
+            else {
+                aq.id(imageView).image(mOffer.getPicturesList()[position - 1], true, true
+                        , imageView.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+                intent.putExtra("imageURL", mOffer.getPicturesList()[position - 1]);
 
-            intent.putExtra("imageURL", mOffer.getPicturesList()[position]);
+            }
+
         }
 
         itemView.setOnClickListener(new View.OnClickListener() {
