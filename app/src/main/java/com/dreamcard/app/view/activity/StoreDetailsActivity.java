@@ -198,7 +198,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
 
     public void setData() {
         Intent intent = getIntent();
-        Stores bean = intent.getParcelableExtra(Params.DATA);
+        final Stores bean = intent.getParcelableExtra(Params.DATA);
         bean.setPictures(intent.getStringArrayExtra(Params.PICTURE_LIST));
         this.bean = bean;
 
@@ -214,20 +214,41 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         }
 
         if (bean.getOurMessage() != null && !bean.getOurMessage().isEmpty() && !bean.getOurMessage().equalsIgnoreCase("null")) {
+            String about = bean.getOurMessage();
             if (bean.getOurMessage().length() > 100) {
-                bean.setOurMessage(bean.getOurMessage().substring(0, 100) + "...");
+                about = bean.getOurMessage().substring(0, 100) + "...";
+                txtAbout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        txtAbout.setText(bean.getOurMessage());
+                    }
+                });
             }
-            txtAbout.setText(bean.getOurMessage());
+            txtAbout.setText(about);
         } else if (bean.getMission() != null && !bean.getMission().isEmpty() && !bean.getMission().equalsIgnoreCase("null")) {
+            String mission = bean.getMission();
             if (bean.getMission().length() > 100) {
-                bean.setMission(bean.getMission().substring(0, 100) + "...");
+                mission = bean.getMission().substring(0, 100) + "...";
+                txtAbout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        txtAbout.setText(bean.getMission());
+                    }
+                });
             }
-            txtAbout.setText(bean.getMission());
+            txtAbout.setText(mission);
         } else if (bean.getVision() != null && !bean.getVision().isEmpty() && !bean.getVision().equalsIgnoreCase("null")) {
+            String vision = bean.getVision();
             if (bean.getVision().length() > 100) {
-                bean.setVision(bean.getVision().substring(0, 100) + "...");
+                vision = bean.getVision().substring(0, 100) + "...";
+                txtAbout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        txtAbout.setText(bean.getVision());
+                    }
+                });
             }
-            txtAbout.setText(bean.getVision());
+            txtAbout.setText(vision);
         }
 
         imgAdapter = new StoreImagePagerAdapter(this, bean);
