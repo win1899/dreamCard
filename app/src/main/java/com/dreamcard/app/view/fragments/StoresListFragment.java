@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -20,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,6 +72,7 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
     private ListAdapter mAdapter;
     private RegularStoresGridAdapter adapter;
     private HorizontalScrollView goldScroll;
+    private ScrollView mainScroll;
     private TextView txtAdv1;
     private TextView txtAdv2;
     private HorizontalScrollView silverScroll;
@@ -81,6 +84,7 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
     private Activity activity;
     private ProgressBar progressBar;
     private LinearLayout storeListMainLayout;
+
 
     public static StoresListFragment newInstance(String param1, String param2) {
         StoresListFragment fragment = new StoresListFragment();
@@ -120,10 +124,12 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
         progressBar=(ProgressBar)view.findViewById(R.id.progress);
         storeListMainLayout = (LinearLayout) view.findViewById(R.id.store_list_main_layout);
         silverScroll=(HorizontalScrollView)view.findViewById(R.id.silver_scroll);
+        mainScroll = (ScrollView) view.findViewById(R.id.stores_main_scroll);
         progressBar.setVisibility(View.VISIBLE);
         storeListMainLayout.setVisibility(View.GONE);
         allBusinessAsync=new AllBusinessAsync(this, new ArrayList<ServiceRequest>(), Params.SERVICE_PROCESS_1);
         allBusinessAsync.execute(this.activity);
+
 
         return view;
     }
@@ -174,6 +180,19 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
             adapter = new RegularStoresGridAdapter(getActivity(), R.layout.stores_grid_button
                     , gridArray, this, null);
             grid.setAdapter(adapter);
+            grid.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    if (event.getAction() == MotionEvent.ACTION_DOWN || event.getAction() == MotionEvent.ACTION_MOVE
+                            || event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_SCROLL)
+                    {
+                        mainScroll.dispatchTouchEvent(event);
+                        return true;
+                    }
+                    return false;
+                }
+            });
+
             progressBar.setVisibility(View.GONE);
             storeListMainLayout.setVisibility(View.VISIBLE);
         }
