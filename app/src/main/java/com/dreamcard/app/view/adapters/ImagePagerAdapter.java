@@ -37,7 +37,7 @@ public class ImagePagerAdapter extends PagerAdapter {
         if (mOffer.getPicturesList() == null) {
             return 1;
         }
-        return mOffer.getPicturesList().length;
+        return mOffer.getPicturesList().length + 1;
     }
 
     @Override
