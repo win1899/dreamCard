@@ -1,5 +1,7 @@
 package com.dreamcard.app.constants;
 
+import android.util.Log;
+
 import com.dreamcard.app.entity.PersonalInfo;
 import com.dreamcard.app.entity.SearchCriteria;
 import com.dreamcard.app.entity.ServiceRequest;
@@ -611,8 +613,12 @@ public class ServicesConstants {
         bean = new ServiceRequest();
         bean.setName("CityId");
         bean.setType(PropertyInfo.INTEGER_CLASS);
-        bean.setValue(Integer.parseInt(info.getCity()));
-        list.add(bean);
+        try {
+            bean.setValue(Integer.parseInt(info.getCity()));
+            list.add(bean);
+        } catch (NumberFormatException e) {
+            Log.e(ServicesConstants.class.getName(), "Can't parse CityId");
+        }
 
         if(info.getCountry()!=null && !info.getCountry().equalsIgnoreCase("null")) {
             bean = new ServiceRequest();
