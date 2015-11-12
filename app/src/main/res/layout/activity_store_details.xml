@@ -92,7 +92,6 @@
                     android:layout_height="68dp"
                     android:paddingTop="1dp"
                     android:id="@+id/main_store_icon"
-                    android:src="@drawable/dream_card_app"
                     android:scaleType="centerInside"
                     android:layout_alignBottom="@+id/rating_pnl"
                     android:layout_centerHorizontal="true" />
