@@ -2,7 +2,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="140dp"
-    android:layout_height="180dp"
+    android:layout_height="190dp"
     android:layout_gravity="center_horizontal|center_vertical"
     android:orientation="vertical"
     android:layout_marginEnd="10dp"
@@ -26,7 +26,7 @@
 
         <RelativeLayout
             android:layout_width="wrap_content"
-            android:layout_height="110dp"
+            android:layout_height="130dp"
             android:id="@+id/img_pnl">
             <!--<include layout="@layout/test_merge"></include>-->
 
@@ -42,9 +42,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerHorizontal="true"
-                android:layout_centerInParent="true"
                 android:scaleType="fitXY"
-                android:src="@drawable/offer_item_bg"/>
+                android:src="@drawable/offer_item_bg" />
 
             <LinearLayout
                 android:id="@+id/rating_pnl"
@@ -66,39 +65,41 @@
             android:layout_below="@+id/img_pnl"
             android:minHeight="65dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="14sp"
-            android:textColor="#000000"
-            android:id="@+id/txt_description"
-            android:text="desc"
-            android:layout_marginTop="3dp"
-            android:layout_marginLeft="3dp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="12sp"
+                android:textColor="#000000"
+                android:id="@+id/txt_description"
+                android:text="desc"
+                android:layout_marginLeft="3dp"
+                android:layout_marginRight="3dp"
+                android:maxLines="3"
+                android:layout_alignParentTop="true"
+                android:gravity="center"
+                android:layout_gravity="center_vertical"
+                android:layout_centerHorizontal="true" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/txt_price"
-            android:textColor="@color/button_login"
-            android:textSize="17sp"
-            android:layout_centerVertical="true"
-            android:layout_below="@+id/txt_description"
-            android:layout_alignParentEnd="true"
-            android:layout_marginEnd="1dp"
-            android:text="000"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/txt_price"
+                android:textColor="@color/button_login"
+                android:textSize="17sp"
+                android:text="000"
+                android:layout_below="@+id/txt_description"
+                android:layout_alignParentEnd="true" />
 
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="17sp"
-            android:textColor="@color/list_divider"
-            android:layout_marginEnd="3dp"
-            android:layout_toStartOf="@+id/txt_price"
-            android:layout_below="@+id/txt_description"
-            android:id="@+id/txt_old_price"
-            android:text="111"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="17sp"
+                android:textColor="@color/list_divider"
+                android:id="@+id/txt_old_price"
+                android:text="111"
+                android:layout_below="@+id/txt_description"
+                android:layout_centerHorizontal="true" />
 
         </RelativeLayout>
 
