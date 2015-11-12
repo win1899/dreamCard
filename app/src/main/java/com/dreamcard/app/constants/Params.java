@@ -126,4 +126,10 @@ public class Params {
      */
     public static final String SYSTEM_DB="DREAMCARD";
     public static final int DB_VERSION=2;
+
+    /**
+     * FAQ
+     */
+    public static final String QUESTION_EXTRA = "questionExtra";
+    public static final String ANSWER_EXTRA = "answerExtra";
 }

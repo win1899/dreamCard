@@ -195,6 +195,7 @@
     <string name="title_activity_setting">SettingActivity</string>
     <string name="title_activity_test">TestActivity</string>
     <string name="title_activity_offer_invoice_pdf">OfferInvoicePdfActivity</string>
+    <string name="title_activity_faq_item">FAQItem</string>
     <string name="title_activity_image_viewer">ImageViewerActivity</string>
     <string name="title_activity_nav_drawer_actiity">NavDrawerActiity</string>
     <string name="title_section1">Section 1</string>

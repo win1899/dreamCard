@@ -2,6 +2,7 @@ package com.dreamcard.app.view.adapters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +10,12 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.dreamcard.app.R;
+import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.entity.Comments;
 import com.dreamcard.app.entity.FAQ;
 import com.dreamcard.app.entity.FAQRecordHolder;
 import com.dreamcard.app.entity.RecordHolder;
+import com.dreamcard.app.view.activity.FAQViewer;
 
 import java.util.ArrayList;
 
@@ -55,9 +58,20 @@ public class FAQAdapter extends BaseAdapter {
         } else
             holder = (FAQRecordHolder) convertView.getTag();
 
-        FAQ bean = this.data.get(position);
+        final FAQ bean = this.data.get(position);
         holder.getQuastion().setText(bean.getQuastion());
         holder.getAnswer().setText(bean.getAnswer());
+
+        vi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(activity, FAQViewer.class);
+                intent.putExtra(Params.QUESTION_EXTRA, bean.getQuastion());
+                intent.putExtra(Params.ANSWER_EXTRA, bean.getAnswer());
+
+                activity.startActivity(intent);
+            }
+        });
         return vi;
     }
 }
