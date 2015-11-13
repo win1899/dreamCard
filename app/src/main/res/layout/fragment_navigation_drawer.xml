@@ -6,37 +6,48 @@
     android:orientation="vertical"
     android:background="@drawable/main_menu_bg">
 
-<TextView android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:textColor="#ffffff"
-    android:textSize="25sp"
-    android:id="@+id/txt_username"
-    android:layout_marginEnd="20dp"
-    android:layout_marginStart="20dp"
-    android:layout_marginTop="10dp"
-    android:layout_gravity="end"
-    android:gravity="end"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="#ffffff"
-        android:textSize="18sp"
-        android:id="@+id/txt_card_num"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="5dp"
-        android:layout_gravity="end"
-        android:gravity="end"/>
-
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:background="@color/list_divider"
-        style="?android:listSeparatorTextViewStyle"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginStart="20dp"/>
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:orientation="vertical">
+        <TextView android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="25sp"
+            android:id="@+id/txt_username"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
+            android:text="tom 6"
+            android:layout_gravity="end"
+            android:gravity="end"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:id="@+id/txt_card_num"
+            android:layout_marginEnd="20dp"
+            android:text="120078453897971212145551"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_gravity="end"
+            android:gravity="end"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/list_divider"
+            style="?android:listSeparatorTextViewStyle"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"/>
+
+    </LinearLayout>
+
+
 
 <ListView
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
