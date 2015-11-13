@@ -168,15 +168,12 @@ public class LeftNavDrawerFragment extends Fragment implements View.OnClickListe
                 , Params.SERVICE_PROCESS_2, Params.TYPE_ALL_CATEGORY);
         categoriesAsync.execute(this.activity);
 
-        discountList.add("0% - 10%");
-        discountList.add("10% - 20%");
-        discountList.add("20% - 30%");
-        discountList.add("30% - 40%");
-        discountList.add("40% - 50%");
-        discountList.add("50% - 60%");
-        discountList.add("60% - 70%");
-        discountList.add("70% - 80%");
-        discountList.add("80% - 90%");
+        discountList.add("0-100");
+        discountList.add("100-200");
+        discountList.add("200-400");
+        discountList.add("400-700");
+        discountList.add("700-1000");
+        discountList.add("1000+");
 
         setData();
 

@@ -730,9 +730,14 @@ public class ServicesConstants {
         list.add(bean);
 
         bean = new ServiceRequest();
-        bean.setName("discountPercentage");
+        bean.setName("discounPercentage");
         bean.setType(PropertyInfo.STRING_CLASS);
-        bean.setValue(criteria.getDiscRate());
+        if (criteria.getDiscRate().equalsIgnoreCase("1000+")) {
+            bean.setValue("1000-1000+");
+        }
+        else {
+            bean.setValue(criteria.getDiscRate());
+        }
         list.add(bean);
 
 //        bean = new ServiceRequest();

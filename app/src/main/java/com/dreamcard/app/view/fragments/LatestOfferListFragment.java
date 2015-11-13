@@ -2,6 +2,7 @@ package com.dreamcard.app.view.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.SearchCriteria;
 import com.dreamcard.app.entity.ServiceRequest;
+import com.dreamcard.app.services.AllOffersAsync;
 import com.dreamcard.app.services.OffersByFilterAsync;
 import com.dreamcard.app.view.adapters.LatestOffersListAdapter;
 import com.dreamcard.app.view.interfaces.IServiceListener;
@@ -59,7 +61,8 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
 
     static LatestOfferListFragment fragment = null;
 
-    private OffersByFilterAsync allOffersAsync;
+    private OffersByFilterAsync offersFilteredAsync;
+    private AllOffersAsync allOffersAsync;
 
     public static LatestOfferListFragment newInstance(int type, String param2) {
 
@@ -115,11 +118,19 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
                 list = ServicesConstants.getOffersByFilterRequestParams(criteria);
             } else {
                 list = new ArrayList<ServiceRequest>();
+                allOffersAsync = new AllOffersAsync(this, list, Params.SERVICE_PROCESS_1, this.typeParam);
+                allOffersAsync.execute(getActivity());
+                return;
             }
         }
-        allOffersAsync = new OffersByFilterAsync(this, list
+
+        if (offersFilteredAsync != null && offersFilteredAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            offersFilteredAsync.cancel(true);
+        }
+        offersFilteredAsync = new OffersByFilterAsync(this, list
                 , Params.SERVICE_PROCESS_1, this.typeParam);
-        allOffersAsync.execute(getActivity());
+
+        offersFilteredAsync.execute(getActivity());
     }
 
     @Override
@@ -137,7 +148,12 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
     @Override
     public void onDetach() {
         super.onDetach();
-        allOffersAsync.cancel(true);
+        if (offersFilteredAsync != null && offersFilteredAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            offersFilteredAsync.cancel(true);
+        }
+        if (allOffersAsync != null && allOffersAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            allOffersAsync.cancel(true);
+        }
         mListener = null;
         LeftNavDrawerFragment.setDrawerMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
