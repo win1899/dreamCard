@@ -107,12 +107,20 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
 
         btnCash = (Button) view.findViewById(R.id.btn_cash);
         btnCash.setOnClickListener(this);
+        GradientDrawable totalShape1 = (GradientDrawable) btnCash.getBackground();
+        totalShape1.setColor(getResources().getColor(R.color.button_not_seleted));
         btnGas = (Button) view.findViewById(R.id.btn_gas);
         btnGas.setOnClickListener(this);
+        GradientDrawable totalShape2 = (GradientDrawable) btnGas.getBackground();
+        totalShape2.setColor(getResources().getColor(R.color.button_not_seleted));
         btnTotal = (Button) view.findViewById(R.id.btn_total);
         btnTotal.setOnClickListener(this);
+        GradientDrawable totalShape3 = (GradientDrawable) btnTotal.getBackground();
+        totalShape3.setColor(getResources().getColor(R.color.button_selected));
         btnWataniya = (Button) view.findViewById(R.id.btn_wataniya);
         btnWataniya.setOnClickListener(this);
+        GradientDrawable totalShape4 = (GradientDrawable) btnWataniya.getBackground();
+        totalShape4.setColor(getResources().getColor(R.color.button_not_seleted));
 
         SharedPreferences prefs = getActivity().getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
         String id = prefs.getString(Params.USER_INFO_ID, "");
