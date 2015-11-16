@@ -112,7 +112,7 @@
     <string name="add_your_comment">اضف تعليقك</string>
     <string name="personal_information">المعلومات الشخصية</string>
     <string name="purchases_list">قائمة المشتريات</string>
-    <string name="discount_rate">نسبة الخصم</string>
+    <string name="discount_rate">قيمة الخصم</string>
     <string name="rate">التقييم</string>
     <string name="select_city">اختر مدينة</string>
     <string name="select_disc_rate">اختر خصم</string>
