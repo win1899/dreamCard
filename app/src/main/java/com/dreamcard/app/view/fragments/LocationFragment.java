@@ -135,7 +135,7 @@ public class LocationFragment extends Fragment implements IServiceListener, View
         lm.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 1, listener);
         Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 
-        if (this.mParam1 != null) {
+        if (this.mParam1 != null && location != null) {
             if (mParam1.getLatitude() > 0) {
                 location.setLatitude(mParam1.getLatitude());
                 location.setLongitude(mParam1.getLongitude());
