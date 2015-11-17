@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -136,7 +137,9 @@ public class AboutUsFragment extends Fragment implements IServiceListener{
         if(processType==Params.SERVICE_PROCESS_1){
             progress.dismiss();
             MessageInfo info= (MessageInfo) b;
-            txtAboutUs.setText(info.getValue());
+            String toShow = info.getValue();
+            toShow = toShow.replaceAll("(\\\\r\\\\n|\\\\n)", "<br />");
+            txtAboutUs.setText(Html.fromHtml(toShow));
         }
     }
 
