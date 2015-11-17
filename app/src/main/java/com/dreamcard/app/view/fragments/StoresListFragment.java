@@ -7,8 +7,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
@@ -20,12 +22,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.androidquery.AQuery;
 import com.dreamcard.app.R;
 
+import com.dreamcard.app.components.ExpandableHeightGridView;
 import com.dreamcard.app.components.TransparentProgressDialog;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.entity.ErrorMessageInfo;
@@ -66,7 +70,8 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
 
     private LinearLayout goldLayout;
     private LinearLayout silverLayout;
-    private GridView grid;
+    private ExpandableHeightGridView grid;
+    private ScrollView mainScroll;
     private ListAdapter mAdapter;
     private RegularStoresGridAdapter adapter;
     private HorizontalScrollView goldScroll;
@@ -113,15 +118,15 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
 
         goldLayout=(LinearLayout)view.findViewById(R.id.gold_gallery);
         silverLayout=(LinearLayout)view.findViewById(R.id.silver_gallery);
-        grid=(GridView)view.findViewById(R.id.regular_stores_grid);
+        grid=(ExpandableHeightGridView)view.findViewById(R.id.regular_stores_grid);
         goldScroll=(HorizontalScrollView)view.findViewById(R.id.gold_scroll);
-        txtAdv1=(TextView)view.findViewById(R.id.txt_adv_1);
-        txtAdv2=(TextView)view.findViewById(R.id.txt_adv_2);
+
         progressBar=(ProgressBar)view.findViewById(R.id.progress);
         storeListMainLayout = (LinearLayout) view.findViewById(R.id.store_list_main_layout);
         silverScroll=(HorizontalScrollView)view.findViewById(R.id.silver_scroll);
         progressBar.setVisibility(View.VISIBLE);
         storeListMainLayout.setVisibility(View.GONE);
+        mainScroll = (ScrollView) view.findViewById(R.id.scroll_view_main_stores);
         allBusinessAsync=new AllBusinessAsync(this, new ArrayList<ServiceRequest>(), Params.SERVICE_PROCESS_1);
         allBusinessAsync.execute(this.activity);
 
@@ -174,6 +179,8 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
             adapter = new RegularStoresGridAdapter(getActivity(), R.layout.stores_grid_button
                     , gridArray, this, null);
             grid.setAdapter(adapter);
+            grid.setExpanded(true);
+
             progressBar.setVisibility(View.GONE);
             storeListMainLayout.setVisibility(View.VISIBLE);
         }
@@ -193,10 +200,12 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
     private void setGoldList() {
         for(Stores bean:list){
             if(bean.getStoreClass()==Params.STORE_CLASS_GOLD) {
-                goldLayout.addView(insertPhotoGold(bean.getLogo(), bean.getPosition(), 220, 200));
+                float goldSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 130, getResources().getDisplayMetrics());
+                goldLayout.addView(insertPhotoGold(bean.getLogo(), bean.getPosition(), (int)goldSize, (int)goldSize));
                 this.storesMap.put(""+bean.getPosition(),bean);
             }else if(bean.getStoreClass()==Params.STORE_CLASS_SILVER){
-                silverLayout.addView(insertPhoto(bean.getLogo(), bean.getPosition(),150,150));
+                float silverSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
+                silverLayout.addView(insertPhoto(bean.getLogo(), bean.getPosition(), (int)silverSize, (int)silverSize));
                 this.storesMap.put(""+bean.getPosition(),bean);
             }else{
                 this.gridList.add(bean);

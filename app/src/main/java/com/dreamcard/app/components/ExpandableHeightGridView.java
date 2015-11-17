@@ -40,9 +40,10 @@ public class ExpandableHeightGridView extends GridView {
         if (isExpanded())
         {
             // Calculate entire height by providing a very large height hint.
-            // View.MEASURED_SIZE_MASK represents the largest height possible.
-            int expandSpec = MeasureSpec.makeMeasureSpec(MEASURED_SIZE_MASK,
-                    MeasureSpec.AT_MOST);
+            // But do not use the highest 2 bits of this integer; those are
+            // reserved for the MeasureSpec mode.
+            int expandSpec = MeasureSpec.makeMeasureSpec(
+                    Integer.MAX_VALUE >> 2, MeasureSpec.AT_MOST);
             super.onMeasure(widthMeasureSpec, expandSpec);
 
             ViewGroup.LayoutParams params = getLayoutParams();
