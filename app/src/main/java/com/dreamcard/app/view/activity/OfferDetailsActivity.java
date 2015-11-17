@@ -460,6 +460,9 @@ public class OfferDetailsActivity extends Activity
             if (list.size() == 0) {
                 noCommentPnl.setVisibility(View.VISIBLE);
             }
+            else {
+                noCommentPnl.setVisibility(View.GONE);
+            }
             scroll.fullScroll(ScrollView.FOCUS_UP);
         } else if (processType == Params.SERVICE_PROCESS_3) {
             progress.dismiss();
