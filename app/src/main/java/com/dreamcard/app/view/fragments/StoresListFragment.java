@@ -200,17 +200,19 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
     private void setGoldList() {
         for(Stores bean:list){
             if(bean.getStoreClass()==Params.STORE_CLASS_GOLD) {
-                float goldSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 130, getResources().getDisplayMetrics());
-                goldLayout.addView(insertPhotoGold(bean.getLogo(), bean.getPosition(), (int)goldSize, (int)goldSize));
+                goldLayout.addView(insertPhotoGold(bean.getLogo(), bean.getPosition(), dpToPx(130 + 20), dpToPx(130)));
                 this.storesMap.put(""+bean.getPosition(),bean);
             }else if(bean.getStoreClass()==Params.STORE_CLASS_SILVER){
-                float silverSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 100, getResources().getDisplayMetrics());
-                silverLayout.addView(insertPhoto(bean.getLogo(), bean.getPosition(), (int)silverSize, (int)silverSize));
+                silverLayout.addView(insertPhoto(bean.getLogo(), bean.getPosition(), dpToPx(100 + 20) , dpToPx(100 - 10)));
                 this.storesMap.put(""+bean.getPosition(),bean);
             }else{
                 this.gridList.add(bean);
             }
         }
+    }
+
+    private int dpToPx(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
@@ -225,35 +227,36 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
         layout.setOnClickListener(this);
 
         ImageView imageView = new ImageView(getActivity());
-        imageView.setLayoutParams(new ViewGroup.LayoutParams(width, height));
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setLayoutParams(new ViewGroup.LayoutParams(width - dpToPx(10), height));
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         imageView.setId(position);
         imageView.setOnClickListener(this);
         imageView.setOnClickListener(this);
         layout.addView(imageView);
         AQuery aq=new AQuery(this.activity);
         aq.id(imageView).image(url, true, true
-                , imageView.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+                , imageView.getWidth() - dpToPx(25), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
         return layout;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private View insertPhoto(String url,int position,int width,int height){
         LinearLayout layout = new LinearLayout(getActivity());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
-        params.setMargins(10,10,10,10);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width ,height);
+        params.setMargins(10, 10, 10, 10);
         layout.setLayoutParams(params);
         layout.setGravity(Gravity.CENTER);
         layout.setBackground(getResources().getDrawable(R.drawable.other_offer_background));
 
         ImageView imageView = new ImageView(getActivity());
-        imageView.setLayoutParams(new ViewGroup.LayoutParams(width, height));
+        imageView.setLayoutParams(new ViewGroup.LayoutParams(width - dpToPx(20),height));
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setId(position);
         imageView.setOnClickListener(this);
         layout.addView(imageView);
-        ImageViewLoader imgLoader = new ImageViewLoader(getActivity());
-        imgLoader.DisplayImage(url, imageView, getActivity().getResources());
+        AQuery aq = new AQuery(this.activity);
+        aq.id(imageView).image(url, true, true,
+                imageView.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
         return layout;
     }
 
