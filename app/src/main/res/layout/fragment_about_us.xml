@@ -34,8 +34,8 @@
         android:id="@+id/txt_about_us"
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
-        android:layout_gravity="end"
-        android:gravity="end" />
+        android:layout_gravity="start"
+        android:gravity="start" />
 
     </LinearLayout>
     </ScrollView>
