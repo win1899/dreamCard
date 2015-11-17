@@ -24,6 +24,7 @@ import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.UserInfo;
 import com.dreamcard.app.services.LoginAsync;
+import com.dreamcard.app.view.activity.BuyDreamCardActivity;
 import com.dreamcard.app.view.activity.MainActivationFormActivity;
 import com.dreamcard.app.view.activity.NavDrawerActivity;
 import com.dreamcard.app.view.interfaces.IServiceListener;
@@ -35,6 +36,7 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
     private EditText txtPassword;
     private Button btnLogin;
     private Button btnForgotPass;
+    private Button whereToBuyDreamCard;
     private LinearLayout activationPnl;
 
     private LoginAsync loginAsync;
@@ -61,10 +63,12 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
         txtPassword=(EditText)findViewById(R.id.txt_password);
         txtUsername=(EditText)findViewById(R.id.txt_username);
         btnForgotPass=(Button)findViewById(R.id.btn_forgot_pass);
+        whereToBuyDreamCard = (Button) findViewById(R.id.where_to_buy);
         btnLogin=(Button)findViewById(R.id.btn_login);
         activationPnl=(LinearLayout)findViewById(R.id.activation_pnl);
         btnLogin.setOnClickListener(this);
         btnForgotPass.setOnClickListener(this);
+        whereToBuyDreamCard.setOnClickListener(this);
         activationPnl.setOnClickListener(this);
 
         handler = new Handler();
@@ -121,6 +125,10 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
             forgotPass();
         }else if(view.getId()==R.id.activation_pnl) {
             activationForm();
+        }else if(view.getId()==R.id.where_to_buy) {
+            Intent intent = new Intent(MainActivity.this, BuyDreamCardActivity.class);
+            startActivity(intent);
+
         }
     }
 
@@ -184,6 +192,7 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
                 Intent intent = new Intent(this, NavDrawerActivity.class);
                 startActivity(intent);
                 overridePendingTransition( R.anim.push_right_in, R.anim.push_right_out );
+                finish();
             } else {
                 new AlertDialog.Builder(this)
                         .setTitle(getResources().getString(R.string.error_in_login))

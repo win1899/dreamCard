@@ -9,6 +9,7 @@
     <string name="password">كلمة السر</string>
     <string name="login">تسجيل الدخول</string>
     <string name="forgot_password">نسيت كلمة المرور</string>
+    <string name="where_to_buy_dream_card">من اين يمكنني الحصول على بطاقة الاحلام</string>
     <string name="activation_form_btn">تفعيل الحساب</string>
     <string name="activation_form">تفعيل البطاقة</string>
     <string name="sponsored_by">Sponsored By</string>
@@ -123,6 +124,7 @@
     <string name="feedback_not_sent">حدث خطا في ارسال البيانات</string>
     <string name="please_insert_your_feedback">يرجى ادخال ملاحظاتك</string>
     <string name="about_us">عن البرنامج</string>
+    <string name="selling_locations">اماكن بيع بطاقة الاحلام</string>
     <string name="faq">الاسئلة الاكثر شيوعا</string>
     <string name="condition">شروط الاستخدام</string>
     <string name="country">الدولة</string>
@@ -196,6 +198,7 @@
     <string name="title_activity_test">TestActivity</string>
     <string name="title_activity_offer_invoice_pdf">OfferInvoicePdfActivity</string>
     <string name="title_activity_faq_item">FAQItem</string>
+    <string name="title_activity_buy_dream_card">Buy Dream Card</string>
     <string name="title_activity_image_viewer">ImageViewerActivity</string>
     <string name="title_activity_nav_drawer_actiity">NavDrawerActiity</string>
     <string name="title_section1">Section 1</string>
