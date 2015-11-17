@@ -78,9 +78,6 @@ public class StoreOffersGridAdapter extends BaseAdapter {
         holder.getPnl().setId(bean.getPosition());
         holder.getPnl().setOnClickListener(this.listener);
         String title = bean.getTitle();
-        if (bean.getTitle().length() > 17) {
-            title = title.substring(0, 17) + "...";
-        }
         holder.getTxtName().setText(title);
 
         if (bean.getOfferMainPhoto() != null && !bean.getOfferMainPhoto().equalsIgnoreCase("null")
