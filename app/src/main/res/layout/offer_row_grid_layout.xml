@@ -85,7 +85,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/txt_price"
                 android:textColor="@color/button_login"
-                android:textSize="17sp"
+                android:textSize="15sp"
                 android:text="000"
                 android:layout_below="@+id/txt_description"
                 android:layout_alignParentEnd="true" />
@@ -94,7 +94,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="17sp"
+                android:textSize="15sp"
                 android:textColor="@color/list_divider"
                 android:id="@+id/txt_old_price"
                 android:text="111"
