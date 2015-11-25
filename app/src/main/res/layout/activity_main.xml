@@ -108,16 +108,18 @@
                 android:layout_marginTop="20dp"/>
 
             <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="#000000"
-                android:text="@string/where_to_buy_dream_card"
-                android:textSize="20sp"
-                android:background="@null"
                 android:id="@+id/where_to_buy"
-                android:gravity="center_horizontal"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="20dp"/>
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:text="@string/where_to_buy_dream_card"
+                android:background="@drawable/login_btn_buy_dream_bg"
+                android:textColor="#ffffff"
+                android:textSize="24sp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="30dp"
+                android:gravity="center_horizontal|center_vertical"
+                android:layout_gravity="center_vertical|center_horizontal"/>
 
     </LinearLayout>
 
