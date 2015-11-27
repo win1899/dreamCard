@@ -260,11 +260,11 @@ public class ServicesConstants {
         bean.setValue(info.getUsername());
         list.add(bean);
 
-//        bean = new ServiceRequest();
-//        bean.setName("Password");
-//        bean.setType(PropertyInfo.STRING_CLASS);
-//        bean.setValue(info.getPassword());
-//        list.add(bean);
+        bean = new ServiceRequest();
+        bean.setName("Password");
+        bean.setType(PropertyInfo.STRING_CLASS);
+        bean.setValue(info.getPassword());
+        list.add(bean);
 
         bean = new ServiceRequest();
         bean.setName(GENDER);

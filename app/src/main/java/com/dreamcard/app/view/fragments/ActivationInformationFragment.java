@@ -61,8 +61,8 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
     private Button btnFemale;
     private EditText txtFirstName;
 //    private EditText txtLastName;
-//    private EditText txtPassword;
-//    private EditText txtRepeatPassword;
+    private EditText txtPassword;
+    private EditText txtRepeatPassword;
     private EditText txtBirthday;
     private EditText txtUsername;
     private EditText txtMobile;
@@ -121,8 +121,8 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
         txtBirthday=(EditText)view.findViewById(R.id.txt_birth_date);
         txtFirstName=(EditText)view.findViewById(R.id.txt_full_name);
 //        txtLastName=(EditText)view.findViewById(R.id.txt_last_name);
-//        txtPassword=(EditText)view.findViewById(R.id.txt_password);
-//        txtRepeatPassword=(EditText)view.findViewById(R.id.txt_repeat_password);
+        txtPassword=(EditText)view.findViewById(R.id.txt_password);
+        txtRepeatPassword=(EditText)view.findViewById(R.id.txt_repeat_password);
         txtUsername=(EditText)view.findViewById(R.id.txt_username);
         txtMobile=(EditText)view.findViewById(R.id.txt_mobile);
         txtAddress=(EditText)view.findViewById(R.id.txt_address);
@@ -209,7 +209,7 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
     }
     public PersonalInfo getData(){
         PersonalInfo bean=new PersonalInfo();
-//        bean.setPassword(txtPassword.getText().toString());
+        bean.setPassword(txtPassword.getText().toString());
         bean.setBirthday(txtBirthday.getText().toString());
         bean.setFullName(txtFirstName.getText().toString());
 //        bean.setLastName(txtLastName.getText().toString());
@@ -234,7 +234,7 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
 
 
         SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "dd/MM/yyyy hh:mm");
+                "dd/MM/yyyy");
         Date convertedStartDate = new Date();
         try {
             convertedStartDate = dateFormat.parse(txtBirthday.getText().toString());
@@ -246,11 +246,11 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
     }
     public boolean isValidInput(){
         if (InputValidator.isNotEmpty(txtFirstName, getString(R.string.first_name_empty))
-//                && InputValidator.isNotEmpty(txtLastName, getString(R.string.last_name_empty))
+//               && InputValidator.isNotEmpty(txtLastName, getString(R.string.last_name_empty))
                 && InputValidator.isNotEmpty(txtUsername, getString(R.string.username_not_valid))
-//                && InputValidator.isNotEmpty(txtPassword, getString(R.string.password_not_valid))
-//                && InputValidator.isPassNotEqualsEmpty(txtPassword
-//                    ,txtRepeatPassword, getString(R.string.password_not_equal_repeat_pass))
+                && InputValidator.isNotEmpty(txtPassword, getString(R.string.password_not_valid))
+                && InputValidator.isPassNotEqualsEmpty(txtPassword
+                    ,txtRepeatPassword, getString(R.string.password_not_equal_repeat_pass))
                 ){
             return true;
         }

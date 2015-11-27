@@ -136,6 +136,7 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
         Intent intent=new Intent(this, MainActivationFormActivity.class);
         startActivity(intent);
         overridePendingTransition( R.anim.push_right_in, R.anim.push_right_out );
+        finish();
     }
 
     private void forgotPass() {

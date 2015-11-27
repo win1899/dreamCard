@@ -145,8 +145,12 @@ public class ActivationSettingFragment extends Fragment implements View.OnClickL
     @Override
     public void onDetach() {
         super.onDetach();
-        categoriesAsync.cancel(true);
-        addRemoveInterestCatAsync.cancel(true);
+        if (categoriesAsync != null && categoriesAsync.getStatus() == AsyncTask.Status.RUNNING)
+            categoriesAsync.cancel(true);
+
+        if (addRemoveInterestCatAsync != null && addRemoveInterestCatAsync.getStatus() == AsyncTask.Status.RUNNING)
+            addRemoveInterestCatAsync.cancel(true);
+
         mListener = null;
     }
 
