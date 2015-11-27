@@ -89,7 +89,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/txt_last_used"
-            android:text="dsda"
             android:layout_marginRight="28dp"
             android:textColor="#ffffff"
             android:textSize="18sp"
