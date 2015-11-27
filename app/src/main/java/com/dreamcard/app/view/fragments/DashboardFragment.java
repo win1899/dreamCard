@@ -126,7 +126,12 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
         String id = prefs.getString(Params.USER_INFO_ID, "");
         String name = prefs.getString(Params.USER_INFO_NAME, "");
 
-        txtUserName.setText(name);
+        if ("null".equalsIgnoreCase(name)) {
+            txtUserName.setText("");
+        }
+        else {
+            txtUserName.setText(name);
+        }
 
         totalSavingAsync = new TotalSavingAsync(this, ServicesConstants.getTotalSavingRequestList(id)
                 , Params.SERVICE_PROCESS_1);
