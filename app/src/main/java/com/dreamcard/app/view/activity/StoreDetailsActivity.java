@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -261,6 +262,10 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         if (bean.getLogo() == null && bean.getPictures() == null) {
             txtBusinessName.setVisibility(View.VISIBLE);
         }
+    }
+
+    private int dpToPx(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
     private void setRating(int rating) {
