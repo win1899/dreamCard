@@ -52,7 +52,6 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textView"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
             android:textColor="#ffffff"
             android:textSize="18sp"
             android:layout_alignParentStart="true" />
@@ -62,7 +61,7 @@
             android:layout_width="25dp"
             android:layout_height="20dp"
             android:src="@drawable/arrows"
-            android:layout_alignBottom="@+id/textView5"
+            android:layout_below="@+id/txt_total_shop"
             android:layout_alignEnd="@+id/textView3" />
 
         <TextView
@@ -90,7 +89,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/txt_last_used"
-            android:layout_marginTop="5dp"
+            android:text="dsda"
             android:layout_marginRight="28dp"
             android:textColor="#ffffff"
             android:textSize="18sp"
