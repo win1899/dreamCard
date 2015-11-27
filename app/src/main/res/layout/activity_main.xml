@@ -83,7 +83,7 @@
 
     <Button
         android:layout_width="match_parent"
-        android:layout_height="45dp"
+        android:layout_height="wrap_content"
         android:text="@string/login"
         android:background="@drawable/login_btn_bg"
         android:id="@+id/btn_login"
@@ -110,7 +110,7 @@
             <Button
                 android:id="@+id/where_to_buy"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
                 android:text="@string/where_to_buy_dream_card"
                 android:background="@drawable/login_btn_buy_dream_bg"
                 android:textColor="#ffffff"
@@ -118,6 +118,7 @@
                 android:layout_marginEnd="20dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginTop="30dp"
+                android:singleLine="false"
                 android:gravity="center_horizontal|center_vertical"
                 android:layout_gravity="center_vertical|center_horizontal"/>
 
