@@ -204,7 +204,14 @@ public class LocationFragment extends Fragment implements IServiceListener, View
                             .title(bean.getStoreName())
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.store_icon));
                     Marker mark = map.addMarker(marker);
-                    mark.showInfoWindow();
+                    try {
+                        if (getLocationInfo().getLatitude() == Double.parseDouble(bean.getLatitude())
+                                && getLocationInfo().getLongitude() == Double.parseDouble(bean.getLongitude())) {
+                            mark.showInfoWindow();
+                        }
+                    } catch (Exception e) {
+
+                    }
                     count++;
 
                 }
