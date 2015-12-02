@@ -174,14 +174,14 @@
                 android:gravity="center_vertical" />
 
             <Button
-                android:id="@+id/btn_wataniya"
+                android:id="@+id/btn_cash_points"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".25"
-                android:background="@drawable/dashboard_total_btn_bg"
-                android:drawableLeft="@drawable/mobile_icon"
+                android:layout_weight=".3"
+                android:background="@drawable/test_shape"
+                android:drawableLeft="@drawable/cashpoints_icon"
                 android:paddingStart="5dp"
-                android:text="Mobile"
+                android:text="Cash Points"
                 android:textColor="#ffffff" />
 
             <TextView
@@ -190,17 +190,6 @@
                 android:layout_height="match_parent"
                 android:background="#f09620"
                 android:gravity="center_vertical" />
-
-            <Button
-                android:id="@+id/btn_gas"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight=".2"
-                android:background="@drawable/dashboard_total_btn_bg"
-                android:drawableLeft="@drawable/gas"
-                android:paddingStart="5dp"
-                android:text="Gas"
-                android:textColor="#ffffff" />
 
             <TextView
                 style="?android:listSeparatorTextViewStyle"
@@ -213,7 +202,7 @@
                 android:id="@+id/btn_cash"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".2"
+                android:layout_weight=".3"
                 android:background="@drawable/cash_shape"
                 android:drawableLeft="@drawable/cash"
                 android:paddingStart="5dp"
