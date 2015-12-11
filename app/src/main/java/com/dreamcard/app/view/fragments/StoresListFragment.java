@@ -200,10 +200,10 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
     private void setGoldList() {
         for(Stores bean:list){
             if(bean.getStoreClass()==Params.STORE_CLASS_GOLD) {
-                goldLayout.addView(insertPhotoGold(bean.getLogo(), bean.getPosition(), dpToPx(130 + 20), dpToPx(130)));
+                goldLayout.addView(insertPhotoGold(bean.getLogo(), bean.getPosition(), dpToPx(130), dpToPx(130)));
                 this.storesMap.put(""+bean.getPosition(),bean);
             }else if(bean.getStoreClass()==Params.STORE_CLASS_SILVER){
-                silverLayout.addView(insertPhoto(bean.getLogo(), bean.getPosition(), dpToPx(100 + 20) , dpToPx(100 - 10)));
+                silverLayout.addView(insertPhoto(bean.getLogo(), bean.getPosition(), dpToPx(100) , dpToPx(100)));
                 this.storesMap.put(""+bean.getPosition(),bean);
             }else{
                 this.gridList.add(bean);
@@ -242,21 +242,21 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private View insertPhoto(String url,int position,int width,int height){
         LinearLayout layout = new LinearLayout(getActivity());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width ,height);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width - 5 ,height - 5);
         params.setMargins(10, 10, 10, 10);
         layout.setLayoutParams(params);
         layout.setGravity(Gravity.CENTER);
         layout.setBackground(getResources().getDrawable(R.drawable.other_offer_background));
 
         ImageView imageView = new ImageView(getActivity());
-        imageView.setLayoutParams(new ViewGroup.LayoutParams(width - dpToPx(20),height));
+        imageView.setLayoutParams(new ViewGroup.LayoutParams(width - dpToPx(10),height));
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setId(position);
         imageView.setOnClickListener(this);
         layout.addView(imageView);
         AQuery aq = new AQuery(this.activity);
         aq.id(imageView).image(url, true, true,
-                imageView.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+                imageView.getWidth() - dpToPx(30), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
         return layout;
     }
 
