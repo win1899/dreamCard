@@ -524,7 +524,7 @@ public class ServicesConstants {
         bean = new ServiceRequest();
         bean.setName("CardNumber");
         bean.setType(PropertyInfo.STRING_CLASS);
-        bean.setValue("");
+        bean.setValue(info.getCardNumber());
         list.add(bean);
 
         bean = new ServiceRequest();

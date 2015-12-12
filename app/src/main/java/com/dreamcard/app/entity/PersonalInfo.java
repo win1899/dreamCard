@@ -24,6 +24,15 @@ public class PersonalInfo {
     private String education;
     private String firstName;
     private String lastName;
+    private String cardNumber;
+
+    public String getCardNumber() {
+        return cardNumber;
+    }
+
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
 
     public String getFullName() {
         return fullName;

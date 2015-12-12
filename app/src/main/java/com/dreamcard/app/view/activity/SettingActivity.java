@@ -144,6 +144,10 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
         setContentView(R.layout.activity_setting);
 
         buildUI();
+        loginAsync = new LoginAsync(this, ServicesConstants.getLoginRequestList(txtEmail.getText().toString()
+                , txtPassword.getText().toString())
+                , Params.SERVICE_PROCESS_6);
+        loginAsync.execute(this);
     }
 
     private void buildUI() {
@@ -431,7 +435,7 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
         if (this.selectedCountry != null) {
             bean.setCountry(this.selectedCountry.getId());
         }
-
+        bean.setCardNumber(txtUserId.getText().toString());
 
         SharedPreferences prefs = getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
         bean.setId(prefs.getString(Params.USER_INFO_ID, null));
@@ -514,6 +518,7 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
                 editor.putString(Params.USER_INFO_ADDRESS, bean.getAddress());
                 editor.putString(Params.USER_INFO_EDUCATION, bean.getEducation());
                 editor.putString(Params.USER_INFO_FULL_NAME, bean.getFullName());
+                editor.putString(Params.USER_INFO_CARD_NUMBER, bean.getCardNumber());
                 editor.apply();
 
                 setData();
