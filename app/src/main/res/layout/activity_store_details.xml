@@ -56,8 +56,8 @@
                 android:id="@+id/store_header">
                 <RelativeLayout
                     android:layout_width="55dp"
-                    android:layout_height="40dp"
-                    android:background="#DBA901"
+                    android:layout_height="fill_parent"
+                    android:background="@color/button_login"
                     android:layout_alignParentRight="true"
                     android:layout_alignParentTop="true"
                     android:id="@+id/rating_pnl">
@@ -66,11 +66,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="#FFFFFF"
-                        android:textSize="15sp"
+                        android:textSize="20sp"
                         android:textStyle="bold"
                         android:text="10%"
-                        android:layout_centerHorizontal="true"
-                        android:id="@+id/annual_discount"/>
+                        android:id="@+id/annual_discount"
+                        android:layout_marginTop="15dp"
+                        android:layout_centerHorizontal="true" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -99,8 +100,17 @@
                 style="?android:listSeparatorTextViewStyle"
                 android:layout_width="match_parent"
                 android:layout_height="3dp"
-                android:background="#888888"
+                android:background="#000000"
+                android:id="@+id/cash_serparator1"
+                android:layout_below="@+id/store_header"/>
+
+            <TextView
+                style="?android:listSeparatorTextViewStyle"
+                android:layout_width="match_parent"
+                android:layout_height="3dp"
+                android:background="#ffffff"
                 android:id="@+id/cash_serparator"
+                android:layout_marginTop="1dp"
                 android:layout_below="@+id/store_header"/>
 
             <RelativeLayout
@@ -345,7 +355,6 @@
                     android:verticalSpacing="10dp"
                     android:id="@+id/offers_grid"
                     android:numColumns="2"/>
-
                 </FrameLayout>
 
             </LinearLayout>
