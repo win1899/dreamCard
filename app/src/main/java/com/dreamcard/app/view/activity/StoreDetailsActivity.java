@@ -205,7 +205,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
 
         txtBusinessName.setText(bean.getStoreName());
         if (bean.getDiscountPrecentage() > 0.0) {
-            txtAnnualDiscount.setText(Double.toString(bean.getDiscountPrecentage()) + "%");
+            txtAnnualDiscount.setText(Integer.toString((int)bean.getDiscountPrecentage()) + "%");
             txtAnnualDiscount.setVisibility(View.VISIBLE);
             ratingPnl.setVisibility(View.VISIBLE);
         }
