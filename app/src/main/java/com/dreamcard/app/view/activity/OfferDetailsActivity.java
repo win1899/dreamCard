@@ -513,13 +513,16 @@ public class OfferDetailsActivity extends Activity
             finish();
         else if (view.getId() == R.id.img_add_comment)
             addCommentDialog();
-        else if (view.getId() == R.id.img_take_me_there) {
+        else if (view.getId() == R.id.img_take_me_there
+                || view.getId() == R.id.take_me_there_layout
+                || view.getId() == R.id.txt_city
+                || view.getId() == R.id.img_marker_icon) {
             Intent intent = new Intent();
             LocationInfo info = new LocationInfo();
             info.setLatitude(this.bean.getLatitude());
             info.setLongitude(this.bean.getLongitude());
             intent.putExtra("location", info);
-            setResult(RESULT_OK, intent);
+            setResult(Params.NAVIGATE, intent);
             finish();
         } else if (view.getId() == R.id.img_offer_logo) {
             Intent intent = new Intent(this, ImageViewerActivity.class);

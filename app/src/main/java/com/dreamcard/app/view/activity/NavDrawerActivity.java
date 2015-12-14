@@ -541,6 +541,29 @@ public class NavDrawerActivity extends FragmentActivity
             if(resultCode == Params.STATUS_MOVE_TO_DASHBOARD){
                 onNavigationDrawerItemSelected(0);
             }
+            if (resultCode == Params.NAVIGATE && data != null) {
+                final LocationInfo location = data.getParcelableExtra("location");
+                currentFragment = R.id.btn_location;
+                new Handler().post(new Runnable() {
+                    public void run() {
+                        LocationFragment fragment = LocationFragment.newInstance(location, "");
+                        String fragmentTag = Params.FRAGMENT_LOCATIONS;
+                        FrameLayout mainFrameLayout = (FrameLayout) findViewById(R.id.activity_main_content_fragment);
+                        mainFrameLayout.setBackgroundColor(getResources().getColor(R.color.location_bg));
+
+                        btnCategories.setBackground(getResources().getDrawable(R.drawable.categories_bg));
+                        btnLatestOffers.setBackground(getResources().getDrawable(R.drawable.latest_offers_bg));
+                        btnStores.setBackground(getResources().getDrawable(R.drawable.store_button_bg));
+                        btnLocations.setBackground(getResources().getDrawable(R.drawable.location_active));
+
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.activity_main_content_fragment, fragment, fragmentTag).addToBackStack(fragmentTag);
+                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                        fragmentTransaction.commit();
+                    }
+                });
+            }
         }else if(resultCode == Params.STATUS_NOTHING){
             finish();
         }

@@ -104,6 +104,8 @@ public class Params {
     public static final int SERVICE_PROCESS_8=8;
     public static final int SERVICE_PROCESS_9=9;
 
+    public static final int NAVIGATE = 58;
+    public static final int START_OFFERS_DETAILS_REQUEST_CODE = 17;
     public static final String DREAMCARD_URL="http://www.dream-card.net/";
 
     public static Typeface FONT;

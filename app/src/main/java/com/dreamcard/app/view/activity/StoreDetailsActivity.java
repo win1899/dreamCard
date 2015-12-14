@@ -412,7 +412,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
                 Intent intent = new Intent(this, OfferDetailsActivity.class);
                 intent.putExtra(Params.DATA, info);
                 intent.putExtra(Params.PICTURE_LIST, info.getPicturesList());
-                startActivity(intent);
+                startActivityForResult(intent, Params.START_OFFERS_DETAILS_REQUEST_CODE);
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
             }
         }
@@ -490,6 +490,10 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Params.START_OFFERS_DETAILS_REQUEST_CODE && resultCode == Params.NAVIGATE) {
+            setResult(Params.NAVIGATE, data);
+            finish();
+        }
         if (resultCode == Params.STATUS_ADD_RATING) {
             String rating = data.getStringExtra("item");
             ratingPnl.removeAllViews();
