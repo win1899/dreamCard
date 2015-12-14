@@ -55,13 +55,13 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="105dp"
+                android:layout_height="110dp"
                 android:background="#ffffff"
                 android:layout_marginTop="10dp"
-                android:paddingTop="8dp">
+                >
                <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="105dp"
+                    android:layout_height="110dp"
                     android:id="@+id/silver_scroll"
                    android:layout_centerHorizontal="true">
                     <LinearLayout

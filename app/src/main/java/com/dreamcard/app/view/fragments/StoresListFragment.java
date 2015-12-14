@@ -242,7 +242,7 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private View insertPhoto(String url,int position,int width,int height){
         LinearLayout layout = new LinearLayout(getActivity());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width - 5 ,height - 5);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width - 10 , height - 10);
         params.setMargins(10, 10, 10, 10);
         layout.setLayoutParams(params);
         layout.setGravity(Gravity.CENTER);
