@@ -352,7 +352,8 @@
                     android:layout_gravity="center_horizontal|center_vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:verticalSpacing="10dp"
+                    android:verticalSpacing="20dp"
+                    android:horizontalSpacing="10dp"
                     android:id="@+id/offers_grid"
                     android:numColumns="2"/>
                 </FrameLayout>
