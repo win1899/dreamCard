@@ -236,12 +236,13 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
         }
         if (processType == Params.SERVICE_PROCESS_1) {
             ConsumerInfo bean = (ConsumerInfo) b;
-            txtYouSaved.setText(bean.getTotalSaving() + getResources().getString(R.string.ils));
             try {
                 totalSave = Double.parseDouble(bean.getTotalSaving());
+                txtYouSaved.setText(Integer.toString((int) totalSave) + getResources().getString(R.string.ils));
             }
             catch (Exception e) {
                 Log.e(DashboardFragment.class.getName(), "Unable to parse double: " + bean.getTotalSaving());
+                txtYouSaved.setText(bean.getTotalSaving() + getResources().getString(R.string.ils));
             }
         } else if (processType == Params.SERVICE_PROCESS_3) {
             ArrayList<Offers> list = (ArrayList<Offers>) b;
