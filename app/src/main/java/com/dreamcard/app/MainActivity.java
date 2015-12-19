@@ -86,12 +86,28 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-
                     txtUsername.setHint("");
-                    txtUsername.setGravity(Gravity.END);
+                    txtUsername.setGravity(Gravity.LEFT);
                 } else {
                     txtUsername.setHint(getResources().getString(R.string.username));
-                    txtUsername.setGravity(Gravity.START);
+                    if ("".equalsIgnoreCase(txtUsername.getText().toString())) {
+                        txtUsername.setGravity(Gravity.RIGHT);
+                    }
+                }
+            }
+        });
+
+        txtPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    txtPassword.setHint("");
+                    txtPassword.setGravity(Gravity.LEFT);
+                } else {
+                    txtPassword.setHint(getResources().getString(R.string.password));
+                    if ("".equalsIgnoreCase(txtPassword.getText().toString())) {
+                        txtPassword.setGravity(Gravity.RIGHT);
+                    }
                 }
             }
         });
