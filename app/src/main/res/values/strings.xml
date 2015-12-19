@@ -69,7 +69,7 @@
     <string name="repeat_password">تاكيد كلمة السر</string>
     <string name="back">السابق</string>
     <string name="next">التالي</string>
-    <string name="tearms_of_condition">الشروط و الخصوصية</string>
+    <string name="tearms_of_condition">الأحكام والشروط</string>
     <string name="agree">موافق</string>
     <string name="first_name_empty">يرجى ادخال الاسم الاول</string>
     <string name="last_name_empty">يرجى ادخال الاسم الاخير</string>
@@ -78,7 +78,7 @@
     <string name="receive_notifications">استقبال الاشعارات</string>
     <string name="choose_from_list">اختر قائمة المفضلة</string>
     <string name="thank_you">شكرا لك</string>
-    <string name="thanks_details">لقد تم ارسال رسالة الى بريدك الالكتروني الرجاء الضغط على الرابط المرفق فيها لتفعيل حسابك</string>
+    <string name="thanks_details">بامكانك الان التمتع بجميع الخدمات والمزايا والعروض والهدايا\nوالخصومات والمفاجئات من ارقى واكبر شبكة تسوق في فلسطين</string>
     <string name="finish">انهاء</string>
     <string name="date">التاريخ</string>
     <string name="location">الموقع</string>
@@ -105,7 +105,7 @@
     <string name="usd">$</string>
     <string name="ok">موافق</string>
     <string name="please_approve_terms">الرجاء الموافقة على الشروط و الخصوصية للاستمرار</string>
-    <string name="start">البدأ</string>
+    <string name="start">ابدأ</string>
     <string name="add_rate">اضف تقييم</string>
     <string name="rate_offer">تقييم العرض</string>
     <string name="notification_desc_1">لقد حصلت على خصم </string>
@@ -210,5 +210,8 @@
     <string name="title_activity_add_comment">AddCommentActivity</string>
     <string name="title_activity_feedback">FeedbackActivity</string>
     <string name="title_activity_login">LoginActivity</string>
-
+    <string name="title_login_info_registration">معلومات تسجيل الدخول</string>
+    <string name="title_personal_info_registration">معلوماتك الشخصية</string>
+    <string name="your_login_info">معلومات تسحيل الدخول الخاصة بك</string>
+    <string name="terms_and_conditions">كرت الاحلام يبقى دائماً ملكاً ل(B2B GROUP) وتكون أنت الوصي فقط على هذه البطاقة ولا يجوز اقراضها لاحد سواك ويجب تسليمها للشركة فوراً عند طلب الشركة أو وكيلها المفوض حسب الأصول، وتحتفظ الشركة بالحق في ابطال البطاقة بموجب إشعار مسبق أو بدون ذلك حسبما تراه مناسباً وفقاً لتقديرها المطلق، وفي جميع الظروف التي تراها مناسبة، هذا الكرت صالح للاستخدام فقط ضمن مجموعة المحلات التجارية المشاركة في برنامج كرت الاحلام(Dream Card Club) وباستعمالك كرت الاحلام ضمن هذه المجموعة بغرض كسب العروض أو الخصومات، فأنك تلقائيا تعطي موافقتك على البرنامج والقوانين والشروط والأحكام الملحقة به، وهي قابلة للتغيير من وقت إلى آخر, وهي موجودة على الموقع الإلكتروني وتطبيق الهاتف المتوفر ادناه, يجب اظهار البطاقة عند كل عملية شراء للحصول على الخصم او العرض المتوفر في ذلك الوقت, (B2BGROUP) غير مسؤولة عن أي ضياع، سرقة، او اتلاف للكرت او أي استعمال غير شرعي, إن كرت الاحلام بطاقة خصومات ولا تعتبر بأي حال من الأحوال بطاقة ائتمان و/أو ضمان و/أو تعريف شخصي, ولا يوفر عروض او خصومات مزدوجة.</string>
 </resources>

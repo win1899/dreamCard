@@ -26,10 +26,12 @@ public class ActivationFinalFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String ARG_PARAM3 = "param3";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private String fullName;
+    private String userName;
+    private String password;
 
     private OnFragmentInteractionListener mListener;
 
@@ -44,11 +46,12 @@ public class ActivationFinalFragment extends Fragment {
      * @return A new instance of fragment ActivationFinalFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ActivationFinalFragment newInstance(String param1, String param2) {
+    public static ActivationFinalFragment newInstance(String fullName, String userName, String password) {
         ActivationFinalFragment fragment = new ActivationFinalFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, fullName);
+        args.putString(ARG_PARAM2, userName);
+        args.putString(ARG_PARAM3, password);
         fragment.setArguments(args);
         return fragment;
     }
@@ -60,8 +63,9 @@ public class ActivationFinalFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+            fullName = getArguments().getString(ARG_PARAM1);
+            userName = getArguments().getString(ARG_PARAM2);
+            password = getArguments().getString(ARG_PARAM3);
         }
     }
 
@@ -70,7 +74,12 @@ public class ActivationFinalFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view=inflater.inflate(R.layout.fragment_activation_final, container, false);
         txtName=(TextView)view.findViewById(R.id.txt_name);
-        txtName.setText(mParam1);
+        txtName.setText(fullName);
+
+        TextView user = (TextView) view.findViewById(R.id.confirm_email_login_txt);
+        user.setText(userName);
+        TextView pass = (TextView) view.findViewById(R.id.confirm_password_login_txt);
+        pass.setText(password);
         return view;
     }
 

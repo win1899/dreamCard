@@ -1,3 +1,9 @@
+<ScrollView  xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.fragments.ActivationFinalFragment"
+    android:background="#000000">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,14 +13,14 @@
     android:layout_marginLeft="5dp"
     android:layout_marginBottom="20dp"
     android:orientation="vertical"
-    android:background="@drawable/welcome_bg">
+    >
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/thank_you"
-        android:textColor="#000000"
-        android:textSize="45sp"
+        android:textColor="#ffffff"
+        android:textSize="30sp"
         android:layout_gravity="center_vertical|center_horizontal"
         android:gravity="center_horizontal|center_vertical"
         android:layout_marginTop="30dp"/>
@@ -22,19 +28,93 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/name_bg"
         android:layout_gravity="center_vertical|center_horizontal"
         android:gravity="center_horizontal|center_vertical"
         android:layout_marginTop="30dp"
         android:textColor="#ffffff"
-        android:textSize="30dp"
+        android:textSize="24sp"
         android:id="@+id/txt_name"/>
+
+    <TextView
+        style="?android:listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#555555"
+        android:layout_marginTop="15dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/your_login_info"
+        android:textColor="#ffffff"
+        android:textSize="20sp"
+        />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="Username:"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textColor="#ffffff"
+            android:id="@+id/confirm_email_login_txt"
+            android:layout_marginLeft="5dp"
+            android:textSize="20sp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="10dp"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:text="Password:"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="5dp"
+            android:id="@+id/confirm_password_login_txt"
+            android:textSize="20sp"
+            />
+    </LinearLayout>
+
+    <TextView
+        style="?android:listSeparatorTextViewStyle"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#555555"
+        android:layout_marginTop="15dp" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:textColor="#000000"
+        android:textSize="15sp"
+        android:textColor="#ffffff"
         android:text="@string/thanks_details"
         android:layout_marginTop="20dp"
         android:layout_gravity="center_vertical|center_horizontal"
@@ -43,8 +123,10 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/welcome"
+        android:layout_marginTop="15dp"
+        android:src="@drawable/dream_card_talks_for_you"
         android:layout_gravity="center_vertical|center_horizontal"
         android:gravity="center_horizontal|center_vertical"/>
 
 </LinearLayout>
+</ScrollView>

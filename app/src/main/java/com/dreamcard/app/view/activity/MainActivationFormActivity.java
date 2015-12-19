@@ -160,7 +160,7 @@ public class MainActivationFormActivity extends FragmentActivity implements View
                         fullName = "";
                     }
                 }
-                finalFragment = ActivationFinalFragment.newInstance(fullName, "");
+                finalFragment = ActivationFinalFragment.newInstance(fullName, personalInfo.getUsername(), personalInfo.getPassword());
                 fragment = finalFragment;
                 tag = Params.FRAGMENT_ACTIVATION_4;
                 btn5.setBackgroundColor(getResources().getColor(R.color.list_sliding_item));

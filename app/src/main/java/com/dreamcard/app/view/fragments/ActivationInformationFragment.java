@@ -41,7 +41,7 @@ import java.util.Date;
  * create an instance of this fragment.
  *
  */
-public class ActivationInformationFragment extends Fragment implements View.OnClickListener,View.OnTouchListener,IServiceListener {
+public class ActivationInformationFragment extends Fragment implements View.OnClickListener,IServiceListener {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
@@ -133,17 +133,17 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
         txtPhone=(EditText)view.findViewById(R.id.txt_phone);
         txtWork=(EditText)view.findViewById(R.id.txt_work);
 
-        txtBirthday.setOnTouchListener(this);
+        txtBirthday.setOnClickListener(this);
         txtBirthday.setClickable(false);
         txtBirthday.setFocusable(false);
         txtBirthday.setFocusableInTouchMode(false);
 
-        txtCountry.setOnTouchListener(this);
+        txtCountry.setOnClickListener(this);
         txtCountry.setClickable(false);
         txtCountry.setFocusable(false);
         txtCountry.setFocusableInTouchMode(false);
 
-        txtCity.setOnTouchListener(this);
+        txtCity.setOnClickListener(this);
         txtCity.setClickable(false);
         txtCity.setFocusable(false);
         txtCity.setFocusableInTouchMode(false);
@@ -206,6 +206,52 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
                 this.gender=Params.GENDER_FEMALE;
             }
         }
+        else if(view.getId()==R.id.txt_birth_date) {
+            DialogFragment newFragment = new DatePickerFragment(this.listener, 0);
+            newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
+        } else if(view.getId()==R.id.txt_country){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Select Imput Type");
+
+            AlertDialog levelDialog = null;
+
+
+            builder.setSingleChoiceItems(this.countriesArray,countryIndex,
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int item) {
+
+                            countryIndex=item;
+                            City cityBo=countriesList.get(item);
+                            String city=cityBo.getName();
+                            txtCountry.setText(city);
+                            selectedCountry=cityBo.getId();
+                            dialog.dismiss();
+                        }
+                    }).setTitle(getResources().getString(R.string.select_country));
+            levelDialog = builder.create();
+            levelDialog.show();
+        } else if(view.getId()==R.id.txt_city){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setTitle("Select Imput Type");
+
+            AlertDialog levelDialog = null;
+
+            builder.setSingleChoiceItems(this.citiesArray,cityIndex,
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int item) {
+
+                            cityIndex=item;
+                            City cityBo=citiesList.get(item);
+                            String city=cityBo.getName();
+                            txtCity.setText(city);
+                            selectedCity=cityBo.getId();
+                            dialog.dismiss();
+                        }
+                    }).setTitle(getResources().getString(R.string.select_city));
+            levelDialog = builder.create();
+            levelDialog.show();
+        }
+
     }
     public PersonalInfo getData(){
         PersonalInfo bean=new PersonalInfo();
@@ -257,58 +303,6 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
         return false;
     }
 
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-            if(view.getId()==R.id.txt_birth_date) {
-                DialogFragment newFragment = new DatePickerFragment(this.listener, 0);
-                newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
-            }else if(view.getId()==R.id.txt_country){
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Select Imput Type");
-
-                AlertDialog levelDialog = null;
-
-
-                builder.setSingleChoiceItems(this.countriesArray,countryIndex,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int item) {
-
-                                countryIndex=item;
-                                City cityBo=countriesList.get(item);
-                                String city=cityBo.getName();
-                                txtCountry.setText(city);
-                                selectedCountry=cityBo.getId();
-                                dialog.dismiss();
-                            }
-                        }).setTitle(getResources().getString(R.string.select_country));
-                levelDialog = builder.create();
-                levelDialog.show();
-            }else if(view.getId()==R.id.txt_city){
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Select Imput Type");
-
-                AlertDialog levelDialog = null;
-
-
-                builder.setSingleChoiceItems(this.citiesArray,cityIndex,
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int item) {
-
-                                cityIndex=item;
-                                City cityBo=citiesList.get(item);
-                                String city=cityBo.getName();
-                                txtCity.setText(city);
-                                selectedCity=cityBo.getId();
-                                dialog.dismiss();
-                            }
-                        }).setTitle(getResources().getString(R.string.select_city));
-                levelDialog = builder.create();
-                levelDialog.show();
-            }
-        }
-        return false;
-    }
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
