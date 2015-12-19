@@ -44,6 +44,7 @@ import com.dreamcard.app.services.CountryAsyncTask;
 import com.dreamcard.app.services.InterestCategoriesAsyncTask;
 import com.dreamcard.app.services.LoginAsync;
 import com.dreamcard.app.services.RegisterConsumerAsync;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.adapters.CustomGridViewAdapterButton;
 import com.dreamcard.app.view.adapters.PurchasesListAdapter;
 import com.dreamcard.app.view.fragments.ActivationSettingFragment;
@@ -293,7 +294,7 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
         String password = prefs.getString(Params.USER_INFO_PASSWORD, "");
         String birthday = prefs.getString(Params.USER_INFO_BIRTHDAY, "");
         String gender = prefs.getString(Params.USER_INFO_GENDER, "");
-        String name = prefs.getString(Params.USER_INFO_NAME, "");
+        String name = Utils.getUserName(this);
         String cardNum = prefs.getString(Params.USER_INFO_CARD_NUMBER, "");
 
         txtUsername.setText(name);

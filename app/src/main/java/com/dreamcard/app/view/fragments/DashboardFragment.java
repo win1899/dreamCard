@@ -27,6 +27,7 @@ import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.services.ConsumerDiscountAsyncTask;
 import com.dreamcard.app.services.TotalSavingAsync;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.adapters.NotificationGridAdapter;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
@@ -119,14 +120,9 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
 
         SharedPreferences prefs = getActivity().getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
         String id = prefs.getString(Params.USER_INFO_ID, "");
-        String name = prefs.getString(Params.USER_INFO_NAME, "");
+        String name = Utils.getUserName(getActivity());
 
-        if ("null".equalsIgnoreCase(name)) {
-            txtUserName.setText("");
-        }
-        else {
-            txtUserName.setText(name);
-        }
+        txtUserName.setText(name);
 
         totalSavingAsync = new TotalSavingAsync(this, ServicesConstants.getTotalSavingRequestList(id)
                 , Params.SERVICE_PROCESS_1);

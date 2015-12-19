@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.adapters.NavDrawerItem;
 import com.dreamcard.app.view.adapters.NavDrawerListAdapter;
 
@@ -111,9 +112,10 @@ public class NavigationDrawerFragment extends Fragment {
 
         SharedPreferences prefs = activity.getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
         String id = prefs.getString(Params.USER_INFO_CARD_NUMBER, "");
-        String name = prefs.getString(Params.USER_INFO_NAME, "");
+        String name = Utils.getUserName(activity);
 
         txtUser.setText(name);
+
         if (name.length() > 15) {
             txtUser.setTextSize(12);
         }

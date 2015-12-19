@@ -154,6 +154,12 @@ public class MainActivationFormActivity extends FragmentActivity implements View
                 break;
             case 4:
                 String fullName = this.personalInfo.getFullName();
+                if ("null".equalsIgnoreCase(fullName) || "".equalsIgnoreCase(fullName)) {
+                    fullName = personalInfo.getFirstName() + " " + personalInfo.getLastName();
+                    if (fullName.equalsIgnoreCase("null ") || fullName.equalsIgnoreCase("null null") || fullName.equalsIgnoreCase("null")) {
+                        fullName = "";
+                    }
+                }
                 finalFragment = ActivationFinalFragment.newInstance(fullName, "");
                 fragment = finalFragment;
                 tag = Params.FRAGMENT_ACTIVATION_4;
