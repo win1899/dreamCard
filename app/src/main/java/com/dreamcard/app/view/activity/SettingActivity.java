@@ -345,6 +345,7 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
 
             String x = df.format("dd/MM/yyyy", c.getTime()).toString();
             txtBirthday.setText(x);
+            txtBirthdayLbl.setText(x);
         }
 
         if (gender != null) {
@@ -473,6 +474,7 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
                     , txtPassword.getText().toString())
                     , Params.SERVICE_PROCESS_6);
             loginAsync.execute(this);
+            Toast.makeText(this, getResources().getString(R.string.information_save_successfully), Toast.LENGTH_LONG).show();
 
         } else if (processType == Params.SERVICE_PROCESS_5) {
             HashMap<String, String> map = (HashMap<String, String>) b;
@@ -525,7 +527,6 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
                 setData();
             }
             progress.dismiss();
-            Toast.makeText(this, getResources().getString(R.string.information_save_successfully), Toast.LENGTH_LONG).show();
             changeMode(Params.MODE_ADD);
         } else if (processType == Params.SERVICE_PROCESS_7) {
             progress.dismiss();

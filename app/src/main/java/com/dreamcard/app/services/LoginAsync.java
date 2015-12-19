@@ -104,7 +104,7 @@ public class LoginAsync extends AbstractAsyncTask<Object, Void, Object> {
                         bean.setCity(oneObject.getString("City"));
                         bean.setPhone(oneObject.getString("Phone"));
                         bean.setIdNum(oneObject.getString("IdNumber"));
-                        bean.setEducation(oneObject.getString("City"));
+                        bean.setEducation(oneObject.getString("Education"));
                         bean.setCountry(oneObject.getString("CountryId"));
                         bean.setAddress(oneObject.getString("AddressLine1"));
 
