@@ -311,6 +311,12 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
 
         if (prefs.getString(Params.USER_INFO_FIRST_NAME, "") != null &&
                 !prefs.getString(Params.USER_INFO_FIRST_NAME, "").equalsIgnoreCase("null")) {
+            txtFullName.setText(prefs.getString(Params.USER_INFO_FIRST_NAME, ""));
+            txtFullNamelbl.setText(prefs.getString(Params.USER_INFO_FIRST_NAME, ""));
+        }
+
+        if (prefs.getString(Params.USER_INFO_FULL_NAME, "") != null &&
+                !prefs.getString(Params.USER_INFO_FULL_NAME, "").equalsIgnoreCase("null")) {
             txtFullName.setText(prefs.getString(Params.USER_INFO_FULL_NAME, ""));
             txtFullNamelbl.setText(prefs.getString(Params.USER_INFO_FULL_NAME, ""));
         }

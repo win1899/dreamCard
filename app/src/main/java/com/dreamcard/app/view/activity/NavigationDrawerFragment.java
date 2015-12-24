@@ -70,6 +70,8 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+
+    private TextView txtUser;
     private Activity activity;
 
     public NavigationDrawerFragment() {
@@ -98,6 +100,15 @@ public class NavigationDrawerFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         // Indicate that this fragment would like to influence the set of actions in the action bar.
         setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (txtUser != null && activity != null) {
+            String name = Utils.getUserName(activity);
+            txtUser.setText(name);
+        }
     }
 
     @Override
