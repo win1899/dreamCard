@@ -41,6 +41,7 @@ import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.BusinessComment;
 import com.dreamcard.app.entity.Comments;
 import com.dreamcard.app.entity.ErrorMessageInfo;
+import com.dreamcard.app.entity.LocationInfo;
 import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.ServiceRequest;
@@ -65,6 +66,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     private TextView txtNumOfLikes;
     private TextView txtLikeBtn;
     private TextView txtAnnualDiscount;
+    private TextView txtAddress;
     private ListView commentsListView;
     private ImageView btnAddComment;
     private AddCommentDialog commentDialog;
@@ -136,6 +138,8 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         scroll = (ScrollView) findViewById(R.id.scroll);
         commentsListView = (ListView) findViewById(android.R.id.list);
         storeIcon = (ImageView) findViewById(R.id.main_store_icon);
+        txtAddress = (TextView) findViewById(R.id.store_address);
+        txtAddress.setOnClickListener(this);
         commentsListView.setOnTouchListener(new ListView.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -166,6 +170,8 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         imgLogo = (ImageView) findViewById(R.id.img_menu_logo);
         imgLogo.setOnClickListener(this);
         imgPager = (ViewPager) findViewById(R.id.img_store_pager);
+        ImageView location = (ImageView) findViewById(R.id.btn_location);
+        location.setOnClickListener(this);
 
         handler = new Handler();
         progress = new TransparentProgressDialog(this, R.drawable.loading);
@@ -251,6 +257,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
             }
             txtAbout.setText(vision);
         }
+        txtAddress.setText(bean.getAddress1());
 
         imgAdapter = new StoreImagePagerAdapter(this, bean);
         imgPager.setAdapter(imgAdapter);
@@ -400,6 +407,20 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
             ArrayList<ServiceRequest> list = ServicesConstants.getLatestOfferByStoreId(this.bean.getId(), 10);
             allOffersAsync = new AllOffersAsync(this, list, Params.SERVICE_PROCESS_1, Params.TYPE_LATEST_OFFERS_BY_BUSINESS);
             allOffersAsync.execute(this);
+        } else if (view.getId() == R.id.btn_location || view.getId() == R.id.store_address) {
+            Intent data = new Intent();
+            try {
+                LocationInfo info = new LocationInfo();
+                double latitude = Double.parseDouble(bean.getLatitude());
+                double longitude = Double.parseDouble(bean.getLongitude());
+                info.setLatitude(latitude);
+                info.setLongitude(longitude);
+                data.putExtra("location", info);
+            } catch (Exception e) {
+
+            }
+            setResult(Params.NAVIGATE, data);
+            finish();
         } else {
             Offers info = null;
             for (Offers bean : this.offersList) {
