@@ -25,6 +25,7 @@ import org.ksoap2.serialization.SoapSerializationEnvelope;
 import org.ksoap2.transport.HttpTransportSE;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Vector;
 
 /**
@@ -197,6 +198,7 @@ public class ConsumerDiscountAsyncTask extends AbstractAsyncTask<Object, Void, O
                             }
                             list.add(bean);
                         }
+                        Collections.reverse(list);
                         return list;
 
                     } catch (JSONException e) {
