@@ -3,8 +3,11 @@ package com.dreamcard.app.view.fragments;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.Image;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dreamcard.app.R;
@@ -66,6 +70,7 @@ public class LocationFragment extends Fragment implements IServiceListener, View
     private double longitude;
     private Activity activity;
     private AllBusinessAsync allBusinessAsync;
+    private LatLng selectedPos;
 
 
     public static LocationFragment newInstance(LocationInfo param1, String param2) {
@@ -102,16 +107,24 @@ public class LocationFragment extends Fragment implements IServiceListener, View
         try {
             view = inflater.inflate(R.layout.fragment_location, container, false);
         } catch (InflateException e) {
-        /* map is already there, just return view as it is */
+            /* map is already there, just return view as it is */
         }
         map = ((MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.map)).getMap();
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
                 marker.showInfoWindow();
+                selectedPos = marker.getPosition();
                 return true;
             }
         });
+
+        ImageView takeMeThere = (ImageView) view.findViewById(R.id.take_me_there_btn);
+        takeMeThere.setOnClickListener(this);
+
+        RelativeLayout takeMethereLayout = (RelativeLayout) view.findViewById(R.id.take_me_there_layout);
+        takeMethereLayout.setOnClickListener(this);
+
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
             public void onInfoWindowClick(Marker marker) {
@@ -288,6 +301,15 @@ public class LocationFragment extends Fragment implements IServiceListener, View
         }
         if (info != null) {
             mListener.doAction(info, Params.FRAGMENT_STORES);
+        }
+
+        if (view.getId() == R.id.take_me_there_btn || view.getId() == R.id.take_me_there_layout) {
+            if (selectedPos == null) {
+                return;
+            }
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                    Uri.parse(String.format("google.navigation:ll=%s,%s&mode=c", selectedPos.latitude, selectedPos.longitude)));
+            startActivity(intent);
         }
     }
 
