@@ -13,7 +13,7 @@
     <string name="activation_form_btn">تفعيل الحساب</string>
     <string name="activation_form">تفعيل البطاقة</string>
     <string name="sponsored_by">Sponsored By</string>
-    <string name="username_not_valid">يرجى ادخال اسم المستخدم</string>
+    <string name="username_not_valid">اسم المستخدم الذي ادخلته خاطئ</string>
     <string name="password_not_valid">يرجى ادخال كلمة السر</string>
     <string name="activation_card_empty">يرجى ادخال رقم البطاقة</string>
     <string name="activation_card_not_valid">الرجاء ادخال رقم بطاقة صالحة للاستمرار</string>

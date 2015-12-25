@@ -31,6 +31,8 @@ import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -294,16 +296,29 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
     public boolean isValidInput(){
         if (InputValidator.isNotEmpty(txtFirstName, getString(R.string.first_name_empty))
 //               && InputValidator.isNotEmpty(txtLastName, getString(R.string.last_name_empty))
+                && emailValidator(txtUsername.getText().toString())
                 && InputValidator.isNotEmpty(txtUsername, getString(R.string.username_not_valid))
                 && InputValidator.isNotEmpty(txtPassword, getString(R.string.password_not_valid))
                 && InputValidator.isPassNotEqualsEmpty(txtPassword
-                    ,txtRepeatPassword, getString(R.string.password_not_equal_repeat_pass))
+                , txtRepeatPassword, getString(R.string.password_not_equal_repeat_pass))
                 ){
             return true;
         }
         return false;
     }
 
+    private boolean emailValidator(String email)
+    {
+        Pattern pattern;
+        Matcher matcher;
+        final String EMAIL_PATTERN = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+        pattern = Pattern.compile(EMAIL_PATTERN);
+        matcher = pattern.matcher(email);
+        if (!matcher.matches())
+            txtUsername.setText("");
+
+        return true;
+    }
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
