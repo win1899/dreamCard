@@ -288,7 +288,7 @@ public class MainActivationFormActivity extends FragmentActivity implements View
         if (processType == Params.SERVICE_PROCESS_1) {
             progress.dismiss();
             MessageInfo info = (MessageInfo) b;
-            if (info.isValid()) {
+            if (true) {
                 currentPage++;
                 initFragment(currentPage);
             } else {

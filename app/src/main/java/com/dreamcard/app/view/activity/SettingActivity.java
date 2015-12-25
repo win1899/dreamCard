@@ -52,6 +52,7 @@ import com.dreamcard.app.view.fragments.DatePickerFragment;
 import com.dreamcard.app.view.interfaces.IDatePickerListener;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -688,6 +689,20 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
         }
     }
 
+    private Date getBirthdayDate(){
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "dd/MM/yyyy");
+        Date convertedStartDate = new Date();
+        try {
+            convertedStartDate = dateFormat.parse(txtBirthday.getText().toString());
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return convertedStartDate;
+    }
+
+
     private void showGender() {
 
 
@@ -816,7 +831,7 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-            DialogFragment newFragment = new DatePickerFragment(this.listener, 0);
+            DialogFragment newFragment = new DatePickerFragment(this.listener, 0, getBirthdayDate());
             newFragment.show(getSupportFragmentManager(), "datePicker");
         }
         return false;

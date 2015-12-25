@@ -207,7 +207,7 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
             }
         }
         else if(view.getId()==R.id.txt_birth_date) {
-            DialogFragment newFragment = new DatePickerFragment(this.listener, 0);
+            DialogFragment newFragment = new DatePickerFragment(this.listener, 0, getBirthdayDate());
             newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
         } else if(view.getId()==R.id.txt_country){
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -276,9 +276,8 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
         bean.setBirthdayDate(getBirthdayDate());
         return bean;
     }
+
     public Date getBirthdayDate(){
-
-
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "dd/MM/yyyy");
         Date convertedStartDate = new Date();
@@ -290,6 +289,8 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
         }
         return convertedStartDate;
     }
+
+
     public boolean isValidInput(){
         if (InputValidator.isNotEmpty(txtFirstName, getString(R.string.first_name_empty))
 //               && InputValidator.isNotEmpty(txtLastName, getString(R.string.last_name_empty))
