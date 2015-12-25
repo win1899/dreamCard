@@ -125,7 +125,6 @@
              />
 
 
-
         <!--  <ImageView
               android:layout_width="wrap_content"
               android:layout_height="wrap_content"
@@ -160,14 +159,14 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn_total"
+                android:id="@+id/btn_cash"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".3"
                 android:background="@drawable/test_shape"
-                android:drawableLeft="@drawable/plus"
+                android:drawableLeft="@drawable/cash"
                 android:paddingStart="5dp"
-                android:text="Total"
+                android:text="Cash"
 
                 android:textColor="#ffffff" />
 
@@ -182,7 +181,7 @@
                 android:id="@+id/btn_cash_points"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_weight=".3"
+                android:layout_weight=".45"
                 android:background="@drawable/test_shape"
                 android:drawableLeft="@drawable/cashpoints_icon"
                 android:paddingStart="5dp"
@@ -196,22 +195,33 @@
                 android:background="#f09620"
                 android:gravity="center_vertical" />
 
-            <TextView
-                style="?android:listSeparatorTextViewStyle"
-                android:layout_width="1dp"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/btn_special"
-                android:background="#f09620" />
-
             <Button
-                android:id="@+id/btn_cash"
+                android:id="@+id/btn_mobile"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight=".3"
                 android:background="@drawable/cash_shape"
-                android:drawableLeft="@drawable/cash"
+                android:drawableLeft="@drawable/mobile_icon"
                 android:paddingStart="5dp"
-                android:text="Cash"
+                android:text="Mobile"
+                android:textColor="#ffffff" />
+
+            <TextView
+                style="?android:listSeparatorTextViewStyle"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:background="#f09620"
+                android:gravity="center_vertical" />
+
+            <Button
+                android:id="@+id/btn_gas"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight=".3"
+                android:background="@drawable/cash_shape"
+                android:drawableLeft="@drawable/gas"
+                android:paddingStart="5dp"
+                android:text="Gas"
                 android:textColor="#ffffff" />
 
         </LinearLayout>

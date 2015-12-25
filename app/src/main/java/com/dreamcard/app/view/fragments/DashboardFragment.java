@@ -64,9 +64,10 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
     private TotalSavingAsync totalSavingAsync;
     private ConsumerDiscountAsyncTask consumerDiscountAsyncTask;
     private ArrayList<Offers> notificationList = new ArrayList<Offers>();
-    private Button btnTotal;
+    private Button btnGas;
     private Button btnCashPoints;
     private Button btnCash;
+    private Button btnMobile;
 
     private double totalSave = 0.0;
 
@@ -108,15 +109,22 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
         btnCash = (Button) view.findViewById(R.id.btn_cash);
         btnCash.setOnClickListener(this);
         GradientDrawable totalShape1 = (GradientDrawable) btnCash.getBackground();
-        totalShape1.setColor(getResources().getColor(R.color.button_not_seleted));
-        btnTotal = (Button) view.findViewById(R.id.btn_total);
-        btnTotal.setOnClickListener(this);
-        GradientDrawable totalShape3 = (GradientDrawable) btnTotal.getBackground();
-        totalShape3.setColor(getResources().getColor(R.color.button_selected));
+        totalShape1.setColor(getResources().getColor(R.color.button_selected));
+
+        btnGas = (Button) view.findViewById(R.id.btn_gas);
+        btnGas.setOnClickListener(this);
+        GradientDrawable totalShape3 = (GradientDrawable) btnGas.getBackground();
+        totalShape3.setColor(getResources().getColor(R.color.button_not_seleted));
+
         btnCashPoints = (Button) view.findViewById(R.id.btn_cash_points);
         btnCashPoints.setOnClickListener(this);
         GradientDrawable totalShape4 = (GradientDrawable) btnCashPoints.getBackground();
         totalShape4.setColor(getResources().getColor(R.color.button_not_seleted));
+
+        btnMobile = (Button) view.findViewById(R.id.btn_mobile);
+        btnMobile.setOnClickListener(this);
+        GradientDrawable totalShape2 = (GradientDrawable) btnMobile.getBackground();
+        totalShape2.setColor(getResources().getColor(R.color.button_not_seleted));
 
         SharedPreferences prefs = getActivity().getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
         String id = prefs.getString(Params.USER_INFO_ID, "");
@@ -171,29 +179,37 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
         }
 
         if (view.getId() == R.id.btn_cash) {
-            GradientDrawable bgShape = (GradientDrawable) btnCash.getBackground();
-            bgShape.setColor(getResources().getColor(R.color.button_selected));
+            btnCashPoints.setBackground(getResources().getDrawable(R.color.button_not_seleted));
+            btnMobile.setBackground(getResources().getDrawable(R.color.button_not_seleted));
+            btnGas.setBackground(getResources().getDrawable(R.color.button_not_seleted));
 
-            GradientDrawable totalShape = (GradientDrawable) btnTotal.getBackground();
-            totalShape.setColor(getResources().getColor(R.color.button_not_seleted));
-            btnCashPoints.setBackgroundColor(getResources().getColor(R.color.button_not_seleted));
+            btnCash.setBackgroundColor(getResources().getColor(R.color.button_selected));
 
             showSavedAmountDialog("Cash saved", totalSave);
-        } else if (view.getId() == R.id.btn_total) {
-            GradientDrawable bgShape = (GradientDrawable) btnCash.getBackground();
-            bgShape.setColor(getResources().getColor(R.color.button_not_seleted));
-
-            GradientDrawable totalShape = (GradientDrawable) btnTotal.getBackground();
-            totalShape.setColor(getResources().getColor(R.color.button_selected));
-            btnCashPoints.setBackgroundColor(getResources().getColor(R.color.button_not_seleted));
-            showSavedAmountDialog("Total saved", totalSave);
         } else if (view.getId() == R.id.btn_cash_points) {
-            GradientDrawable bgShape = (GradientDrawable) btnCash.getBackground();
-            bgShape.setColor(getResources().getColor(R.color.button_not_seleted));
+            btnCash.setBackgroundColor(getResources().getColor(R.color.button_not_seleted));
+            btnMobile.setBackground(getResources().getDrawable(R.color.button_not_seleted));
+            btnGas.setBackground(getResources().getDrawable(R.color.button_not_seleted));
 
-            GradientDrawable totalShape = (GradientDrawable) btnTotal.getBackground();
-            totalShape.setColor(getResources().getColor(R.color.button_not_seleted));
-            btnCashPoints.setBackgroundColor(getResources().getColor(R.color.button_selected));
+            btnCashPoints.setBackground(getResources().getDrawable(R.color.button_selected));
+
+            comingSoonDialog();
+        } else if (view.getId() == R.id.btn_mobile) {
+            btnCash.setBackgroundColor(getResources().getColor(R.color.button_not_seleted));
+            btnGas.setBackground(getResources().getDrawable(R.color.button_not_seleted));
+            btnCashPoints.setBackground(getResources().getDrawable(R.color.button_not_seleted));
+
+            btnMobile.setBackground(getResources().getDrawable(R.color.button_selected));
+
+            comingSoonDialog();
+        }
+        else if (view.getId() == R.id.btn_gas) {
+            btnCash.setBackgroundColor(getResources().getColor(R.color.button_not_seleted));
+            btnMobile.setBackground(getResources().getDrawable(R.color.button_not_seleted));
+            btnCashPoints.setBackground(getResources().getDrawable(R.color.button_not_seleted));
+
+            btnGas.setBackground(getResources().getDrawable(R.color.button_selected));
+
             comingSoonDialog();
         }
     }
