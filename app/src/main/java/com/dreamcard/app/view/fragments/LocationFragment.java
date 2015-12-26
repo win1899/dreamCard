@@ -106,6 +106,14 @@ public class LocationFragment extends Fragment implements IServiceListener, View
         }
         try {
             view = inflater.inflate(R.layout.fragment_location, container, false);
+            if (view != null) {
+                ImageView takeMeThere = (ImageView) view.findViewById(R.id.take_me_there_btn);
+                takeMeThere.setOnClickListener(this);
+
+                RelativeLayout takeMethereLayout = (RelativeLayout) view.findViewById(R.id.take_me_there_layout);
+                takeMethereLayout.setOnClickListener(this);
+            }
+
         } catch (InflateException e) {
             /* map is already there, just return view as it is */
         }
@@ -118,12 +126,6 @@ public class LocationFragment extends Fragment implements IServiceListener, View
                 return true;
             }
         });
-
-        ImageView takeMeThere = (ImageView) view.findViewById(R.id.take_me_there_btn);
-        takeMeThere.setOnClickListener(this);
-
-        RelativeLayout takeMethereLayout = (RelativeLayout) view.findViewById(R.id.take_me_there_layout);
-        takeMethereLayout.setOnClickListener(this);
 
         map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
             @Override
