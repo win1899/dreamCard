@@ -198,7 +198,7 @@ public class ConsumerDiscountAsyncTask extends AbstractAsyncTask<Object, Void, O
                             }
                             list.add(bean);
                         }
-                        Collections.reverse(list);
+                        //Collections.reverse(list);
                         return list;
 
                     } catch (JSONException e) {

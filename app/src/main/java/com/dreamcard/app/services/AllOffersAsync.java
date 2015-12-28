@@ -197,7 +197,7 @@ public class AllOffersAsync extends AbstractAsyncTask<Object, Void, Object> {
 
                             list.add(bean);
                         }
-                        Collections.reverse(list);
+                        //Collections.reverse(list);
                         return list;
 
                     } catch (JSONException e) {
