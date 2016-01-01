@@ -76,7 +76,7 @@ public class NotificationGridAdapter extends BaseAdapter {
             discSt = String.valueOf(discount).substring(0, String.valueOf(discount).lastIndexOf("."));
         }
 
-        String title = this.activity.getString(R.string.notification_desc_1) + " " + discSt + " "
+        String title = this.activity.getString(R.string.notification_desc_1) + " " + discSt + activity.getString(R.string.ils) +" "
                 + this.activity.getString(R.string.notification_desc_2) + " " + bean.getBusinessName();
         if (title.length() > 35) {
             title = title.substring(0, 35) + "...";
