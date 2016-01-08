@@ -14,8 +14,8 @@ android {
     defaultConfig {
         minSdkVersion 17
         targetSdkVersion 19
-        versionCode 9
-        versionName '1.4.2'
+        versionCode 10
+        versionName '1.5'
     }
     buildTypes {
         release {
@@ -38,4 +38,5 @@ dependencies {
     compile files('libs/android-query.0.26.8.jar')
     compile 'com.facebook.fresco:fresco:0.6.0+'
     compile 'com.squareup.picasso:picasso:2.5.2'
+    compile project(':volley')
 }
