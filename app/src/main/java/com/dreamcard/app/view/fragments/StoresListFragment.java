@@ -16,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,11 +25,9 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.androidquery.AQuery;
 import com.dreamcard.app.R;
 
 import com.dreamcard.app.components.ExpandableHeightGridView;
-import com.dreamcard.app.components.TransparentProgressDialog;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.GridItem;
@@ -38,7 +35,7 @@ import com.dreamcard.app.entity.ItemButton;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.services.AllBusinessAsync;
-import com.dreamcard.app.utils.ImageViewLoader;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.adapters.RegularStoresGridAdapter;
 import com.dreamcard.app.view.fragments.dummy.DummyContent;
 import com.dreamcard.app.view.interfaces.IServiceListener;
@@ -216,7 +213,7 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private View insertPhotoGold(String url,int position,int width,int height){
+    private View insertPhotoGold(String url,int position, int width, int height){
         LinearLayout layout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
         params.setMargins(10,10,10,10);
@@ -227,36 +224,33 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
         layout.setOnClickListener(this);
 
         ImageView imageView = new ImageView(getActivity());
-        imageView.setLayoutParams(new ViewGroup.LayoutParams(width - dpToPx(10), height));
+        imageView.setLayoutParams(new ViewGroup.LayoutParams(width - dpToPx(10),height - dpToPx(10)));
         imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         imageView.setId(position);
         imageView.setOnClickListener(this);
         imageView.setOnClickListener(this);
         layout.addView(imageView);
-        AQuery aq=new AQuery(this.activity);
-        aq.id(imageView).image(url, true, true
-                , imageView.getWidth() - dpToPx(25), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+
+        Utils.loadImage(activity, url, imageView, width - dpToPx(10), height - dpToPx(10), false);
         return layout;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private View insertPhoto(String url,int position,int width,int height){
         LinearLayout layout = new LinearLayout(getActivity());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width - 10 , height - 10);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
         params.setMargins(10, 10, 10, 10);
         layout.setLayoutParams(params);
         layout.setGravity(Gravity.CENTER);
         layout.setBackground(getResources().getDrawable(R.drawable.other_offer_background));
 
         ImageView imageView = new ImageView(getActivity());
-        imageView.setLayoutParams(new ViewGroup.LayoutParams(width - dpToPx(10),height));
+        imageView.setLayoutParams(new ViewGroup.LayoutParams(width - dpToPx(10),height - dpToPx(10)));
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setId(position);
         imageView.setOnClickListener(this);
         layout.addView(imageView);
-        AQuery aq = new AQuery(this.activity);
-        aq.id(imageView).image(url, true, true,
-                imageView.getWidth() - dpToPx(30), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+        Utils.loadImage(activity, url, imageView, width - dpToPx(10), height - dpToPx(10), false);
         return layout;
     }
 

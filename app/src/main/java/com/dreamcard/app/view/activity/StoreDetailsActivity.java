@@ -31,7 +31,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.androidquery.AQuery;
 import com.dreamcard.app.R;
 import com.dreamcard.app.components.AddCommentDialog;
 import com.dreamcard.app.components.ExpandableHeightGridView;
@@ -50,6 +49,7 @@ import com.dreamcard.app.services.AddBusinessCommentAsync;
 import com.dreamcard.app.services.AllOffersAsync;
 import com.dreamcard.app.services.CommentsAsync;
 import com.dreamcard.app.services.IsOfferLikedAsyncTask;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.adapters.CommentsAdapter;
 import com.dreamcard.app.view.adapters.ImagePagerAdapter;
 import com.dreamcard.app.view.adapters.StoreImagePagerAdapter;
@@ -262,10 +262,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         imgAdapter = new StoreImagePagerAdapter(this, bean);
         imgPager.setAdapter(imgAdapter);
 
-        AQuery aq = new AQuery(StoreDetailsActivity.this);
-        aq.id(storeIcon).image(bean.getLogo(), true, true
-                , storeIcon.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
-
+        Utils.loadImage(this, bean.getLogo(), storeIcon);
         if (bean.getLogo() == null && bean.getPictures() == null) {
             txtBusinessName.setVisibility(View.VISIBLE);
         }

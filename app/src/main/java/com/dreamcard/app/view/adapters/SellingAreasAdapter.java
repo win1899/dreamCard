@@ -2,7 +2,6 @@ package com.dreamcard.app.view.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.media.Image;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +9,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.androidquery.AQuery;
 import com.dreamcard.app.R;
 import com.dreamcard.app.entity.Stores;
+import com.dreamcard.app.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -66,10 +65,7 @@ public class SellingAreasAdapter  extends BaseAdapter {
         holder.storeAddress.setText(store.getAddress1());
         holder.storePhone.setText(store.getPhone());
 
-        AQuery aq = new AQuery(activity);
-        aq.id(holder.storeLogo).image(store.getLogo(), true, true
-                , holder.storeLogo.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
-
+        Utils.loadImage(activity, store.getLogo(), holder.storeLogo);
         return vi;
     }
 

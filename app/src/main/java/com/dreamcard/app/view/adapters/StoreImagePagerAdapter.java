@@ -1,8 +1,6 @@
 package com.dreamcard.app.view.adapters;
 
-import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +8,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.androidquery.AQuery;
 import com.dreamcard.app.R;
 import com.dreamcard.app.entity.Stores;
-import com.dreamcard.app.view.activity.ImageViewerActivity;
+import com.dreamcard.app.utils.Utils;
 
 /**
  * Created by WIN on 10/21/2015.
@@ -47,7 +44,6 @@ public class StoreImagePagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.activity_image_viewer, container, false);
-        AQuery aq = new AQuery(mContext);
 
         ImageView imageView = (ImageView) itemView.findViewById(R.id.img_offer_image);
 
@@ -56,12 +52,10 @@ public class StoreImagePagerAdapter extends PagerAdapter {
                 itemView.setVisibility(View.GONE);
                 return itemView;
             }
-            aq.id(imageView).image(mStore.getLogo(), true, true
-                    , imageView.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+            Utils.loadImage(mContext, mStore.getLogo(), imageView);
         }
         else {
-            aq.id(imageView).image(mStore.getPictures()[position], true, true
-                    , imageView.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+            Utils.loadImage(mContext, mStore.getPictures()[position], imageView);
         }
 
         container.addView(itemView);

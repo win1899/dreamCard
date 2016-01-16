@@ -10,9 +10,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.androidquery.AQuery;
 import com.dreamcard.app.R;
 import com.dreamcard.app.entity.Offers;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.activity.ImageViewerActivity;
 
 
@@ -48,26 +48,22 @@ public class ImagePagerAdapter extends PagerAdapter {
     @Override
     public Object instantiateItem(ViewGroup container, int position) {
         View itemView = mLayoutInflater.inflate(R.layout.image_in_pager_view, container, false);
-        AQuery aq = new AQuery(mContext);
 
         ImageView imageView = (ImageView) itemView.findViewById(R.id.img_offer_image);
         final Intent intent = new Intent(mContext, ImageViewerActivity.class);
 
         if (mOffer.getPicturesList() == null || mOffer.getPicturesList().length <= 0) {
-            aq.id(imageView).image(mOffer.getOfferMainPhoto(), true, true
-                    , imageView.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+            Utils.loadImage(mContext, mOffer.getOfferMainPhoto(), imageView);
             intent.putExtra("imageURL", mOffer.getOfferMainPhoto());
-
         }
         else {
             if (position == 0) {
-                aq.id(imageView).image(mOffer.getOfferMainPhoto(), true, true
-                        , imageView.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+                Utils.loadImage(mContext, mOffer.getOfferMainPhoto(), imageView);
                 intent.putExtra("imageURL", mOffer.getOfferMainPhoto());
             }
             else {
-                aq.id(imageView).image(mOffer.getPicturesList()[position - 1], true, true
-                        , imageView.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+                Utils.loadImage(mContext, mOffer.getPicturesList()[position - 1], imageView);
+
                 intent.putExtra("imageURL", mOffer.getPicturesList()[position - 1]);
 
             }

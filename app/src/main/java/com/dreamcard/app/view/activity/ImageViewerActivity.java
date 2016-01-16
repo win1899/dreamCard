@@ -1,15 +1,13 @@
 package com.dreamcard.app.view.activity;
 
 import android.app.Activity;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
-import com.androidquery.AQuery;
 import com.dreamcard.app.R;
-import com.dreamcard.app.utils.ImageViewLoader;
+import com.dreamcard.app.utils.Utils;
 
 public class ImageViewerActivity extends Activity {
 
@@ -26,8 +24,7 @@ public class ImageViewerActivity extends Activity {
     private void buildUI() {
         img = (ImageView) findViewById(R.id.img_offer_image);
         String imageURL = getIntent().getStringExtra("imageURL");
-        AQuery aq = new AQuery(this);
-        aq.id(R.id.img_offer_image).progress(R.drawable.loading_progress).image(imageURL, true, true, img.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+        Utils.loadImage(this, imageURL, img);
     }
 
 

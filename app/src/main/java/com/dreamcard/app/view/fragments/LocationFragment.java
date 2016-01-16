@@ -19,7 +19,6 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.androidquery.AQuery;
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.entity.ErrorMessageInfo;
@@ -28,6 +27,7 @@ import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.services.AllBusinessAsync;
 import com.dreamcard.app.utils.ImageViewLoader;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.adapters.MarkerInfoWindowAdapter;
 import com.dreamcard.app.view.interfaces.ILocationListener;
 import com.dreamcard.app.view.interfaces.IServiceListener;
@@ -152,10 +152,7 @@ public class LocationFragment extends Fragment implements IServiceListener, View
                 storeName.setText(selectedStore.getStoreName());
                 storeAddress.setText(selectedStore.getAddress1());
                 storePhone.setText(selectedStore.getPhone());
-                AQuery aq = new AQuery(activity);
-                aq.id(storeLogo).image(selectedStore.getLogo(), true, true
-                        , storeLogo.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
-
+                Utils.loadImage(activity, selectedStore.getLogo(), storeLogo);
                 break;
             }
         }

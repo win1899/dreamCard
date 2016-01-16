@@ -33,7 +33,6 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.androidquery.AQuery;
 import com.dreamcard.app.R;
 import com.dreamcard.app.components.AddCommentDialog;
 import com.dreamcard.app.components.TransparentProgressDialog;
@@ -50,6 +49,7 @@ import com.dreamcard.app.services.AllOffersAsync;
 import com.dreamcard.app.services.CommentsAsync;
 import com.dreamcard.app.services.GetBussinesByIdAsync;
 import com.dreamcard.app.utils.ImageViewLoader;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.adapters.CommentsAdapter;
 import com.dreamcard.app.view.adapters.ImagePagerAdapter;
 import com.dreamcard.app.view.adapters.OtherOffersAdapter;
@@ -341,8 +341,6 @@ public class OfferDetailsActivity extends Activity
                 txtYouSaveLbl.setText(txtYouSaveLbl.getText() + getString(R.string.usd));
             }
         }
-        AQuery aq = new AQuery(this);
-        //aq.id(R.id.img_offer_logo).progress(R.id.offer_detail_progress).image(bean.getOfferMainPhoto(), true, true, imgOfferLogo.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
 
         imgAdapter = new ImagePagerAdapter(this, bean);
         imgPager.setAdapter(imgAdapter);
@@ -379,21 +377,19 @@ public class OfferDetailsActivity extends Activity
             txtNewPrice.setVisibility(View.GONE);
             txtYouSaveLbl.setVisibility(View.GONE);
         }
-        aq = new AQuery(this);
-        aq.id(imgStoreLogo).image(bean.getBusinessLogo(), true, true
-                , imgStoreLogo.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
 
+        Utils.loadImage(this, bean.getBusinessLogo(), imgStoreLogo);
         imgStoreLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (offerStore == null) {
                     return;
                 }
-                Intent intent=new Intent(OfferDetailsActivity.this, StoreDetailsActivity.class);
+                Intent intent = new Intent(OfferDetailsActivity.this, StoreDetailsActivity.class);
                 intent.putExtra(Params.DATA, offerStore);
                 intent.putExtra(Params.PICTURE_LIST, offerStore.getPictures());
                 startActivity(intent);
-                overridePendingTransition( R.anim.push_down_in, R.anim.push_down_in );
+                overridePendingTransition(R.anim.push_down_in, R.anim.push_down_in);
                 finish();
             }
         });

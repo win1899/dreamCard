@@ -17,11 +17,11 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.androidquery.AQuery;
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.OffersRecordHolder;
+import com.dreamcard.app.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -138,9 +138,7 @@ public class LatestOffersListAdapter extends BaseAdapter {
 
         if (bean.getOfferMainPhoto() != null && !bean.getOfferMainPhoto().equalsIgnoreCase("null")
                 && bean.getOfferMainPhoto().length() > 0) {
-            AQuery aq = new AQuery(this.activity);
-            aq.id(holder.getImgOffer()).progress(R.id.offer_detail_progress).image(bean.getOfferMainPhoto(), true, true
-                    , holder.getImgOffer().getWidth(), R.drawable.offer_item_bg, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+            Utils.loadImage(this.activity, bean.getOfferMainPhoto(), holder.getImgOffer());
         }
         holder.getRatingBar().removeAllViews();
         setRating(bean.getOfferRating(), holder.getRatingBar());
