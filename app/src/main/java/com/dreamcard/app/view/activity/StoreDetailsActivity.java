@@ -105,7 +105,12 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_store_details);
+        try {
+            setContentView(R.layout.activity_store_details);
+        }
+        catch (OutOfMemoryError e) {
+            finish();
+        }
 
         buildUI();
         setData();
