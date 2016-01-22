@@ -1,0 +1,90 @@
+package com.dreamcard.app.view.adapters;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.view.PagerAdapter;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+
+import com.dreamcard.app.R;
+import com.dreamcard.app.entity.Offers;
+import com.dreamcard.app.utils.Utils;
+import com.dreamcard.app.view.activity.ImageViewerActivity;
+
+
+/**
+ * Created by WIN on 10/16/2015.
+ */
+public class ImagePagerAdapter extends PagerAdapter {
+
+    private Context mContext;
+    private LayoutInflater mLayoutInflater;
+    private Offers mOffer;
+
+
+    public ImagePagerAdapter(Context context, Offers offer) {
+        mContext = context;
+        mOffer = offer;
+        mLayoutInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+    }
+
+    @Override
+    public int getCount() {
+        if (mOffer.getPicturesList() == null) {
+            return 1;
+        }
+        return mOffer.getPicturesList().length + 1;
+    }
+
+    @Override
+    public boolean isViewFromObject(View view, Object object) {
+        return view == object;
+    }
+
+    @Override
+    public Object instantiateItem(ViewGroup container, int position) {
+        View itemView = mLayoutInflater.inflate(R.layout.image_in_pager_view, container, false);
+
+        ImageView imageView = (ImageView) itemView.findViewById(R.id.img_offer_image);
+        final Intent intent = new Intent(mContext, ImageViewerActivity.class);
+
+        if (mOffer.getPicturesList() == null || mOffer.getPicturesList().length <= 0) {
+            Utils.loadImage(mContext, mOffer.getOfferMainPhoto(), imageView);
+            intent.putExtra("imageURL", mOffer.getOfferMainPhoto());
+        }
+        else {
+            if (position == 0) {
+                Utils.loadImage(mContext, mOffer.getOfferMainPhoto(), imageView);
+                intent.putExtra("imageURL", mOffer.getOfferMainPhoto());
+            }
+            else {
+                Utils.loadImage(mContext, mOffer.getPicturesList()[position - 1], imageView);
+
+                intent.putExtra("imageURL", mOffer.getPicturesList()[position - 1]);
+
+            }
+
+        }
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mContext.startActivity(intent);
+                ((Activity) mContext).overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+            }
+        });
+
+        container.addView(itemView);
+
+        return itemView;
+    }
+
+    @Override
+    public void destroyItem(ViewGroup container, int position, Object object) {
+        container.removeView((RelativeLayout) object);
+    }
+}

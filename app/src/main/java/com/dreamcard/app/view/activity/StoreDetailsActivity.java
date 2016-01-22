@@ -1,22 +1,19 @@
 package com.dreamcard.app.view.activity;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -24,7 +21,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,10 +29,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.Toast;
 
-import com.androidquery.AQuery;
 import com.dreamcard.app.R;
 import com.dreamcard.app.components.AddCommentDialog;
 import com.dreamcard.app.components.ExpandableHeightGridView;
@@ -45,23 +39,20 @@ import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.BusinessComment;
 import com.dreamcard.app.entity.Comments;
-import com.dreamcard.app.entity.ConsumerInfo;
 import com.dreamcard.app.entity.ErrorMessageInfo;
-import com.dreamcard.app.entity.LikeOfferBusiness;
+import com.dreamcard.app.entity.LocationInfo;
 import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.entity.Stores;
-import com.dreamcard.app.services.AddBusinessComment;
+import com.dreamcard.app.services.AddBusinessCommentAsync;
 import com.dreamcard.app.services.AllOffersAsync;
 import com.dreamcard.app.services.CommentsAsync;
-import com.dreamcard.app.services.DislikeOfferBusinessAsyncTask;
-import com.dreamcard.app.services.IsOfferLikedAyncTask;
-import com.dreamcard.app.services.LikeOfferBusinessAsyncTask;
-import com.dreamcard.app.services.LikesNumAsync;
-import com.dreamcard.app.utils.ImageViewLoader;
+import com.dreamcard.app.services.IsOfferLikedAsyncTask;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.adapters.CommentsAdapter;
-import com.dreamcard.app.view.adapters.LatestOffersListAdapter;
+import com.dreamcard.app.view.adapters.ImagePagerAdapter;
+import com.dreamcard.app.view.adapters.StoreImagePagerAdapter;
 import com.dreamcard.app.view.adapters.StoreOffersGridAdapter;
 import com.dreamcard.app.view.interfaces.AddCommentListener;
 import com.dreamcard.app.view.interfaces.IServiceListener;
@@ -74,10 +65,12 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     private ImageView imgOfferLogo;
     private TextView txtNumOfLikes;
     private TextView txtLikeBtn;
+    private TextView txtAnnualDiscount;
+    private TextView txtAddress;
     private ListView commentsListView;
     private ImageView btnAddComment;
     private AddCommentDialog commentDialog;
-    private LinearLayout ratingPnl;
+    private RelativeLayout ratingPnl;
     private ExpandableHeightGridView grid;
     private StoreOffersGridAdapter adapter;
     private ProgressBar progressBar;
@@ -95,11 +88,13 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     private CommentsAsync commentsAsync;
     private ArrayList<Comments> commentsList;
     private ArrayList<Offers> offersList;
-    private ImageView imgStoreLogo;
+    private StoreImagePagerAdapter imgAdapter;
+    private ViewPager imgPager;
     private ImageButton btnFacebook;
     private ImageButton btnPhone;
     private ImageButton btnEmail;
     private ImageButton btnWebsite;
+    private ImageView storeIcon;
     private Button btnAll;
     private Button btnLatest;
     private boolean firstLoad = true;
@@ -110,7 +105,12 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_store_details);
+        try {
+            setContentView(R.layout.activity_store_details);
+        }
+        catch (OutOfMemoryError e) {
+            finish();
+        }
 
         buildUI();
         setData();
@@ -118,7 +118,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         SharedPreferences prefs = getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
         String id = prefs.getString(Params.USER_INFO_ID, "");
 
-        IsOfferLikedAyncTask asyncTask = new IsOfferLikedAyncTask(this
+        IsOfferLikedAsyncTask asyncTask = new IsOfferLikedAsyncTask(this
                 , ServicesConstants.getIsBusinessLikedRequestList(id, this.bean.getId())
                 , Params.SERVICE_PROCESS_6, Params.TYPE_BUSINESS);
         asyncTask.execute(this);
@@ -138,9 +138,13 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     private void buildUI() {
         txtBusinessName = (TextView) findViewById(R.id.txt_business_name);
         imgOfferLogo = (ImageView) findViewById(R.id.img_offer_logo);
+        txtAnnualDiscount = (TextView) findViewById(R.id.annual_discount);
         imgOfferLogo.setOnClickListener(this);
         scroll = (ScrollView) findViewById(R.id.scroll);
         commentsListView = (ListView) findViewById(android.R.id.list);
+        storeIcon = (ImageView) findViewById(R.id.main_store_icon);
+        txtAddress = (TextView) findViewById(R.id.store_address);
+        txtAddress.setOnClickListener(this);
         commentsListView.setOnTouchListener(new ListView.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -164,13 +168,15 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         });
         btnAddComment = (ImageView) findViewById(R.id.img_add_comment);
         btnAddComment.setOnClickListener(this);
-        ratingPnl = (LinearLayout) findViewById(R.id.rating_pnl);
+        ratingPnl = (RelativeLayout) findViewById(R.id.rating_pnl);
         grid = (ExpandableHeightGridView) findViewById(R.id.offers_grid);
         progressBar = (ProgressBar) findViewById(R.id.progress);
         noCommentPnl = (RelativeLayout) findViewById(R.id.no_comments_pnl);
         imgLogo = (ImageView) findViewById(R.id.img_menu_logo);
         imgLogo.setOnClickListener(this);
-        imgStoreLogo = (ImageView) findViewById(R.id.img_store_logo);
+        imgPager = (ViewPager) findViewById(R.id.img_store_pager);
+        ImageView location = (ImageView) findViewById(R.id.btn_location);
+        location.setOnClickListener(this);
 
         handler = new Handler();
         progress = new TransparentProgressDialog(this, R.drawable.loading);
@@ -204,41 +210,71 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
 
     public void setData() {
         Intent intent = getIntent();
-        Stores bean = intent.getParcelableExtra(Params.DATA);
+        final Stores bean = intent.getParcelableExtra(Params.DATA);
+        bean.setPictures(intent.getStringArrayExtra(Params.PICTURE_LIST));
         this.bean = bean;
 
         txtBusinessName.setText(bean.getStoreName());
+        if (bean.getDiscountPrecentage() > 0.0) {
+            txtAnnualDiscount.setText(Integer.toString((int)bean.getDiscountPrecentage()) + "%");
+            txtAnnualDiscount.setVisibility(View.VISIBLE);
+            ratingPnl.setVisibility(View.VISIBLE);
+        }
+        else {
+            txtAnnualDiscount.setVisibility(View.GONE);
+            ratingPnl.setVisibility(View.GONE);
+        }
 
         if (bean.getOurMessage() != null && !bean.getOurMessage().isEmpty() && !bean.getOurMessage().equalsIgnoreCase("null")) {
+            String about = bean.getOurMessage();
             if (bean.getOurMessage().length() > 100) {
-                bean.setOurMessage(bean.getOurMessage().substring(0, 100) + "...");
+                about = bean.getOurMessage().substring(0, 100) + "...";
+                txtAbout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        txtAbout.setText(bean.getOurMessage());
+                    }
+                });
             }
-            txtAbout.setText(bean.getOurMessage());
+            txtAbout.setText(about);
         } else if (bean.getMission() != null && !bean.getMission().isEmpty() && !bean.getMission().equalsIgnoreCase("null")) {
+            String mission = bean.getMission();
             if (bean.getMission().length() > 100) {
-                bean.setMission(bean.getMission().substring(0, 100) + "...");
+                mission = bean.getMission().substring(0, 100) + "...";
+                txtAbout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        txtAbout.setText(bean.getMission());
+                    }
+                });
             }
-            txtAbout.setText(bean.getMission());
+            txtAbout.setText(mission);
         } else if (bean.getVision() != null && !bean.getVision().isEmpty() && !bean.getVision().equalsIgnoreCase("null")) {
+            String vision = bean.getVision();
             if (bean.getVision().length() > 100) {
-                bean.setVision(bean.getVision().substring(0, 100) + "...");
+                vision = bean.getVision().substring(0, 100) + "...";
+                txtAbout.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        txtAbout.setText(bean.getVision());
+                    }
+                });
             }
-            txtAbout.setText(bean.getVision());
+            txtAbout.setText(vision);
         }
+        txtAddress.setText(bean.getAddress1());
 
-        AQuery aq = new AQuery(this);
-        aq.id(R.id.img_offer_logo).progress(R.id.store_detail_progress).image(bean.getWideLogo(), true
-                , true, imgOfferLogo.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
-        setRating(bean.getRating());
-        ratingPnl.setOnClickListener(this);
+        imgAdapter = new StoreImagePagerAdapter(this, bean);
+        imgPager.setAdapter(imgAdapter);
 
-        if (bean.getLogo() != null && bean.getLogo().length() > 0 && bean.getLogo().contains("http")) {
-            aq.id(imgStoreLogo).image(bean.getLogo(), true, true
-                    , imgStoreLogo.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
-            txtBusinessName.setVisibility(View.GONE);
-        } else {
-            imgStoreLogo.setVisibility(View.GONE);
+        Utils.loadImage(this, bean.getLogo(), storeIcon);
+        if (bean.getLogo() == null && bean.getPictures() == null) {
+            txtBusinessName.setVisibility(View.VISIBLE);
         }
+    }
+
+    private int dpToPx(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
     }
 
     private void setRating(int rating) {
@@ -373,6 +409,20 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
             ArrayList<ServiceRequest> list = ServicesConstants.getLatestOfferByStoreId(this.bean.getId(), 10);
             allOffersAsync = new AllOffersAsync(this, list, Params.SERVICE_PROCESS_1, Params.TYPE_LATEST_OFFERS_BY_BUSINESS);
             allOffersAsync.execute(this);
+        } else if (view.getId() == R.id.btn_location || view.getId() == R.id.store_address) {
+            Intent data = new Intent();
+            try {
+                LocationInfo info = new LocationInfo();
+                double latitude = Double.parseDouble(bean.getLatitude());
+                double longitude = Double.parseDouble(bean.getLongitude());
+                info.setLatitude(latitude);
+                info.setLongitude(longitude);
+                data.putExtra("location", info);
+            } catch (Exception e) {
+
+            }
+            setResult(Params.NAVIGATE, data);
+            finish();
         } else {
             Offers info = null;
             for (Offers bean : this.offersList) {
@@ -384,7 +434,8 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
             if (info != null) {
                 Intent intent = new Intent(this, OfferDetailsActivity.class);
                 intent.putExtra(Params.DATA, info);
-                startActivity(intent);
+                intent.putExtra(Params.PICTURE_LIST, info.getPicturesList());
+                startActivityForResult(intent, Params.START_OFFERS_DETAILS_REQUEST_CODE);
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
             }
         }
@@ -462,6 +513,10 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Params.START_OFFERS_DETAILS_REQUEST_CODE && resultCode == Params.NAVIGATE) {
+            setResult(Params.NAVIGATE, data);
+            finish();
+        }
         if (resultCode == Params.STATUS_ADD_RATING) {
             String rating = data.getStringExtra("item");
             ratingPnl.removeAllViews();
@@ -496,7 +551,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         bean.Comment = comment;
         bean.BusinessID = 22;
 
-        AddBusinessComment asyncTask = new AddBusinessComment(this
+        AddBusinessCommentAsync asyncTask = new AddBusinessCommentAsync(this
                 , ServicesConstants.getAddBusinessCommentRequestList(id, this.bean.getId(), comment)
                 , Params.SERVICE_PROCESS_3, Params.TYPE_BUSINESS);
         asyncTask.execute(this);

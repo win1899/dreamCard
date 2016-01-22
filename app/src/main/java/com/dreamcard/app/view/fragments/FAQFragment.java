@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +61,8 @@ public class FAQFragment extends Fragment implements AbsListView.OnItemClickList
 
     private FAQAdapter adapter;
 
+    private FAQAsync faqAsync;
+
     // TODO: Rename and change types of parameters
     public static FAQFragment newInstance(String param1, String param2) {
         FAQFragment fragment = new FAQFragment();
@@ -111,9 +114,9 @@ public class FAQFragment extends Fragment implements AbsListView.OnItemClickList
 
         progress.show();
         handler.postDelayed(runnable, 5000);
-        FAQAsync async = new FAQAsync(this, new ArrayList<ServiceRequest>()
+        faqAsync = new FAQAsync(this, new ArrayList<ServiceRequest>()
                 , Params.SERVICE_PROCESS_1);
-        async.execute(this.activity);
+        faqAsync.execute(this.activity);
 
         return view;
     }
@@ -133,6 +136,7 @@ public class FAQFragment extends Fragment implements AbsListView.OnItemClickList
     @Override
     public void onDetach() {
         super.onDetach();
+        faqAsync.cancel(true);
         mListener = null;
     }
 
@@ -160,6 +164,10 @@ public class FAQFragment extends Fragment implements AbsListView.OnItemClickList
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         if(processType==Params.SERVICE_PROCESS_1){
             progress.dismiss();
             ArrayList<FAQ> list= (ArrayList<FAQ>) b;
@@ -171,6 +179,10 @@ public class FAQFragment extends Fragment implements AbsListView.OnItemClickList
 
     @Override
     public void onServiceFailed(ErrorMessageInfo info) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         progress.dismiss();
         Toast.makeText(this.activity, getResources().getString(R.string.feedback_not_sent), Toast.LENGTH_LONG).show();
     }

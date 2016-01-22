@@ -29,7 +29,7 @@ import java.util.Vector;
 /**
  * Created by Moayad on 6/21/2015.
  */
-public class OffersByFilterAsync extends AsyncTask<Object, Void, Object> {
+public class OffersByFilterAsync extends AbstractAsyncTask<Object, Void, Object> {
 
     private Context context;
     private IServiceListener listener;
@@ -44,7 +44,7 @@ public class OffersByFilterAsync extends AsyncTask<Object, Void, Object> {
         this.type = type;
     }
 
-    protected Object doInBackground(Object... data) {
+    protected Object doInBackgroundSafe(Object... data) {
         this.context = (Context) data[0];
         if (!SystemOperation.isOnline(this.context)) {
             ErrorMessageInfo bean = new ErrorMessageInfo();
@@ -281,7 +281,7 @@ public class OffersByFilterAsync extends AsyncTask<Object, Void, Object> {
         return request;
     }
 
-    protected void onPostExecute(Object serviceResponse) {
+    protected void onPostExecuteSafe(Object serviceResponse) {
         if (serviceResponse != null) {
             if (serviceResponse instanceof ErrorMessageInfo) {
                 this.listener.onServiceFailed((ErrorMessageInfo) serviceResponse);

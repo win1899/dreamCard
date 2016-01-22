@@ -7,12 +7,8 @@ import android.graphics.Typeface;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -22,12 +18,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.support.v4.widget.DrawerLayout;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dreamcard.app.MainActivity;
@@ -50,7 +44,7 @@ import com.dreamcard.app.view.fragments.StoresListFragment;
 import com.dreamcard.app.view.fragments.SubcategoryFragment;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
 
-public class NavDrawerActiity extends FragmentActivity
+public class NavDrawerActivity extends FragmentActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,View.OnClickListener,OnFragmentInteractionListener {
 
     /**
@@ -84,14 +78,12 @@ public class NavDrawerActiity extends FragmentActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav_drawer_actiity);
 
-//        headerPnl=(RelativeLayout)findViewById(R.id.main_header_pnl);
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
 
         leftNavDrawerFragment = (LeftNavDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.left_navigation_drawer);
 
-//        mTitle = getTitle();
 
         mDrawer=(DrawerLayout) findViewById(R.id.drawer_layout);
 
@@ -132,11 +124,6 @@ public class NavDrawerActiity extends FragmentActivity
         btnLocations.setOnClickListener(this);
         btnStores.setOnClickListener(this);
 
-//        btnCategories.setFocusableInTouchMode(true);
-//        btnLatestOffers.setFocusableInTouchMode(true);
-//        btnLocations.setFocusableInTouchMode(true);
-//        btnStores.setFocusableInTouchMode(true);
-
         btnStores.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
@@ -175,6 +162,7 @@ public class NavDrawerActiity extends FragmentActivity
         if(btnSetting!=null) {
             btnSetting.setVisibility(View.GONE);
         }
+        currentFragment=0;
 //        onNavigationDrawerItemSelected(0);
     }
 
@@ -207,6 +195,7 @@ public class NavDrawerActiity extends FragmentActivity
                 if(imgLogo !=null) {
                     imgLogo.setVisibility(View.VISIBLE);
                 }
+                currentFragment = 0;
                 break;
             case 1:
                 LatestOfferListFragment.getType();
@@ -263,18 +252,6 @@ public class NavDrawerActiity extends FragmentActivity
                 btnStores.setBackground(getResources().getDrawable(R.drawable.store_button_bg));
                 btnLocations.setBackground(getResources().getDrawable(R.drawable.location_active));
 
-//                android.app.FragmentManager fragmentManager = getFragmentManager();
-//                android.app.FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.activity_main_content_fragment, fragment2,fragmentTag).addToBackStack(fragmentTag);
-//                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//                fragmentTransaction.commit();
-//                android.app.FragmentManager fragmentManager = getFragmentManager();
-//                fragmentManager.beginTransaction()
-//                        .replace(R.id.activity_main_content_fragment, fragment2).addToBackStack(fragmentTag).commit();
-//
-//                lvMenu.setItemChecked(position, true);
-//                lvMenu.setSelection(position);
-//                this.currentMenu=navMenuTitles[position];
                 break;
             case 5:
                 intent=new Intent(this,SettingActivity.class);
@@ -317,27 +294,29 @@ public class NavDrawerActiity extends FragmentActivity
 
         if(fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
+
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            fragmentTransaction.replace(R.id.activity_main_content_fragment, fragment, fragmentTag).addToBackStack(fragmentTag);
+            fragmentTransaction.replace(R.id.activity_main_content_fragment, fragment, fragmentTag);
+            if (fragment instanceof FAQFragment || fragment instanceof AboutUsFragment) {
+                fragmentTransaction.addToBackStack(fragmentTag);
+            }
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             fragmentTransaction.commitAllowingStateLoss();
-//            fragmentManager.beginTransaction()
-//                    .replace(R.id.activity_main_content_fragment, fragment,fragmentTag).addToBackStack(fragmentTag).commit();
-
-//            lvMenu.setItemChecked(position, true);
-//            lvMenu.setSelection(position);
-//            this.currentMenu=navMenuTitles[position];
-
-
-//            tvTitle.setText(this.currentMenu);
-//            if(position==0){
-//                tvTitle.setVisibility(View.GONE);
-//                imgLogo.setVisibility(View.VISIBLE);
-//            }else{
-//                tvTitle.setVisibility(View.VISIBLE);
-//                imgLogo.setVisibility(View.GONE);
-//            }
         }
+    }
+
+    public String getActiveFragment() {
+
+        if (getFragmentManager().getBackStackEntryCount() == 0) {
+            return null;
+        }
+
+        String tag = getFragmentManager()
+                .getBackStackEntryAt(getFragmentManager()
+                        .getBackStackEntryCount() - 1)
+                .getName();
+
+        return tag;
     }
 
     public void onSectionAttached(int number) {
@@ -353,13 +332,6 @@ public class NavDrawerActiity extends FragmentActivity
                 break;
         }
     }
-
-//    public void restoreActionBar() {
-//        ActionBar actionBar = getSupportActionBar();
-//        actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
-//        actionBar.setDisplayShowTitleEnabled(true);
-//        actionBar.setTitle(mTitle);
-//    }
 
 
     @Override
@@ -402,26 +374,24 @@ public class NavDrawerActiity extends FragmentActivity
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        leftNavDrawerFragment.setDrawerMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+    }
+
+    @Override
     public void doAction(Object b, String fragment) {
         if(fragment.equalsIgnoreCase(Params.FRAGMENT_LATEST_OFFERS)){
             Offers bean= (Offers) b;
             Intent intent=new Intent(this,OfferDetailsActivity.class);
             intent.putExtra(Params.DATA,bean);
+            intent.putExtra(Params.PICTURE_LIST, bean.getPicturesList());
             startActivityForResult(intent, 1);
             overridePendingTransition( R.anim.push_right_in, R.anim.push_right_out );
-
-//            OfferDetailsFragment frag=new OfferDetailsFragment().newInstance(bean);
-//            android.app.FragmentManager fragmentManager = getFragmentManager();
-//            fragmentManager.beginTransaction()
-//                    .replace(R.id.activity_main_content_fragment, frag).addToBackStack(Params.FRAGMENT_OFFER_DETAILS).commit();
 
         }else if(fragment.equalsIgnoreCase(Params.FRAGMENT_CATEGORIES)){
             Categories bean= (Categories) b;
 
-//            if(bean.getParentId() == null || bean.getParentId().equalsIgnoreCase("null")){
-//                Fragment fragmentObject = CategoriesListFragment.newInstance(null, "");
-//                String fragmentTag=Params.FRAGMENT_CATEGORIES;
-//            }
             FrameLayout mainFrameLayout=(FrameLayout)findViewById(R.id.activity_main_content_fragment);
             mainFrameLayout.setBackgroundColor(getResources().getColor(R.color.categories_bg));
 
@@ -431,23 +401,26 @@ public class NavDrawerActiity extends FragmentActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.activity_main_content_fragment, subCategoryFragment)
-                    .addToBackStack(Params.FRAGMENT_SUB_CATEGORY).commit();
+                    .commit();
+            fragmentManager.executePendingTransactions();
 
-//            mNavigationDrawerFragment.selectItem(1);
-//            String currentMenu=getResources().getString(R.string.offers)+" "+bean.getTitle();
-//            tvTitle.setText(currentMenu);
-//            tvTitle.setVisibility(View.VISIBLE);
-//            imgLogo.setVisibility(View.GONE);
         }else if(fragment.equalsIgnoreCase(Params.FRAGMENT_STORES)){
             Stores bean= (Stores) b;
             Intent intent=new Intent(this,StoreDetailsActivity.class);
             intent.putExtra(Params.DATA,bean);
-            startActivityForResult(intent,2);
+            intent.putExtra(Params.PICTURE_LIST, bean.getPictures());
+            startActivityForResult(intent, 2);
             overridePendingTransition( R.anim.push_down_in, R.anim.push_down_in );
         }else if(fragment.equalsIgnoreCase(Params.FRAGMENT_LEFT_DRAWER)){
             if(this.isOfferListSelected){
                 LatestOfferListFragment.getType();
                 LatestOfferListFragment f= LatestOfferListFragment.newInstance(Params.TYPE_OFFER, "");
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.activity_main_content_fragment, f)
+                        .commit();
+                fragmentManager.executePendingTransactions();
+
                 f.referesh();
 
             }
@@ -463,7 +436,7 @@ public class NavDrawerActiity extends FragmentActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.activity_main_content_fragment, fragment1)
-                    .addToBackStack(Params.FRAGMENT_LATEST_OFFERS).commit();
+                    .commit();
             btnCategories.setBackground(getResources().getDrawable(R.drawable.categories_bg));
             btnLatestOffers.setBackground(getResources().getDrawable(R.drawable.latest_offers_active_bg));
 
@@ -482,15 +455,15 @@ public class NavDrawerActiity extends FragmentActivity
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.activity_main_content_fragment, fragment1)
-                    .addToBackStack(Params.FRAGMENT_LATEST_OFFERS).commit();
+                    .commit();
             btnCategories.setBackground(getResources().getDrawable(R.drawable.categories_bg));
             btnLatestOffers.setBackground(getResources().getDrawable(R.drawable.latest_offers_active_bg));
 
-            mNavigationDrawerFragment.selectItem(1);
             String currentMenu=getResources().getString(R.string.offers)+" "+bean.getTitle();
-            tvTitle.setText(currentMenu);
-            tvTitle.setVisibility(View.VISIBLE);
-            imgLogo.setVisibility(View.GONE);
+
+            tvTitle.setVisibility(View.GONE);
+            imgLogo.setVisibility(View.VISIBLE);
+
         }
     }
 
@@ -520,22 +493,13 @@ public class NavDrawerActiity extends FragmentActivity
         }else if(view.getId()==R.id.btn_notifications) {
             callSetting();
         }else if(view.getId()==R.id.img_menu_logo){
+            LeftNavDrawerFragment.setDrawerMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             onNavigationDrawerItemSelected(0);
         }
     }
 
     private void callSetting() {
         mDrawer.openDrawer(Gravity.LEFT);
-
-//        Intent intent=new Intent(this,SettingActivity.class);
-//        startActivity(intent);
-//        overridePendingTransition( R.anim.push_down_in, R.anim.push_down_in );
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//        Fragment fragment=new SettingFragment();
-//        fragmentTransaction.replace(R.id.activity_main_content_fragment,fragment,Params.FRAGMENT_SETTING).addToBackStack(Params.FRAGMENT_SETTING);
-//        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//        fragmentTransaction.commit();
     }
 
     @Override
@@ -566,7 +530,6 @@ public class NavDrawerActiity extends FragmentActivity
                     });
                 }
             }else if(resultCode == 100){
-//                onNavigationDrawerItemSelected(1);
                 LatestOfferListFragment f= LatestOfferListFragment.newInstance(Params.TYPE_OFFER, "");
                 f.referesh();
             }else if(resultCode == Params.STATUS_MOVE_TO_DASHBOARD){
@@ -577,6 +540,29 @@ public class NavDrawerActiity extends FragmentActivity
         }else if(requestCode==2){
             if(resultCode == Params.STATUS_MOVE_TO_DASHBOARD){
                 onNavigationDrawerItemSelected(0);
+            }
+            if (resultCode == Params.NAVIGATE && data != null) {
+                final LocationInfo location = data.getParcelableExtra("location");
+                currentFragment = R.id.btn_location;
+                new Handler().post(new Runnable() {
+                    public void run() {
+                        LocationFragment fragment = LocationFragment.newInstance(location, "");
+                        String fragmentTag = Params.FRAGMENT_LOCATIONS;
+                        FrameLayout mainFrameLayout = (FrameLayout) findViewById(R.id.activity_main_content_fragment);
+                        mainFrameLayout.setBackgroundColor(getResources().getColor(R.color.location_bg));
+
+                        btnCategories.setBackground(getResources().getDrawable(R.drawable.categories_bg));
+                        btnLatestOffers.setBackground(getResources().getDrawable(R.drawable.latest_offers_bg));
+                        btnStores.setBackground(getResources().getDrawable(R.drawable.store_button_bg));
+                        btnLocations.setBackground(getResources().getDrawable(R.drawable.location_active));
+
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.activity_main_content_fragment, fragment, fragmentTag).addToBackStack(fragmentTag);
+                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                        fragmentTransaction.commit();
+                    }
+                });
             }
         }else if(resultCode == Params.STATUS_NOTHING){
             finish();
@@ -618,41 +604,33 @@ public class NavDrawerActiity extends FragmentActivity
         @Override
         public void onAttach(Activity activity) {
             super.onAttach(activity);
-            ((NavDrawerActiity) activity).onSectionAttached(
+            ((NavDrawerActivity) activity).onSectionAttached(
                     getArguments().getInt(ARG_SECTION_NUMBER));
         }
     }
 
     @Override
     public void onBackPressed() {
-//        if (mainLayout.isMenuShown()) {
-//            mainLayout.toggleMenu();
-//        }
-//        else {
-            FragmentManager manager = getSupportFragmentManager();
-        int x=manager.getBackStackEntryCount();
-            if (manager.getBackStackEntryCount() > 1) {
-                int i=manager.getBackStackEntryCount();
-                Log.d("", "" + i);
+        if (mDrawer.isDrawerOpen(Gravity.RIGHT)) {
+            Log.i(this.getClass().getName(), "Drawer opened ... closing");
+            mDrawer.closeDrawer(Gravity.RIGHT);
+            return;
+        }
 
-//                if (getSupportFragmentManager().getFragments().get(i).getTag().toString()== Params.FRAGMENT_SUB_CATEGORY){
-//                    getSupportFragmentManager().popBackStackImmediate();
-//                    getSupportFragmentManager().popBackStackImmediate();
-//
-//                    //Get your first fragment that you loaded in the beginning.
-//                    Fragment first = getSupportFragmentManager().findFragmentByTag(Params.FRAGMENT_CATEGORIES);
-//                    FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-//                    transaction.replace(R.id.activity_main_content_fragment, first);
-//                    transaction.commit();
-//                    return;
-//                }
-                super.onBackPressed();
-            }else if(manager.getBackStackEntryCount()<=1){
-                finish();
-            }
+        if (mDrawer.isDrawerOpen(Gravity.LEFT)) {
+            Log.i(this.getClass().getName(), "Drawer on left is open ... closing");
+            mDrawer.closeDrawer(Gravity.LEFT);
+            return;
+        }
 
-
-//        }
+        FragmentManager manager = getSupportFragmentManager();
+        if (manager.getBackStackEntryCount() > 0) {
+            int i=manager.getBackStackEntryCount();
+            Log.d("", "" + i);
+            manager.popBackStackImmediate();
+        }else {
+            finish();
+        }
     }
 
 }

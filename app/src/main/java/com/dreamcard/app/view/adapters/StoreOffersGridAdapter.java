@@ -2,8 +2,6 @@ package com.dreamcard.app.view.adapters;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +10,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.androidquery.AQuery;
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.OffersRecordHolder;
-import com.dreamcard.app.utils.ImageUtil;
-import com.dreamcard.app.utils.ImageViewLoader;
+import com.dreamcard.app.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -78,16 +74,11 @@ public class StoreOffersGridAdapter extends BaseAdapter {
         holder.getPnl().setId(bean.getPosition());
         holder.getPnl().setOnClickListener(this.listener);
         String title = bean.getTitle();
-        if (bean.getTitle().length() > 17) {
-            title = title.substring(0, 17) + "...";
-        }
         holder.getTxtName().setText(title);
 
         if (bean.getOfferMainPhoto() != null && !bean.getOfferMainPhoto().equalsIgnoreCase("null")
                 && bean.getOfferMainPhoto().length() > 0) {
-            AQuery aq = new AQuery(this.activity);
-            aq.id(holder.getImgOffer()).image(bean.getOfferMainPhoto(), true, true
-                    , holder.getImgOffer().getWidth(), R.drawable.offer_item_bg, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+            Utils.loadImage(this.activity, bean.getOfferMainPhoto(), holder.getImgOffer());
         }
         return vi;
     }

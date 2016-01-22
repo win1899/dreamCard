@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,11 +16,9 @@ import com.dreamcard.app.R;
 import com.dreamcard.app.components.TransparentProgressDialog;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
-import com.dreamcard.app.entity.BusinessComment;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.MessageInfo;
-import com.dreamcard.app.services.AddBusinessComment;
-import com.dreamcard.app.services.CommentsAsync;
+import com.dreamcard.app.services.AddBusinessCommentAsync;
 import com.dreamcard.app.view.interfaces.AddCommentListener;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
@@ -100,12 +97,12 @@ public class AddCommentActivity extends Activity implements View.OnClickListener
             String id = prefs.getString(Params.USER_INFO_ID, "");
 
             if (this.type == Params.TYPE_OFFER) {
-                AddBusinessComment asyncTask = new AddBusinessComment(this
+                AddBusinessCommentAsync asyncTask = new AddBusinessCommentAsync(this
                         , ServicesConstants.getAddOfferCommentRequestList(id, this.offerId, txtComment.getText().toString())
                         , Params.SERVICE_PROCESS_1, Params.TYPE_OFFER);
                 asyncTask.execute(this);
             } else if (this.type == Params.TYPE_BUSINESS) {
-                AddBusinessComment asyncTask = new AddBusinessComment(this
+                AddBusinessCommentAsync asyncTask = new AddBusinessCommentAsync(this
                         , ServicesConstants.getAddBusinessCommentRequestList(id, this.offerId, txtComment.getText().toString())
                         , Params.SERVICE_PROCESS_1, Params.TYPE_BUSINESS);
                 asyncTask.execute(this);

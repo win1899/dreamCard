@@ -24,9 +24,9 @@ import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.UserInfo;
 import com.dreamcard.app.services.LoginAsync;
+import com.dreamcard.app.view.activity.BuyDreamCardActivity;
 import com.dreamcard.app.view.activity.MainActivationFormActivity;
-import com.dreamcard.app.view.activity.NavDrawerActiity;
-import com.dreamcard.app.view.activity.SlidingMenuActivity;
+import com.dreamcard.app.view.activity.NavDrawerActivity;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
 
@@ -36,6 +36,7 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
     private EditText txtPassword;
     private Button btnLogin;
     private Button btnForgotPass;
+    private Button whereToBuyDreamCard;
     private LinearLayout activationPnl;
 
     private LoginAsync loginAsync;
@@ -62,10 +63,12 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
         txtPassword=(EditText)findViewById(R.id.txt_password);
         txtUsername=(EditText)findViewById(R.id.txt_username);
         btnForgotPass=(Button)findViewById(R.id.btn_forgot_pass);
+        whereToBuyDreamCard = (Button) findViewById(R.id.where_to_buy);
         btnLogin=(Button)findViewById(R.id.btn_login);
         activationPnl=(LinearLayout)findViewById(R.id.activation_pnl);
         btnLogin.setOnClickListener(this);
         btnForgotPass.setOnClickListener(this);
+        whereToBuyDreamCard.setOnClickListener(this);
         activationPnl.setOnClickListener(this);
 
         handler = new Handler();
@@ -83,12 +86,28 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (hasFocus) {
-
                     txtUsername.setHint("");
-                    txtUsername.setGravity(Gravity.END);
+                    txtUsername.setGravity(Gravity.LEFT);
                 } else {
                     txtUsername.setHint(getResources().getString(R.string.username));
-                    txtUsername.setGravity(Gravity.START);
+                    if ("".equalsIgnoreCase(txtUsername.getText().toString())) {
+                        txtUsername.setGravity(Gravity.RIGHT);
+                    }
+                }
+            }
+        });
+
+        txtPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (hasFocus) {
+                    txtPassword.setHint("");
+                    txtPassword.setGravity(Gravity.LEFT);
+                } else {
+                    txtPassword.setHint(getResources().getString(R.string.password));
+                    if ("".equalsIgnoreCase(txtPassword.getText().toString())) {
+                        txtPassword.setGravity(Gravity.RIGHT);
+                    }
                 }
             }
         });
@@ -117,12 +136,15 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.btn_login) {
-            // handleLogin();
-            onServiceSuccess(null, 1);
+            handleLogin();
         }else if(view.getId()==R.id.btn_forgot_pass) {
             forgotPass();
         }else if(view.getId()==R.id.activation_pnl) {
             activationForm();
+        }else if(view.getId()==R.id.where_to_buy) {
+            Intent intent = new Intent(MainActivity.this, BuyDreamCardActivity.class);
+            startActivity(intent);
+
         }
     }
 
@@ -130,6 +152,7 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
         Intent intent=new Intent(this, MainActivationFormActivity.class);
         startActivity(intent);
         overridePendingTransition( R.anim.push_right_in, R.anim.push_right_out );
+        finish();
     }
 
     private void forgotPass() {
@@ -183,9 +206,10 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
                 DatabaseController.getInstance(this).saveLogin(txtUsername.getText().toString()
                         ,txtPassword.getText().toString());
 
-                Intent intent = new Intent(this, NavDrawerActiity.class);
+                Intent intent = new Intent(this, NavDrawerActivity.class);
                 startActivity(intent);
                 overridePendingTransition( R.anim.push_right_in, R.anim.push_right_out );
+                finish();
             } else {
                 new AlertDialog.Builder(this)
                         .setTitle(getResources().getString(R.string.error_in_login))
@@ -197,36 +221,6 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
                         .setIcon(android.R.drawable.ic_dialog_alert)
                         .show();
             }
-        }
-        else {
-            SharedPreferences pref = getSharedPreferences(Params.APP_DATA, MODE_PRIVATE);
-            SharedPreferences.Editor editor = pref.edit();
-            editor.putString(Params.USER_INFO_ID, "1");
-            editor.putString(Params.USER_INFO_EMAIL, "walid511@hotmail.com");
-            editor.putString(Params.USER_INFO_NAME, "Walid");
-            editor.putString(Params.USER_INFO_PASSWORD,"1234");
-            editor.putString(Params.USER_INFO_FIRST_NAME,"WIN");
-            editor.putString(Params.USER_INFO_LAST_NAME,"EID");
-            editor.putString(Params.USER_INFO_MOBILE,"0598576421");
-            editor.putString(Params.USER_INFO_GENDER,"Male");
-            editor.putString(Params.USER_INFO_WORK,"dsada");
-            editor.putString(Params.USER_INFO_BIRTHDAY,"05/11/2014");
-            editor.putString(Params.USER_INFO_CITY,"Nablus");
-            editor.putString(Params.USER_INFO_COUNTRY,"Palestine");
-            editor.putString(Params.USER_INFO_PHONE,"ddd");
-            editor.putString(Params.USER_INFO_ID_NUM, "1");
-            editor.putString(Params.USER_INFO_ADDRESS, "2231");
-            editor.putString(Params.USER_INFO_EDUCATION, "Master");
-            editor.putString(Params.USER_INFO_FULL_NAME, "InfoFullName");
-            editor.putString(Params.USER_INFO_CARD_NUMBER, "512");
-            editor.commit();
-
-            DatabaseController.getInstance(this).saveLogin(txtUsername.getText().toString()
-                    ,txtPassword.getText().toString());
-
-            Intent intent = new Intent(this, NavDrawerActiity.class);
-            startActivity(intent);
-            overridePendingTransition( R.anim.push_right_in, R.anim.push_right_out );
         }
     }
 

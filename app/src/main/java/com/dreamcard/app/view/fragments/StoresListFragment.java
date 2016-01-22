@@ -2,14 +2,12 @@ package com.dreamcard.app.view.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -18,35 +16,27 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
 import android.widget.HorizontalScrollView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.androidquery.AQuery;
 import com.dreamcard.app.R;
 
-import com.dreamcard.app.components.TransparentProgressDialog;
+import com.dreamcard.app.components.ExpandableHeightGridView;
 import com.dreamcard.app.constants.Params;
-import com.dreamcard.app.entity.Categories;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.GridItem;
 import com.dreamcard.app.entity.ItemButton;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.services.AllBusinessAsync;
-import com.dreamcard.app.services.AllOffersAsync;
-import com.dreamcard.app.utils.ButtonImageLoader;
-import com.dreamcard.app.utils.ImageViewLoader;
-import com.dreamcard.app.view.adapters.CategoriesListAdapter;
-import com.dreamcard.app.view.adapters.CustomGridViewAdapterButton;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.adapters.RegularStoresGridAdapter;
-import com.dreamcard.app.view.adapters.StoresListAdapter;
 import com.dreamcard.app.view.fragments.dummy.DummyContent;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
@@ -77,7 +67,8 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
 
     private LinearLayout goldLayout;
     private LinearLayout silverLayout;
-    private GridView grid;
+    private ExpandableHeightGridView grid;
+    private ScrollView mainScroll;
     private ListAdapter mAdapter;
     private RegularStoresGridAdapter adapter;
     private HorizontalScrollView goldScroll;
@@ -89,9 +80,6 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
     HashMap<String,Stores> storesMap=new HashMap<String,Stores>();
 
     private AllBusinessAsync allBusinessAsync;
-    private TransparentProgressDialog progress;
-    private Runnable runnable;
-    private Handler handler;
     private Activity activity;
     private ProgressBar progressBar;
     private LinearLayout storeListMainLayout;
@@ -127,15 +115,15 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
 
         goldLayout=(LinearLayout)view.findViewById(R.id.gold_gallery);
         silverLayout=(LinearLayout)view.findViewById(R.id.silver_gallery);
-        grid=(GridView)view.findViewById(R.id.regular_stores_grid);
+        grid=(ExpandableHeightGridView)view.findViewById(R.id.regular_stores_grid);
         goldScroll=(HorizontalScrollView)view.findViewById(R.id.gold_scroll);
-        txtAdv1=(TextView)view.findViewById(R.id.txt_adv_1);
-        txtAdv2=(TextView)view.findViewById(R.id.txt_adv_2);
+
         progressBar=(ProgressBar)view.findViewById(R.id.progress);
         storeListMainLayout = (LinearLayout) view.findViewById(R.id.store_list_main_layout);
         silverScroll=(HorizontalScrollView)view.findViewById(R.id.silver_scroll);
         progressBar.setVisibility(View.VISIBLE);
         storeListMainLayout.setVisibility(View.GONE);
+        mainScroll = (ScrollView) view.findViewById(R.id.scroll_view_main_stores);
         allBusinessAsync=new AllBusinessAsync(this, new ArrayList<ServiceRequest>(), Params.SERVICE_PROCESS_1);
         allBusinessAsync.execute(this.activity);
 
@@ -157,6 +145,7 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
     @Override
     public void onDetach() {
         super.onDetach();
+        allBusinessAsync.cancel(true);
         mListener = null;
     }
 
@@ -172,6 +161,10 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         if(processType == Params.SERVICE_PROCESS_1) {
             ArrayList<Stores> list = (ArrayList<Stores>) b;
             this.list = list;
@@ -183,13 +176,19 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
             adapter = new RegularStoresGridAdapter(getActivity(), R.layout.stores_grid_button
                     , gridArray, this, null);
             grid.setAdapter(adapter);
+            grid.setExpanded(true);
+
             progressBar.setVisibility(View.GONE);
             storeListMainLayout.setVisibility(View.VISIBLE);
         }
-
     }
+
     @Override
     public void onServiceFailed(ErrorMessageInfo info) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         progressBar.setVisibility(View.GONE);
         storeListMainLayout.setVisibility(View.VISIBLE);
         Toast.makeText(this.activity, info.getMessage(), Toast.LENGTH_LONG).show();
@@ -198,10 +197,10 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
     private void setGoldList() {
         for(Stores bean:list){
             if(bean.getStoreClass()==Params.STORE_CLASS_GOLD) {
-                goldLayout.addView(insertPhotoGold(bean.getLogo(), bean.getPosition(), 220, 200));
+                goldLayout.addView(insertPhotoGold(bean.getLogo(), bean.getPosition(), dpToPx(130), dpToPx(130)));
                 this.storesMap.put(""+bean.getPosition(),bean);
             }else if(bean.getStoreClass()==Params.STORE_CLASS_SILVER){
-                silverLayout.addView(insertPhoto(bean.getLogo(), bean.getPosition(),150,150));
+                silverLayout.addView(insertPhoto(bean.getLogo(), bean.getPosition(), dpToPx(100) , dpToPx(100)));
                 this.storesMap.put(""+bean.getPosition(),bean);
             }else{
                 this.gridList.add(bean);
@@ -209,8 +208,12 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
         }
     }
 
+    private int dpToPx(int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
+    }
+
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private View insertPhotoGold(String url,int position,int width,int height){
+    private View insertPhotoGold(String url,int position, int width, int height){
         LinearLayout layout = new LinearLayout(getActivity());
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
         params.setMargins(10,10,10,10);
@@ -221,35 +224,33 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
         layout.setOnClickListener(this);
 
         ImageView imageView = new ImageView(getActivity());
-        imageView.setLayoutParams(new ViewGroup.LayoutParams(width, height));
-        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setLayoutParams(new ViewGroup.LayoutParams(width - dpToPx(10),height - dpToPx(10)));
+        imageView.setScaleType(ImageView.ScaleType.FIT_XY);
         imageView.setId(position);
         imageView.setOnClickListener(this);
         imageView.setOnClickListener(this);
         layout.addView(imageView);
-        AQuery aq=new AQuery(this.activity);
-        aq.id(imageView).image(url, true, true
-                , imageView.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+
+        Utils.loadImage(activity, url, imageView, width - dpToPx(10), height - dpToPx(10), false);
         return layout;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     private View insertPhoto(String url,int position,int width,int height){
         LinearLayout layout = new LinearLayout(getActivity());
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,height);
-        params.setMargins(10,10,10,10);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width, height);
+        params.setMargins(10, 10, 10, 10);
         layout.setLayoutParams(params);
         layout.setGravity(Gravity.CENTER);
         layout.setBackground(getResources().getDrawable(R.drawable.other_offer_background));
 
         ImageView imageView = new ImageView(getActivity());
-        imageView.setLayoutParams(new ViewGroup.LayoutParams(width, height));
+        imageView.setLayoutParams(new ViewGroup.LayoutParams(width - dpToPx(10),height - dpToPx(10)));
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setId(position);
         imageView.setOnClickListener(this);
         layout.addView(imageView);
-        ImageViewLoader imgLoader = new ImageViewLoader(getActivity());
-        imgLoader.DisplayImage(url, imageView, getActivity().getResources());
+        Utils.loadImage(activity, url, imageView, width - dpToPx(10), height - dpToPx(10), false);
         return layout;
     }
 

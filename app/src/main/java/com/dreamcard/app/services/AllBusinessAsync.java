@@ -2,6 +2,7 @@ package com.dreamcard.app.services;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
@@ -30,7 +31,7 @@ import java.util.Vector;
 /**
  * Created by Moayed on 6/24/2014.
  */
-public class AllBusinessAsync extends AsyncTask<Object, Void, Object> {
+public class AllBusinessAsync extends AbstractAsyncTask<Object, Void, Object> {
 
     private Context context;
     private IServiceListener listener;
@@ -43,7 +44,7 @@ public class AllBusinessAsync extends AsyncTask<Object, Void, Object> {
         this.requestList=list;
     }
 
-    protected Object doInBackground(Object... data) {
+    protected Object doInBackgroundSafe(Object... data) {
         this.context= (Context) data[0];
         if(!SystemOperation.isOnline(this.context)){
             ErrorMessageInfo bean=new ErrorMessageInfo();
@@ -119,6 +120,22 @@ public class AllBusinessAsync extends AsyncTask<Object, Void, Object> {
                                 if(!rating.equalsIgnoreCase("null") && rating.length()>0)
                                     bean.setRating(Integer.parseInt(rating.substring(0,1)));
                             }
+
+                            String pictures=oneObject.getString("Pictures");
+                            if (pictures != null && !pictures.equalsIgnoreCase("null") && pictures.length() > 0) {
+                                bean.setPictures(pictures.split(";"));
+                            }
+
+                            String discountString = oneObject.optString("DiscountPercentage");
+                            double discount = 0.0;
+                            try {
+                                discount = Double.parseDouble(discountString);
+                            }
+                            catch (Exception e) {
+                                Log.i(AllBusinessAsync.class.getName(), e.getMessage());
+                            }
+                            bean.setDiscountPrecentage(discount);
+
                             bean.setPosition(index);
                             index++;
                             list.add(bean);
@@ -210,7 +227,7 @@ public class AllBusinessAsync extends AsyncTask<Object, Void, Object> {
         return request;
     }
 
-    protected void onPostExecute(Object serviceResponse) {
+    protected void onPostExecuteSafe(Object serviceResponse) {
         if(serviceResponse!=null) {
             if (serviceResponse instanceof ErrorMessageInfo) {
                 this.listener.onServiceFailed((ErrorMessageInfo) serviceResponse);

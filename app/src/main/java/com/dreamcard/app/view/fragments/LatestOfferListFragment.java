@@ -2,20 +2,17 @@ package com.dreamcard.app.view.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.GridView;
-import android.widget.ListAdapter;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamcard.app.R;
@@ -23,19 +20,13 @@ import com.dreamcard.app.R;
 import com.dreamcard.app.common.DatabaseController;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
-import com.dreamcard.app.entity.Categories;
-import com.dreamcard.app.entity.ConsumerInfo;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.SearchCriteria;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.services.AllOffersAsync;
-import com.dreamcard.app.services.LikesNumAsync;
 import com.dreamcard.app.services.OffersByFilterAsync;
-import com.dreamcard.app.view.adapters.CategoriesListAdapter;
-import com.dreamcard.app.view.adapters.CustomGridViewAdapterButton;
 import com.dreamcard.app.view.adapters.LatestOffersListAdapter;
-import com.dreamcard.app.view.fragments.dummy.DummyContent;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
 
@@ -70,20 +61,16 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
 
     static LatestOfferListFragment fragment = null;
 
-    private OffersByFilterAsync allOffersAsync;
+    private OffersByFilterAsync offersFilteredAsync;
+    private AllOffersAsync allOffersAsync;
 
     public static LatestOfferListFragment newInstance(int type, String param2) {
 
-        if (type == Params.TYPE_OFFERS_BY_CAT) {
-            fragment = null;
-        }
-        if (fragment == null) {
-            fragment = new LatestOfferListFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_PARAM1, type);
-            args.putString(ARG_PARAM2, param2);
-            fragment.setArguments(args);
-        }
+        fragment = new LatestOfferListFragment();
+        Bundle args = new Bundle();
+        args.putInt(ARG_PARAM1, type);
+        args.putString(ARG_PARAM2, param2);
+        fragment.setArguments(args);
 
         return fragment;
     }
@@ -123,7 +110,7 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
         grid.setVisibility(View.GONE);
         this.process = Params.SERVICE_PROCESS_1;
         ArrayList<ServiceRequest> list = ServicesConstants.getLatestOfferRequestList("100");
-        if (this.typeParam == Params.TYPE_OFFERS_BY_CAT) {
+        if (typeParam == Params.TYPE_OFFERS_BY_CAT) {
             list = ServicesConstants.getOffersByCategoryRequestList(this.mParam2);
         } else {
             SearchCriteria criteria = DatabaseController.getInstance(getActivity()).getCriteria();
@@ -131,11 +118,19 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
                 list = ServicesConstants.getOffersByFilterRequestParams(criteria);
             } else {
                 list = new ArrayList<ServiceRequest>();
+                allOffersAsync = new AllOffersAsync(this, list, Params.SERVICE_PROCESS_1, this.typeParam);
+                allOffersAsync.execute(getActivity());
+                return;
             }
         }
-        allOffersAsync = new OffersByFilterAsync(this, list
+
+        if (offersFilteredAsync != null && offersFilteredAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            offersFilteredAsync.cancel(true);
+        }
+        offersFilteredAsync = new OffersByFilterAsync(this, list
                 , Params.SERVICE_PROCESS_1, this.typeParam);
-        allOffersAsync.execute(getActivity());
+
+        offersFilteredAsync.execute(getActivity());
     }
 
     @Override
@@ -147,16 +142,28 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
             throw new ClassCastException(activity.toString()
                     + " must implement OnFragmentInteractionListener");
         }
+        LeftNavDrawerFragment.setDrawerMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     @Override
     public void onDetach() {
         super.onDetach();
+        if (offersFilteredAsync != null && offersFilteredAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            offersFilteredAsync.cancel(true);
+        }
+        if (allOffersAsync != null && allOffersAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            allOffersAsync.cancel(true);
+        }
         mListener = null;
+        LeftNavDrawerFragment.setDrawerMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         if (processType == Params.SERVICE_PROCESS_1) {
             ArrayList<Offers> list = (ArrayList<Offers>) b;
             this.list = list;
@@ -170,7 +177,17 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        LeftNavDrawerFragment.setDrawerMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+    }
+
+    @Override
     public void onServiceFailed(ErrorMessageInfo info) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         if (this.process == Params.SERVICE_PROCESS_1) {
             progressBar.setVisibility(View.GONE);
             grid.setVisibility(View.VISIBLE);

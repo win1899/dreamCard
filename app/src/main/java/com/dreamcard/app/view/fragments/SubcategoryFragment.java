@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,11 +124,16 @@ public class SubcategoryFragment extends Fragment implements View.OnClickListene
     @Override
     public void onDetach() {
         super.onDetach();
+        categoriesAsync.cancel(true);
         mListener = null;
     }
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         ArrayList<Categories> list= (ArrayList<Categories>) b;
         if(list.size() > 0) {
             this.list = list;
@@ -147,6 +153,10 @@ public class SubcategoryFragment extends Fragment implements View.OnClickListene
 
     @Override
     public void onServiceFailed(ErrorMessageInfo info) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         progressBar.setVisibility(View.GONE);
         grid.setVisibility(View.VISIBLE);
         Toast.makeText(getActivity(), info.getMessage(), Toast.LENGTH_LONG).show();

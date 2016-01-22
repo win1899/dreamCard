@@ -2,16 +2,16 @@ package com.dreamcard.app.view.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -28,8 +28,6 @@ import com.dreamcard.app.entity.RecordHolder;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.services.AddRemoveInterestCatAsync;
 import com.dreamcard.app.services.CategoriesAsync;
-import com.dreamcard.app.services.RegisterConsumerAsync;
-import com.dreamcard.app.view.adapters.CategoriesListAdapter;
 import com.dreamcard.app.view.adapters.CustomGridViewAdapterButton;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
@@ -61,6 +59,7 @@ public class ActivationSettingFragment extends Fragment implements View.OnClickL
     private HashMap<Integer, RecordHolder> recordHolderList = new HashMap<Integer, RecordHolder>();
     private ArrayList<Categories> gridList = new ArrayList<Categories>();
     private CategoriesAsync categoriesAsync;
+    private  AddRemoveInterestCatAsync addRemoveInterestCatAsync;
     private RecordHolder holder = new RecordHolder();
     private Categories selectedCategory = new Categories();
 
@@ -146,6 +145,12 @@ public class ActivationSettingFragment extends Fragment implements View.OnClickL
     @Override
     public void onDetach() {
         super.onDetach();
+        if (categoriesAsync != null && categoriesAsync.getStatus() == AsyncTask.Status.RUNNING)
+            categoriesAsync.cancel(true);
+
+        if (addRemoveInterestCatAsync != null && addRemoveInterestCatAsync.getStatus() == AsyncTask.Status.RUNNING)
+            addRemoveInterestCatAsync.cancel(true);
+
         mListener = null;
     }
 
@@ -169,10 +174,13 @@ public class ActivationSettingFragment extends Fragment implements View.OnClickL
                 progressDialog.show();
                 handler.postDelayed(runnable, 5000);
 
-                AddRemoveInterestCatAsync async = new AddRemoveInterestCatAsync(this
+                if (addRemoveInterestCatAsync != null && addRemoveInterestCatAsync.getStatus().equals(AsyncTask.Status.RUNNING)) {
+                    addRemoveInterestCatAsync.cancel(true);
+                }
+                addRemoveInterestCatAsync = new AddRemoveInterestCatAsync(this
                         , ServicesConstants.getAddRemoveCategoryRequestList(data.getId(), mParam1)
                         , Params.SERVICE_PROCESS_2, Params.TYPE_REMOVE_CATEGORY);
-                async.execute(getActivity());
+                addRemoveInterestCatAsync.execute(getActivity());
             } else {
                 this.holder = holder;
                 this.selectedCategory = data;
@@ -180,10 +188,13 @@ public class ActivationSettingFragment extends Fragment implements View.OnClickL
                 progressDialog.show();
                 handler.postDelayed(runnable, 5000);
 
-                AddRemoveInterestCatAsync async = new AddRemoveInterestCatAsync(this
+                if (addRemoveInterestCatAsync != null && addRemoveInterestCatAsync.getStatus().equals(AsyncTask.Status.RUNNING)) {
+                    addRemoveInterestCatAsync.cancel(true);
+                }
+                addRemoveInterestCatAsync = new AddRemoveInterestCatAsync(this
                         , ServicesConstants.getAddRemoveCategoryRequestList(data.getId(), mParam1)
                         , Params.SERVICE_PROCESS_3, Params.TYPE_ADD_CATEGORY);
-                async.execute(getActivity());
+                addRemoveInterestCatAsync.execute(getActivity());
             }
         }
     }
@@ -191,6 +202,10 @@ public class ActivationSettingFragment extends Fragment implements View.OnClickL
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onServiceSuccess(Object b, int processType) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         if (processType == Params.SERVICE_PROCESS_1) {
             ArrayList<Categories> list = (ArrayList<Categories>) b;
             this.gridList = list;
@@ -221,6 +236,10 @@ public class ActivationSettingFragment extends Fragment implements View.OnClickL
 
     @Override
     public void onServiceFailed(ErrorMessageInfo info) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         progress.setVisibility(View.GONE);
         grid.setVisibility(View.VISIBLE);
         Toast.makeText(getActivity(), info.getMessage(), Toast.LENGTH_LONG).show();

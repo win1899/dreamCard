@@ -16,6 +16,7 @@ public class Params {
     public static final String FRAGMENT_LOCATIONS="FRAGMENT_LOCATIONS";
     public static final String FRAGMENT_STORES="FRAGMENT_STORES";
     public static final String FRAGMENT_CATEGORIES="CATEGORIES";
+    public static final String FRAGMENT_OFFER_INVOICE_PDF = "FRAGMENT_OFFER_INVOICE_PDF";
     public static final String FRAGMENT_OFFER_DETAILS="FRAGMENT_OFFER_DETAILS";
     public static final String FRAGMENT_ACTIVATION_1="FRAGMENT_ACTIVATION_1";
     public static final String FRAGMENT_ACTIVATION_2="FRAGMENT_ACTIVATION_2";
@@ -64,7 +65,7 @@ public class Params {
         public static final String USD=""+1;
     }
 
-    public static final int TIME_OUT=2000;
+    public static final int TIME_OUT=10000;
     public static final int SERVICE_REQUEST_COUNT=1;
 
     public static final int TYPE_OFFER=1;
@@ -87,6 +88,7 @@ public class Params {
     public static final int STATUS_NOTHING=-100;
 
     public static final String DATA="DATA";
+    public static final String PICTURE_LIST = "PictureList";
     public static String BUSINESS_ID=null;
 
     public static final int STATUS_FAILED=1;
@@ -100,7 +102,10 @@ public class Params {
     public static final int SERVICE_PROCESS_6=6;
     public static final int SERVICE_PROCESS_7=7;
     public static final int SERVICE_PROCESS_8=8;
+    public static final int SERVICE_PROCESS_9=9;
 
+    public static final int NAVIGATE = 58;
+    public static final int START_OFFERS_DETAILS_REQUEST_CODE = 17;
     public static final String DREAMCARD_URL="http://www.dream-card.net/";
 
     public static Typeface FONT;
@@ -123,4 +128,10 @@ public class Params {
      */
     public static final String SYSTEM_DB="DREAMCARD";
     public static final int DB_VERSION=2;
+
+    /**
+     * FAQ
+     */
+    public static final String QUESTION_EXTRA = "questionExtra";
+    public static final String ANSWER_EXTRA = "answerExtra";
 }

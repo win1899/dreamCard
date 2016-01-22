@@ -6,23 +6,24 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -32,48 +33,45 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.androidquery.AQuery;
 import com.dreamcard.app.R;
 import com.dreamcard.app.components.AddCommentDialog;
 import com.dreamcard.app.components.TransparentProgressDialog;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.Comments;
-import com.dreamcard.app.entity.ConsumerInfo;
 import com.dreamcard.app.entity.ErrorMessageInfo;
-import com.dreamcard.app.entity.LikeOfferBusiness;
 import com.dreamcard.app.entity.LocationInfo;
 import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.entity.Offers;
-import com.dreamcard.app.services.AddBusinessComment;
+import com.dreamcard.app.entity.Stores;
+import com.dreamcard.app.services.AddBusinessCommentAsync;
 import com.dreamcard.app.services.AllOffersAsync;
 import com.dreamcard.app.services.CommentsAsync;
-import com.dreamcard.app.services.DislikeOfferBusinessAsyncTask;
-import com.dreamcard.app.services.IsOfferLikedAyncTask;
-import com.dreamcard.app.services.LikeOfferBusinessAsyncTask;
-import com.dreamcard.app.services.LikesNumAsync;
+import com.dreamcard.app.services.GetBussinesByIdAsync;
 import com.dreamcard.app.utils.ImageViewLoader;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.adapters.CommentsAdapter;
+import com.dreamcard.app.view.adapters.ImagePagerAdapter;
 import com.dreamcard.app.view.adapters.OtherOffersAdapter;
+import com.dreamcard.app.view.fragments.LeftNavDrawerFragment;
 import com.dreamcard.app.view.interfaces.AddCommentListener;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
-import java.util.AbstractQueue;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-public class OfferDetailsActivity extends Activity implements IServiceListener, View.OnClickListener, AddCommentListener {
-
+public class OfferDetailsActivity extends Activity
+        implements IServiceListener, View.OnClickListener, AddCommentListener {
 
     private TextView txtOfferPeriod;
+    private TextView txtOfferValidFrom;
     private TextView txtMobile;
     private TextView txtPhone;
     private TextView txtCity;
     private TextView txtYouSaveLbl;
     private TextView txtNewPrice;
     private TextView txtBusinessName;
-    private ImageView imgOfferLogo;
     private TextView txtDescription;
     private TextView txtOtherOfferBusiness;
     private ListView commentsListView;
@@ -84,6 +82,8 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
     private ImageView imgCircle;
     private TextView txtOfferDiscount;
     private RelativeLayout noCommentPnl;
+    private ImagePagerAdapter imgAdapter;
+    private ViewPager imgPager;
 
     private TransparentProgressDialog progress;
     private Runnable runnable;
@@ -112,6 +112,24 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
     private ScrollView scroll;
     private ImageView imgStoreLogo;
 
+    private Stores offerStore;
+
+    private GetBussinesByIdAsync getBussinesByIdAsync;
+
+    @Override
+    protected void onPause() {
+        if (commentsAsync != null && commentsAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            commentsAsync.cancel(true);
+        }
+        if (otherOfferAsync != null && otherOfferAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            otherOfferAsync.cancel(true);
+        }
+        if (getBussinesByIdAsync != null && getBussinesByIdAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            getBussinesByIdAsync.cancel(true);
+        }
+        super.onPause();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,6 +148,10 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
                 , ServicesConstants.getOffersByBusinessRequestList(this.bean.getBusinessId())
                 , Params.SERVICE_PROCESS_7, Params.TYPE_OFFERS_BY_BUSINESS);
         otherOfferAsync.execute(this);
+
+        getBussinesByIdAsync = new GetBussinesByIdAsync(this, ServicesConstants.getBusinessById(bean.getBusinessId()),
+                Params.SERVICE_PROCESS_9);
+        getBussinesByIdAsync.execute(this);
     }
 
     private void buildUI() {
@@ -140,13 +162,12 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
         imgTakeMeThere.setOnClickListener(this);
         txtDescription = (TextView) findViewById(R.id.txt_description);
         txtMobile = (TextView) findViewById(R.id.txt_mobile);
-        txtOfferPeriod = (TextView) findViewById(R.id.txt_offer_period);
+        txtOfferPeriod = (TextView) findViewById(R.id.txt_offer_period_until);
+        txtOfferValidFrom = (TextView) findViewById(R.id.txt_offer_period);
         txtPhone = (TextView) findViewById(R.id.txt_phone);
-        imgOfferLogo = (ImageView) findViewById(R.id.img_offer_logo);
-        imgOfferLogo.setOnClickListener(this);
         txtNewPrice = (TextView) findViewById(R.id.txt_new_price);
         txtYouSaveLbl = (TextView) findViewById(R.id.txt_you_save_lbl);
-        txtOfferDiscount = (TextView) findViewById(R.id.txt_offer_discount);
+        txtOfferDiscount = (TextView) findViewById(R.id.txt_discount);
         txtRatingPercentage = (TextView) findViewById(R.id.txt_per_rating);
         txtRatingTotal = (TextView) findViewById(R.id.txt_total_num_rating);
         txtRatingTotalPer = (TextView) findViewById(R.id.txt_total_per_rating);
@@ -156,6 +177,8 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
         imgStoreLogo = (ImageView) findViewById(R.id.img_store_logo);
         imgLogo = (ImageView) findViewById(R.id.img_menu_logo);
         imgLogo.setOnClickListener(this);
+
+        imgPager = (ViewPager) findViewById(R.id.offer_details_pager);
 
         handler = new Handler();
         progress = new TransparentProgressDialog(this, R.drawable.loading);
@@ -240,15 +263,16 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
     public void setData() {
         Intent intent = getIntent();
         Offers bean = intent.getParcelableExtra(Params.DATA);
+        bean.setPicturesList(intent.getStringArrayExtra(Params.PICTURE_LIST));
         this.bean = bean;
-        txtBusinessName.setText(bean.getBusinessName());
-        if (bean.getBusinessName().length() > 12) {
+        txtBusinessName.setText(bean.getTitle());
+        if (bean.getTitle().length() > 12) {
             txtBusinessName.setTextSize(18);
         }
         if (bean.getDescription() == null || bean.getDescription().equalsIgnoreCase("null"))
             txtDescription.setText("");
         else
-            txtDescription.setText(bean.getTitle());
+            txtDescription.setText(bean.getDescription());
 
         if (bean.getCity() == null || bean.getCity().equalsIgnoreCase("null"))
             txtCity.setText("");
@@ -317,33 +341,58 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
                 txtYouSaveLbl.setText(txtYouSaveLbl.getText() + getString(R.string.usd));
             }
         }
-        AQuery aq = new AQuery(this);
-        aq.id(R.id.img_offer_logo).progress(R.id.offer_detail_progress).image(bean.getOfferMainPhoto(), true, true, imgOfferLogo.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+
+        imgAdapter = new ImagePagerAdapter(this, bean);
+        imgPager.setAdapter(imgAdapter);
 
         setRating(bean.getOfferRating());
         txtRatingPercentage.setText(String.valueOf(bean.getOfferRating()));
         txtRatingTotal.setText(String.valueOf(bean.getRatingCount()));
 
-        Date date = new Date(Long.parseLong(bean.getValidFrom().replaceAll(".*?(\\d+).*", "$1")));
-        android.text.format.DateFormat df = new android.text.format.DateFormat();
-        Calendar c = Calendar.getInstance();
-        c.setTime(date);
-        String period = bean.getValidationPeriod();
-        if (period != null) {
-            if (!period.equalsIgnoreCase("null") && period.length() > 0)
-                c.add(Calendar.DATE, Integer.parseInt(period));
-        }
+        try {
+            Date date = new Date(Long.parseLong(bean.getValidFrom().replaceAll(".*?(\\d+).*", "$1")));
+            android.text.format.DateFormat df = new android.text.format.DateFormat();
+            Calendar c = Calendar.getInstance();
+            c.setTime(date);
+            String period = bean.getValidationPeriod();
+            if (period != null) {
+                if (!period.equalsIgnoreCase("null") && period.length() > 0)
+                    c.add(Calendar.DATE, Integer.parseInt(period));
+            }
 
-        String x = df.format("dd/MM/yyyy", c.getTime()).toString();
-        txtOfferPeriod.setText(x);
+            String x = df.format("dd/MM/yyyy", c.getTime()).toString();
+            txtOfferPeriod.setText(x);
+
+            Date validUntil = new Date(Long.parseLong(bean.getValidFrom().replaceAll(".*?(\\d+).*", "$1")));
+            Calendar valid = Calendar.getInstance();
+            valid.setTime(validUntil);
+            String v = df.format("dd/MM/yyyy", valid.getTime()).toString();
+            txtOfferValidFrom.setText(v);
+        }
+        catch (Exception e) {
+            Log.e(OfferDetailsActivity.class.getName(), "Parsing error on date ...");
+        }
 
         if (bean.getType().equalsIgnoreCase("" + Params.OFFER_TYPE_EVENT)) {
             txtNewPrice.setVisibility(View.GONE);
             txtYouSaveLbl.setVisibility(View.GONE);
         }
-        aq = new AQuery(this);
-        aq.id(imgStoreLogo).image(bean.getBusinessLogo(), true, true
-                , imgStoreLogo.getWidth(), 0, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+
+        Utils.loadImage(this, bean.getBusinessLogo(), imgStoreLogo);
+        imgStoreLogo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (offerStore == null) {
+                    return;
+                }
+                Intent intent = new Intent(OfferDetailsActivity.this, StoreDetailsActivity.class);
+                intent.putExtra(Params.DATA, offerStore);
+                intent.putExtra(Params.PICTURE_LIST, offerStore.getPictures());
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_down_in, R.anim.push_down_in);
+                finish();
+            }
+        });
 
         if (bean.getBusinessLogo() != null && bean.getBusinessLogo().length() > 0 && bean.getBusinessLogo().contains("http")) {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) txtBusinessName.getLayoutParams();
@@ -407,6 +456,9 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
             if (list.size() == 0) {
                 noCommentPnl.setVisibility(View.VISIBLE);
             }
+            else {
+                noCommentPnl.setVisibility(View.GONE);
+            }
             scroll.fullScroll(ScrollView.FOCUS_UP);
         } else if (processType == Params.SERVICE_PROCESS_3) {
             progress.dismiss();
@@ -431,6 +483,20 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
                 }
             }
         }
+        else if (processType == Params.SERVICE_PROCESS_9) {
+            ArrayList<Stores> list = (ArrayList<Stores>) b;
+            if (list != null && list.size() == 1) {
+                this.offerStore = list.get(0);
+            }
+            else {
+                for (Stores s : list) {
+                    if (s.getId().equalsIgnoreCase(this.bean.getBusinessId())) {
+                        offerStore = s;
+                        return;
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -443,13 +509,16 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
             finish();
         else if (view.getId() == R.id.img_add_comment)
             addCommentDialog();
-        else if (view.getId() == R.id.img_take_me_there) {
+        else if (view.getId() == R.id.img_take_me_there
+                || view.getId() == R.id.take_me_there_layout
+                || view.getId() == R.id.txt_city
+                || view.getId() == R.id.img_marker_icon) {
             Intent intent = new Intent();
             LocationInfo info = new LocationInfo();
             info.setLatitude(this.bean.getLatitude());
             info.setLongitude(this.bean.getLongitude());
             intent.putExtra("location", info);
-            setResult(RESULT_OK, intent);
+            setResult(Params.NAVIGATE, intent);
             finish();
         } else if (view.getId() == R.id.img_offer_logo) {
             Intent intent = new Intent(this, ImageViewerActivity.class);
@@ -465,6 +534,7 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
         } else if (view.getId() == R.id.img_menu_logo) {
             Intent intent = new Intent();
             setResult(Params.STATUS_MOVE_TO_DASHBOARD, intent);
+            LeftNavDrawerFragment.setDrawerMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             finish();
         } else {
             Offers info = null;
@@ -479,6 +549,7 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
             if (info != null) {
                 Intent intent = new Intent(this, OfferDetailsActivity.class);
                 intent.putExtra(Params.DATA, info);
+                intent.putExtra(Params.PICTURE_LIST, info.getPicturesList());
                 startActivityForResult(intent, 1);
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
             }
@@ -566,7 +637,7 @@ public class OfferDetailsActivity extends Activity implements IServiceListener, 
         SharedPreferences prefs = getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
         String id = prefs.getString(Params.USER_INFO_ID, "");
 
-        AddBusinessComment asyncTask = new AddBusinessComment(this
+        AddBusinessCommentAsync asyncTask = new AddBusinessCommentAsync(this
                 , ServicesConstants.getAddOfferCommentRequestList(id, this.bean.getId(), comment)
                 , Params.SERVICE_PROCESS_3, Params.TYPE_OFFER);
         asyncTask.execute(this);

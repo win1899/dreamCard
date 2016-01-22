@@ -15,16 +15,14 @@
         android:id="@+id/txt_notification_detail"
         android:layout_marginRight="20dp"
         android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"/>
+        android:layout_marginLeft="5dp"
+        android:layout_alignParentRight="true"
+        android:layout_toEndOf="@+id/img_notification_icon" />
     <ImageView
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:layout_marginLeft="20dp"
         android:id="@+id/img_notification_icon"
         android:layout_centerVertical="true"/>
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/plus_green"/>
 
 </RelativeLayout>

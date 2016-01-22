@@ -14,15 +14,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/faq"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginEnd="10dp"
             android:textColor="#ffffff"
             android:textSize="22sp"
             android:background="@color/button_login"
             android:paddingEnd="5dp"
             android:paddingStart="5dp"
-            android:id="@+id/txt_faq"/>
+            android:id="@+id/txt_faq"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true" />
 
 
     </RelativeLayout>

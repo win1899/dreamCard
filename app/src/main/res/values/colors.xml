@@ -27,6 +27,7 @@
     <color name="button_not_seleted">#e38e0f</color>
     <color name="button_selected">#8cb722</color>
     <color name="button_login">#19ba9b</color>
+    <color name="button_where_buy_bg">#fbca4a</color>
     <color name="add_comment_bg">#fbca4a</color>
     <color name="nav_text_hdr">#efc785</color>
     <color name="selected_offer_status_bg">#27262e</color>

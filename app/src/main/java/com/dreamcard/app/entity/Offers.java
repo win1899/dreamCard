@@ -19,6 +19,7 @@ public class Offers implements Parcelable {
     private int position,rating;
     private int offerRating;
     private int ratingCount;
+    private int offerId;
     private String date;
     private String amount;
     private double amountBeforeDicount;
@@ -31,6 +32,14 @@ public class Offers implements Parcelable {
 
     public Offers(Parcel in) {
         readFromParcel(in);
+    }
+
+    public int getOfferId() {
+        return offerId;
+    }
+
+    public void setOfferId(int offerid){
+        this.offerId = offerid;
     }
 
     public String getId() {
@@ -345,7 +354,7 @@ public class Offers implements Parcelable {
         parcel.writeDouble(amountBeforeDicount);
         parcel.writeDouble(amountAfterDiscount);
         parcel.writeString(categoryIcon);
-        parcel.writeStringArray(picturesList);
+        parcel.writeInt(offerId);
 
     }
 
@@ -384,6 +393,7 @@ public class Offers implements Parcelable {
         amountBeforeDicount=in.readDouble();
         amountAfterDiscount=in.readDouble();
         categoryIcon=in.readString();
+        offerId = in.readInt();
 //        in.readStringArray(picturesList);
     }
 

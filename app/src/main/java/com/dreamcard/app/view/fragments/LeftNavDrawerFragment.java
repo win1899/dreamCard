@@ -3,20 +3,17 @@ package com.dreamcard.app.view.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.location.Criteria;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -26,7 +23,6 @@ import android.widget.TextView;
 import com.dreamcard.app.R;
 import com.dreamcard.app.common.DatabaseController;
 import com.dreamcard.app.constants.Params;
-import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.Categories;
 import com.dreamcard.app.entity.City;
 import com.dreamcard.app.entity.ErrorMessageInfo;
@@ -35,8 +31,6 @@ import com.dreamcard.app.entity.SearchCriteria;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.services.CategoriesAsync;
 import com.dreamcard.app.services.CitiesAsyncTask;
-import com.dreamcard.app.services.InterestCategoriesAsyncTask;
-import com.dreamcard.app.view.adapters.CommentsAdapter;
 import com.dreamcard.app.view.adapters.FilterCategoryAdapter;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
@@ -62,7 +56,7 @@ public class LeftNavDrawerFragment extends Fragment implements View.OnClickListe
     private String mParam1;
     private String mParam2;
 
-    private DrawerLayout mDrawerLayout;
+    private static  DrawerLayout mDrawerLayout;
     private View mFragmentContainerView;
     private TextView txtCity;
     private TextView txtDiscRate;
@@ -88,6 +82,9 @@ public class LeftNavDrawerFragment extends Fragment implements View.OnClickListe
     private SearchCriteria criteria = null;
 
     private OnFragmentInteractionListener mListener;
+
+    private CitiesAsyncTask citiesAsyncTask;
+    private CategoriesAsync categoriesAsync;
 
     /**
      * Use this factory method to create a new instance of
@@ -163,23 +160,20 @@ public class LeftNavDrawerFragment extends Fragment implements View.OnClickListe
         txtDiscRate.setOnClickListener(this);
         ratingBar = (RatingBar) view.findViewById(R.id.rating_bar);
 
-        CitiesAsyncTask citiesAsyncTask = new CitiesAsyncTask(this, new ArrayList<ServiceRequest>()
+        citiesAsyncTask = new CitiesAsyncTask(this, new ArrayList<ServiceRequest>()
                 , Params.SERVICE_PROCESS_1);
         citiesAsyncTask.execute(this.activity);
 
-        CategoriesAsync categoriesAsync = new CategoriesAsync(this, new ArrayList<ServiceRequest>()
+        categoriesAsync = new CategoriesAsync(this, new ArrayList<ServiceRequest>()
                 , Params.SERVICE_PROCESS_2, Params.TYPE_ALL_CATEGORY);
         categoriesAsync.execute(this.activity);
 
-        discountList.add("0% - 10%");
-        discountList.add("10% - 20%");
-        discountList.add("20% - 30%");
-        discountList.add("30% - 40%");
-        discountList.add("40% - 50%");
-        discountList.add("50% - 60%");
-        discountList.add("60% - 70%");
-        discountList.add("70% - 80%");
-        discountList.add("80% - 90%");
+        discountList.add("0-100");
+        discountList.add("100-200");
+        discountList.add("200-400");
+        discountList.add("400-700");
+        discountList.add("700-1000");
+        discountList.add("1000+");
 
         setData();
 
@@ -189,12 +183,18 @@ public class LeftNavDrawerFragment extends Fragment implements View.OnClickListe
     public void setUp(int fragmentId, DrawerLayout drawerLayout) {
         mFragmentContainerView = getActivity().findViewById(fragmentId);
         mDrawerLayout = drawerLayout;
-
+        mDrawerLayout.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED, Gravity.LEFT);
         // set a custom shadow that overlays the main content when the drawer opens
         mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 
 //        setData();
 
+    }
+
+    public static void setDrawerMode(int lockMode) {
+        if (mDrawerLayout != null) {
+            mDrawerLayout.setDrawerLockMode(lockMode, Gravity.LEFT);
+        }
     }
 
     private void setData() {
@@ -232,6 +232,8 @@ public class LeftNavDrawerFragment extends Fragment implements View.OnClickListe
     @Override
     public void onDetach() {
         super.onDetach();
+        citiesAsyncTask.cancel(true);
+        categoriesAsync.cancel(true);
         mListener = null;
     }
 
@@ -273,7 +275,7 @@ public class LeftNavDrawerFragment extends Fragment implements View.OnClickListe
 
     private void showDiscountDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this.activity);
-        builder.setTitle("Select Imput Type");
+        builder.setTitle("Select Input Type");
 
         AlertDialog levelDialog = null;
 
@@ -348,6 +350,10 @@ public class LeftNavDrawerFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         if (processType == Params.SERVICE_PROCESS_1) {
             ArrayList<City> list = (ArrayList<City>) b;
             this.citiesList = list;

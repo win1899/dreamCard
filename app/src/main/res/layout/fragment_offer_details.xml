@@ -61,7 +61,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="New Text"
-                android:id="@+id/txt_new_price"
+                android:id="@+id/txt_discount"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="30dp"
                 android:textColor="#ffffff"
@@ -75,7 +75,7 @@
                 android:layout_marginLeft="30dp"
                 android:textColor="#ffffff"
                 android:textSize="15sp"
-                android:layout_below="@+id/txt_new_price"/>
+                android:layout_below="@+id/txt_discount"/>
         </RelativeLayout>
         </LinearLayout>
     <LinearLayout

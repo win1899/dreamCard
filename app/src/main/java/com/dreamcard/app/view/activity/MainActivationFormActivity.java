@@ -1,9 +1,7 @@
 package com.dreamcard.app.view.activity;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -13,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -38,10 +35,6 @@ import com.dreamcard.app.view.fragments.ActivationFinalFragment;
 import com.dreamcard.app.view.fragments.ActivationInformationFragment;
 import com.dreamcard.app.view.fragments.ActivationSettingFragment;
 import com.dreamcard.app.view.fragments.ActivationTermsFragment;
-import com.dreamcard.app.view.fragments.CategoriesListFragment;
-import com.dreamcard.app.view.fragments.DashboardFragment;
-import com.dreamcard.app.view.fragments.LatestOfferListFragment;
-import com.dreamcard.app.view.fragments.StoresListFragment;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
 
@@ -160,8 +153,14 @@ public class MainActivationFormActivity extends FragmentActivity implements View
                 imgStage3.setVisibility(View.VISIBLE);
                 break;
             case 4:
-                String fullName = this.personalInfo.getFirstName() + " " + this.personalInfo.getLastName();
-                finalFragment = ActivationFinalFragment.newInstance(fullName, "");
+                String fullName = this.personalInfo.getFullName();
+                if ("null".equalsIgnoreCase(fullName) || "".equalsIgnoreCase(fullName)) {
+                    fullName = personalInfo.getFirstName() + " " + personalInfo.getLastName();
+                    if (fullName.equalsIgnoreCase("null ") || fullName.equalsIgnoreCase("null null") || fullName.equalsIgnoreCase("null")) {
+                        fullName = "";
+                    }
+                }
+                finalFragment = ActivationFinalFragment.newInstance(fullName, personalInfo.getUsername(), personalInfo.getPassword());
                 fragment = finalFragment;
                 tag = Params.FRAGMENT_ACTIVATION_4;
                 btn5.setBackgroundColor(getResources().getColor(R.color.list_sliding_item));
@@ -213,6 +212,7 @@ public class MainActivationFormActivity extends FragmentActivity implements View
         if (this.currentPage == 4) {
             Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
+            finish();
         } else {
             if (currentPage == 0) {
                 isValid = cardNumFragment.isValidInput();
@@ -323,5 +323,6 @@ public class MainActivationFormActivity extends FragmentActivity implements View
         Intent intent = new Intent(this, MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+        finish();
     }
 }

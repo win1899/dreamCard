@@ -1,5 +1,6 @@
 package com.dreamcard.app.entity;
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -10,6 +11,7 @@ public class PurchasesHolder {
     private TextView txtStoreName;
     private TextView txtCity;
     private TextView txtAmount;
+    private ImageView pdfImage;
 
     public TextView getTxtStoreName() {
         return txtStoreName;
@@ -33,5 +35,13 @@ public class PurchasesHolder {
 
     public void setTxtAmount(TextView txtAmount) {
         this.txtAmount = txtAmount;
+    }
+
+    public void setPdfImg(ImageView pdfImage) {
+        this.pdfImage = pdfImage;
+    }
+
+    public ImageView getPdfImg() {
+        return pdfImage;
     }
 }

@@ -3,12 +3,9 @@ package com.dreamcard.app.view.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Handler;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.dreamcard.app.MainActivity;
 import com.dreamcard.app.R;
@@ -86,7 +83,7 @@ public class SplashActivity extends Activity implements IServiceListener {
                 editor.putString(Params.USER_INFO_BIRTHDAY, bean.getBirthday());
                 editor.putString(Params.USER_INFO_CITY, bean.getCity());
 
-                Intent intent = new Intent(this, NavDrawerActiity.class);
+                Intent intent = new Intent(this, NavDrawerActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
             } else {

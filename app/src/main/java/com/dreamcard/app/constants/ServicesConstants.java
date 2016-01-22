@@ -1,5 +1,7 @@
 package com.dreamcard.app.constants;
 
+import android.util.Log;
+
 import com.dreamcard.app.entity.PersonalInfo;
 import com.dreamcard.app.entity.SearchCriteria;
 import com.dreamcard.app.entity.ServiceRequest;
@@ -33,6 +35,7 @@ public class ServicesConstants {
     public static final String WS_METHOD_LIKE_OFFER="LikeOffer";
     public static final String WS_METHOD_DISLIKE_OFFER="DislikeOffer";
     public static final String WS_METHOD_LATEST_OFFERS="SelectLatestOffers";
+    public static final String WS_METHOD_INVOICE_PDF="GetInvoiceForOfferUsage";
     public static final String WS_METHOD_IS_CARD_AVAILABLE="IsCardNumberAvailable";
     public static final String WS_METHOD_REGISTER_CONSUMER="RegisterConsumer";
     public static final String WS_METHOD_OFFER_BY_CATEGORY="SelectOffersByCategoryID";
@@ -62,6 +65,7 @@ public class ServicesConstants {
     public static final String CONSUMER_ID="consumerID";
     public static final String OFFER_ID="offerID";
     public static final String BUSINESS_ID="businessID";
+    public static final String OFFER_USAGE_ID = "OfferUsageID";
     public static final String EMAIL="email";
     public static final String PASSWORD="password";
     public static final String COUNT="count";
@@ -256,11 +260,11 @@ public class ServicesConstants {
         bean.setValue(info.getUsername());
         list.add(bean);
 
-//        bean = new ServiceRequest();
-//        bean.setName("Password");
-//        bean.setType(PropertyInfo.STRING_CLASS);
-//        bean.setValue(info.getPassword());
-//        list.add(bean);
+        bean = new ServiceRequest();
+        bean.setName("Password");
+        bean.setType(PropertyInfo.STRING_CLASS);
+        bean.setValue(info.getPassword());
+        list.add(bean);
 
         bean = new ServiceRequest();
         bean.setName(GENDER);
@@ -366,6 +370,19 @@ public class ServicesConstants {
 
         return list;
     }
+
+    public static ArrayList<ServiceRequest> getOfferInvoicePdfRequestList(int offerUsageId) {
+        ArrayList<ServiceRequest> list=new ArrayList<ServiceRequest>();
+
+        ServiceRequest bean = new ServiceRequest();
+        bean.setName(OFFER_USAGE_ID);
+        bean.setType(PropertyInfo.INTEGER_CLASS);
+        bean.setValue(offerUsageId);
+        list.add(bean);
+
+        return list;
+    }
+
     public static ArrayList<ServiceRequest> getLikeBusinessRequestList(String id,String businessId){
         ArrayList<ServiceRequest> list=new ArrayList<ServiceRequest>();
 
@@ -507,7 +524,7 @@ public class ServicesConstants {
         bean = new ServiceRequest();
         bean.setName("CardNumber");
         bean.setType(PropertyInfo.STRING_CLASS);
-        bean.setValue("");
+        bean.setValue(info.getCardNumber());
         list.add(bean);
 
         bean = new ServiceRequest();
@@ -596,8 +613,12 @@ public class ServicesConstants {
         bean = new ServiceRequest();
         bean.setName("CityId");
         bean.setType(PropertyInfo.INTEGER_CLASS);
-        bean.setValue(Integer.parseInt(info.getCity()));
-        list.add(bean);
+        try {
+            bean.setValue(Integer.parseInt(info.getCity()));
+            list.add(bean);
+        } catch (NumberFormatException e) {
+            Log.e(ServicesConstants.class.getName(), "Can't parse CityId");
+        }
 
         if(info.getCountry()!=null && !info.getCountry().equalsIgnoreCase("null")) {
             bean = new ServiceRequest();
@@ -709,9 +730,14 @@ public class ServicesConstants {
         list.add(bean);
 
         bean = new ServiceRequest();
-        bean.setName("discountPercentage");
+        bean.setName("discounPercentage");
         bean.setType(PropertyInfo.STRING_CLASS);
-        bean.setValue(criteria.getDiscRate());
+        if (criteria.getDiscRate().equalsIgnoreCase("1000+")) {
+            bean.setValue("1000-1000+");
+        }
+        else {
+            bean.setValue(criteria.getDiscRate());
+        }
         list.add(bean);
 
 //        bean = new ServiceRequest();
@@ -737,6 +763,18 @@ public class ServicesConstants {
         bean.setName("ParentCategoryID");
         bean.setType(PropertyInfo.STRING_CLASS);
         bean.setValue(parentId);
+        list.add(bean);
+
+        return list;
+    }
+
+    public static ArrayList<ServiceRequest> getBusinessById(String businessId) {
+        ArrayList<ServiceRequest> list=new ArrayList<ServiceRequest>();
+
+        ServiceRequest bean = new ServiceRequest();
+        bean.setName("businessID");
+        bean.setType(PropertyInfo.STRING_CLASS);
+        bean.setValue(businessId);
         list.add(bean);
 
         return list;

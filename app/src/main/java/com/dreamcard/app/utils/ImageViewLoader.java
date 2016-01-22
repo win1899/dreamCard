@@ -117,16 +117,15 @@ public class ImageViewLoader {
 
     private Bitmap getBitmap(String url)
     {
-        File f=fileCache.getFile(url);
-
-        //from SD cache
-        Bitmap b = decodeFile(f);
-        if(b!=null)
-            return b;
-
         //from web
         try {
-            Bitmap bitmap=null;
+            File f=fileCache.getFile(url);
+            //from SD cache
+            Bitmap b = decodeFile(f);
+            if(b!=null)
+                return b;
+
+            Bitmap bitmap;
             URL imageUrl = new URL(url);
             HttpURLConnection conn = (HttpURLConnection)imageUrl.openConnection();
             conn.setConnectTimeout(30000);
@@ -140,6 +139,9 @@ public class ImageViewLoader {
             return bitmap;
         } catch (Exception ex){
             ex.printStackTrace();
+            return null;
+        } catch (OutOfMemoryError e) {
+            e.printStackTrace();
             return null;
         }
     }
@@ -194,6 +196,9 @@ public class ImageViewLoader {
             if(imageViewReused(photoToLoad))
                 return;
             Bitmap bmp=getBitmap(photoToLoad.url);
+            if (bmp == null) {
+                return;
+            }
             memoryCache.put(photoToLoad.url, bmp);
             if(imageViewReused(photoToLoad))
                 return;

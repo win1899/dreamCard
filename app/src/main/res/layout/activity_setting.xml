@@ -750,66 +750,14 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:id="@+id/purchases_header_pnl"
-                android:background="@color/button_login"
-                android:layout_below="@+id/info_pnl"
-                android:gravity="center_vertical|end"
-                android:layout_marginTop="15dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#ffffff"
-                    android:textSize="20sp"
-                    android:text="@string/purchases_list"
-                    android:gravity="end|center_vertical"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginStart="10dp"/>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/purchases_header_pnl"
-                android:id="@+id/purchases_list_pnl"
-                android:layout_marginTop="10dp"
-                android:orientation="vertical">
-
-            <ListView
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                android:id="@android:id/list"/>
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:id="@+id/no_purchases_pnl"
-                    android:background="#ffffff"
-                    android:visibility="gone"
-                    android:layout_marginBottom="20dp">
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="end"
-                        android:layout_alignParentEnd="true"
-                        android:textColor="#000000"
-                        android:textSize="20sp"
-                        android:text="@string/no_purchases"
-                        android:layout_centerVertical="true"
-                        android:layout_marginEnd="20dp"/>
-                </RelativeLayout>
-
-            </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="30dp"
                 android:id="@+id/category_header_pnl"
                 android:background="@color/button_login"
-                android:layout_below="@+id/purchases_list_pnl"
+                android:layout_below="@+id/info_pnl"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="15dp">
 
@@ -851,8 +799,8 @@
                     android:drawablePadding="5dp"
                     android:id="@+id/btn_done"
                     android:visibility="gone"/>
-            </RelativeLayout>
 
+            </RelativeLayout>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -861,6 +809,7 @@
                 android:background="#ffffff"
                 android:layout_marginRight="6dp"
                 android:layout_marginLeft="6dp"
+                android:id="@+id/ddd"
                 android:layout_marginTop="10dp">
 
                 <com.dreamcard.app.components.MyGridView
@@ -872,6 +821,63 @@
                     android:numColumns="4"
                     android:layout_marginTop="10dp"/>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:id="@+id/purchases_header_pnl"
+                android:background="@color/button_login"
+                android:layout_below="@+id/ddd"
+                android:gravity="center_vertical|end"
+                android:layout_marginTop="15dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#ffffff"
+                    android:textSize="20sp"
+                    android:text="@string/purchases_list"
+                    android:gravity="end|center_vertical"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginStart="10dp"/>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/purchases_header_pnl"
+                android:id="@+id/purchases_list_pnl"
+                android:layout_marginTop="10dp"
+                android:orientation="vertical">
+
+            <ListView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@android:id/list"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:id="@+id/no_purchases_pnl"
+                    android:background="#ffffff"
+                    android:visibility="gone"
+                    android:layout_marginBottom="20dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:layout_alignParentEnd="true"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:text="@string/no_purchases"
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="20dp"/>
+                </RelativeLayout>
+
+            </LinearLayout>
+
+
 
         </RelativeLayout>
 

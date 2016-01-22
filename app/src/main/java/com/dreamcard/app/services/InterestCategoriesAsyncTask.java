@@ -31,7 +31,7 @@ import java.util.Vector;
 /**
  * Created by Moayed on 9/10/2014.
  */
-public class InterestCategoriesAsyncTask extends AsyncTask<Object, Void, Object> {
+public class InterestCategoriesAsyncTask extends AbstractAsyncTask<Object, Void, Object> {
 
     private Context context;
     private IServiceListener listener;
@@ -44,7 +44,7 @@ public class InterestCategoriesAsyncTask extends AsyncTask<Object, Void, Object>
         this.requestList=list;
     }
 
-    protected Object doInBackground(Object... data) {
+    protected Object doInBackgroundSafe(Object... data) {
         this.context= (Context) data[0];
         if(!SystemOperation.isOnline(this.context)){
             ErrorMessageInfo bean=new ErrorMessageInfo();
@@ -181,7 +181,7 @@ public class InterestCategoriesAsyncTask extends AsyncTask<Object, Void, Object>
         return request;
     }
 
-    protected void onPostExecute(Object serviceResponse) {
+    protected void onPostExecuteSafe(Object serviceResponse) {
         if(serviceResponse!=null) {
             if (serviceResponse instanceof ErrorMessageInfo) {
                 this.listener.onServiceFailed((ErrorMessageInfo) serviceResponse);

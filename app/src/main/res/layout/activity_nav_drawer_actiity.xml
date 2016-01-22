@@ -4,7 +4,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.dreamcard.app.view.activity.NavDrawerActiity">
+    tools:context="com.dreamcard.app.view.activity.NavDrawerActivity">
 
     <!-- As the main content view, the view below consumes the entire
          space available using match_parent in both dimensions. -->
@@ -35,14 +35,16 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="10dp">
+                    android:layout_marginStart="10dp"
+                    android:layout_marginBottom="10dp">
 
                     <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="35dp"
+                        android:layout_height="35dp"
                         android:src="@drawable/filter_icon"
                         android:background="@null"
                         android:id="@+id/btn_notifications"
+                        android:scaleType="fitXY"
                         android:layout_centerHorizontal="true"
                         android:layout_centerVertical="true" />
                 </RelativeLayout>
@@ -74,16 +76,17 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp">
 
                     <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
                         android:onClick="toggleMenu"
                         android:src="@drawable/menu_icon"
                         android:background="@null"
                         android:id="@+id/activity_main_content_button_menu"
+                        android:scaleType="fitXY"
                         android:layout_centerVertical="true"
                         android:layout_centerHorizontal="true"/>
 

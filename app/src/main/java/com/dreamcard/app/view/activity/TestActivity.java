@@ -16,7 +16,7 @@ import android.widget.RelativeLayout;
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.entity.Offers;
-import com.dreamcard.app.services.DownloadImageTask;
+import com.dreamcard.app.services.DownloadImageAsyncTask;
 
 public class TestActivity extends ActionBarActivity {
 
@@ -42,7 +42,7 @@ public class TestActivity extends ActionBarActivity {
         Intent intent = getIntent();
         Offers bean = intent.getParcelableExtra(Params.DATA);
 
-        DownloadImageTask task=new DownloadImageTask(img,listener);
+        DownloadImageAsyncTask task=new DownloadImageAsyncTask(img,listener);
         task.execute(bean.getBusinessLogo());
     }
 

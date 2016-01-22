@@ -3,25 +3,20 @@ package com.dreamcard.app.view.fragments;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
+import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.dreamcard.app.R;
@@ -32,6 +27,7 @@ import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.services.AllBusinessAsync;
 import com.dreamcard.app.utils.ImageViewLoader;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.adapters.MarkerInfoWindowAdapter;
 import com.dreamcard.app.view.interfaces.ILocationListener;
 import com.dreamcard.app.view.interfaces.IServiceListener;
@@ -39,7 +35,6 @@ import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
-import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
@@ -74,7 +69,15 @@ public class LocationFragment extends Fragment implements IServiceListener, View
     private double latitude;
     private double longitude;
     private Activity activity;
-
+    private AllBusinessAsync allBusinessAsync;
+    private TextView storeName;
+    private TextView storeAddress;
+    private TextView storePhone;
+    private ImageView storeLogo;
+    private ImageView navigateToStore;
+    private Stores selectedStore;
+    private RelativeLayout navPanel;
+    private Marker selectedMarker;
 
     public static LocationFragment newInstance(LocationInfo param1, String param2) {
         LocationFragment fragment = new LocationFragment();
@@ -109,27 +112,59 @@ public class LocationFragment extends Fragment implements IServiceListener, View
         }
         try {
             view = inflater.inflate(R.layout.fragment_location, container, false);
+
         } catch (InflateException e) {
-        /* map is already there, just return view as it is */
+            /* map is already there, just return view as it is */
         }
         map = ((MapFragment) getActivity().getFragmentManager().findFragmentById(R.id.map)).getMap();
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                marker.showInfoWindow();
+                selectStore(marker);
                 return true;
             }
         });
-        map.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
-            @Override
-            public void onInfoWindowClick(Marker marker) {
-                loadStoreInfo(marker);
-            }
-        });
-        AllBusinessAsync allBusinessAsync = new AllBusinessAsync(this, new ArrayList<ServiceRequest>()
+
+        storeName = (TextView) view.findViewById(R.id.map_store_name);
+        storeName.setOnClickListener(this);
+        storeAddress = (TextView) view.findViewById(R.id.map_address);
+        storeAddress.setOnClickListener(this);
+        storeLogo = (ImageView) view.findViewById(R.id.map_store_logo);
+        storeLogo.setOnClickListener(this);
+        navigateToStore = (ImageView) view.findViewById(R.id.map_gps_button);
+        storePhone = (TextView) view.findViewById(R.id.map_phone_num);
+        storePhone.setOnClickListener(this);
+
+        navPanel = (RelativeLayout) view.findViewById(R.id.navigation_panel);
+
+        navigateToStore.setOnClickListener(this);
+
+        allBusinessAsync = new AllBusinessAsync(this, new ArrayList<ServiceRequest>()
                 , Params.SERVICE_PROCESS_1);
         allBusinessAsync.execute(getActivity());
         return view;
+    }
+
+    private void selectStore(Marker marker) {
+        for (Stores bean : this.list) {
+            if (marker.getTitle().equalsIgnoreCase(bean.getStoreName())) {
+                selectedStore = bean;
+                storeName.setText(selectedStore.getStoreName());
+                storeAddress.setText(selectedStore.getAddress1());
+                storePhone.setText(selectedStore.getPhone());
+                Utils.loadImage(activity, selectedStore.getLogo(), storeLogo);
+                break;
+            }
+        }
+        if (selectedStore != null) {
+            navPanel.setVisibility(View.VISIBLE);
+        }
+
+        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_ping_selected));
+        if (selectedMarker != null) {
+            selectedMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_unselected));
+        }
+        selectedMarker = marker;
     }
 
     private LocationInfo getLocationInfo() {
@@ -145,6 +180,9 @@ public class LocationFragment extends Fragment implements IServiceListener, View
 
         if (this.mParam1 != null) {
             if (mParam1.getLatitude() > 0) {
+                if (location == null) {
+                    location = new Location("Passive");
+                }
                 location.setLatitude(mParam1.getLatitude());
                 location.setLongitude(mParam1.getLongitude());
             }
@@ -155,8 +193,8 @@ public class LocationFragment extends Fragment implements IServiceListener, View
             bean.setLatitude(location.getLatitude());
             bean.setLongitude(location.getLongitude());
         } else {
-            bean.setLatitude(32.043532);
-            bean.setLongitude(35.122449);
+            bean.setLatitude(31.8890726);
+            bean.setLongitude(35.2195921);
         }
         return bean;
     }
@@ -176,6 +214,7 @@ public class LocationFragment extends Fragment implements IServiceListener, View
     @Override
     public void onDetach() {
         super.onDetach();
+        allBusinessAsync.cancel(true);
         mListener = null;
     }
 
@@ -209,9 +248,17 @@ public class LocationFragment extends Fragment implements IServiceListener, View
 
                     MarkerOptions marker = new MarkerOptions().position(new LatLng(latitude, longitude))
                             .title(bean.getStoreName())
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.store_icon));
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.map_pin_unselected));
+
                     Marker mark = map.addMarker(marker);
-                    mark.showInfoWindow();
+                    try {
+                        if (getLocationInfo().getLatitude() == Double.parseDouble(bean.getLatitude())
+                                && getLocationInfo().getLongitude() == Double.parseDouble(bean.getLongitude())) {
+                            selectStore(mark);
+                        }
+                    } catch (Exception e) {
+
+                    }
                     count++;
 
                 }
@@ -231,7 +278,7 @@ public class LocationFragment extends Fragment implements IServiceListener, View
                         .title(bean.getName());
                 Marker mark = map.addMarker(marker);
                 map.setInfoWindowAdapter(new MarkerInfoWindowAdapter(getActivity(), null, this));
-                mark.showInfoWindow();
+                selectStore(mark);
             }
         }
 
@@ -250,6 +297,10 @@ public class LocationFragment extends Fragment implements IServiceListener, View
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
+        if (getActivity() == null) {
+            Log.e(this.getClass().getName(), "Activity is null, avoid callback");
+            return;
+        }
         if (processType == Params.SERVICE_PROCESS_1) {
             ArrayList<Stores> list = (ArrayList<Stores>) b;
 
@@ -285,18 +336,27 @@ public class LocationFragment extends Fragment implements IServiceListener, View
         if (info != null) {
             mListener.doAction(info, Params.FRAGMENT_STORES);
         }
+
+        if (view.getId() == R.id.map_store_logo
+                || view.getId() == R.id.map_store_name
+                || view.getId() == R.id.map_address) {
+            loadStoreInfo();
+        }
+
+        if (view.getId() == R.id.map_gps_button) {
+            if (selectedStore == null) {
+                return;
+            }
+
+            Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                    Uri.parse(String.format("google.navigation:ll=%s,%s&mode=c", selectedStore.getLatitude(), selectedStore.getLongitude())));
+            startActivity(intent);
+        }
     }
 
-    private void loadStoreInfo(Marker marker) {
-        Stores info = null;
-        for (Stores bean : this.list) {
-            if (marker.getTitle().equalsIgnoreCase(bean.getStoreName())) {
-                info = bean;
-                break;
-            }
-        }
-        if (info != null) {
-            mListener.doAction(info, Params.FRAGMENT_STORES);
+    private void loadStoreInfo() {
+        if (selectedStore != null) {
+            mListener.doAction(selectedStore, Params.FRAGMENT_STORES);
         }
     }
 }

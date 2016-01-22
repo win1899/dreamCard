@@ -2,6 +2,7 @@ package com.dreamcard.app.services;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
@@ -30,7 +31,7 @@ import java.util.Vector;
 /**
  * Created by Moayed on 6/29/2014.
  */
-public class LoginAsync extends AsyncTask<Object, Void, Object> {
+public class LoginAsync extends AbstractAsyncTask<Object, Void, Object> {
 
     private Context context;
     private IServiceListener listener;
@@ -43,7 +44,7 @@ public class LoginAsync extends AsyncTask<Object, Void, Object> {
         this.requestList=list;
     }
 
-    protected Object doInBackground(Object... data) {
+    protected Object doInBackgroundSafe(Object... data) {
         this.context= (Context) data[0];
         if(!SystemOperation.isOnline(this.context)){
             ErrorMessageInfo bean=new ErrorMessageInfo();
@@ -103,7 +104,7 @@ public class LoginAsync extends AsyncTask<Object, Void, Object> {
                         bean.setCity(oneObject.getString("City"));
                         bean.setPhone(oneObject.getString("Phone"));
                         bean.setIdNum(oneObject.getString("IdNumber"));
-                        bean.setEducation(oneObject.getString("City"));
+                        bean.setEducation(oneObject.getString("Education"));
                         bean.setCountry(oneObject.getString("CountryId"));
                         bean.setAddress(oneObject.getString("AddressLine1"));
 
@@ -209,11 +210,12 @@ public class LoginAsync extends AsyncTask<Object, Void, Object> {
         return request;
     }
 
-    protected void onPostExecute(Object serviceResponse) {
+    protected void onPostExecuteSafe(Object serviceResponse) {
         if(serviceResponse!=null) {
             if (serviceResponse instanceof ErrorMessageInfo) {
                 this.listener.onServiceFailed((ErrorMessageInfo) serviceResponse);
             } else {
+                Log.e("Login", "Finished waiting ... calling onServiceSuccess");
                 this.listener.onServiceSuccess(serviceResponse,this.processType);
             }
         }

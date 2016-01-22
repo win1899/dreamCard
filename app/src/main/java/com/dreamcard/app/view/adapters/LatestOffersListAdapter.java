@@ -3,13 +3,10 @@ package com.dreamcard.app.view.adapters;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
-import android.net.Uri;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,27 +14,15 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RatingBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.androidquery.AQuery;
 import com.dreamcard.app.R;
-import com.dreamcard.app.components.CustomImageView;
-import com.dreamcard.app.components.CustomImageViewer;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.OffersRecordHolder;
-import com.dreamcard.app.entity.RecordHolder;
-import com.dreamcard.app.services.DownloadImageTask;
-import com.dreamcard.app.utils.ImageLoader;
-import com.dreamcard.app.utils.ImageUtil;
-import com.dreamcard.app.utils.ImageViewLoader;
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.squareup.picasso.Picasso;
+import com.dreamcard.app.utils.Utils;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
 
 /**
@@ -107,10 +92,7 @@ public class LatestOffersListAdapter extends BaseAdapter {
         Offers bean = this.data.get(position);
 
         if (bean.getDescription() != null && !bean.getDescription().equalsIgnoreCase("null")) {
-            if (bean.getDescription().length() > 30) {
-                bean.setDescription(bean.getDescription().substring(0, 30) + "...");
-            }
-            holder.getTxtDesc().setText(bean.getDescription());
+            holder.getTxtDesc().setText(bean.getTitle());
         }
 
         if (bean.getSaleOldPrice().contains(".")) {
@@ -156,9 +138,7 @@ public class LatestOffersListAdapter extends BaseAdapter {
 
         if (bean.getOfferMainPhoto() != null && !bean.getOfferMainPhoto().equalsIgnoreCase("null")
                 && bean.getOfferMainPhoto().length() > 0) {
-            AQuery aq = new AQuery(this.activity);
-            aq.id(holder.getImgOffer()).progress(R.id.offer_detail_progress).image(bean.getOfferMainPhoto(), true, true
-                    , holder.getImgOffer().getWidth(), R.drawable.offer_item_bg, null, AQuery.FADE_IN, AQuery.RATIO_PRESERVE);
+            Utils.loadImage(this.activity, bean.getOfferMainPhoto(), holder.getImgOffer());
         }
         holder.getRatingBar().removeAllViews();
         setRating(bean.getOfferRating(), holder.getRatingBar());

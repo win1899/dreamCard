@@ -1,18 +1,20 @@
 package com.dreamcard.app.services;
 
 import android.content.Context;
-import android.os.AsyncTask;
+import android.util.Log;
 
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
-import com.dreamcard.app.entity.BusinessComment;
 import com.dreamcard.app.entity.ErrorMessageInfo;
-import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.entity.ServiceRequest;
+import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.utils.SystemOperation;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.ksoap2.SoapEnvelope;
 import org.ksoap2.SoapFault;
 import org.ksoap2.serialization.PropertyInfo;
@@ -25,24 +27,22 @@ import java.util.ArrayList;
 import java.util.Vector;
 
 /**
- * Created by Moayed on 8/9/2014.
+ * Created by WIN on 11/8/2015.
  */
-public class AddBusinessComment extends AsyncTask<Object, Void, Object> {
+public class GetBussinesByIdAsync extends AbstractAsyncTask<Object, Void, Object> {
 
     private Context context;
     private IServiceListener listener;
     private ArrayList<ServiceRequest> requestList=new ArrayList<ServiceRequest>();
     private int processType;
-    private int type;
 
-    public AddBusinessComment(IServiceListener listener,ArrayList<ServiceRequest> list,int processType,int type){
+    public GetBussinesByIdAsync(IServiceListener listener,ArrayList<ServiceRequest> list,int processType){
         this.listener=listener;
         this.processType=processType;
         this.requestList=list;
-        this.type=type;
     }
 
-    protected Object doInBackground(Object... data) {
+    protected Object doInBackgroundSafe(Object... data) {
         this.context= (Context) data[0];
         if(!SystemOperation.isOnline(this.context)){
             ErrorMessageInfo bean=new ErrorMessageInfo();
@@ -54,21 +54,19 @@ public class AddBusinessComment extends AsyncTask<Object, Void, Object> {
     private Object callService(){
         Object result=null;
         SoapSerializationEnvelope envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-
-        String method= ServicesConstants.WS_METHOD_ADD_BUSINESS_COMMENT;
-        if(this.type==Params.TYPE_OFFER)
-            method= ServicesConstants.WS_METHOD_ADD_OFFER_COMMENT;
-
-        envelope.setOutputSoapObject(createRequest(method));
         envelope.dotNet = true;
+        SoapObject request = createRequest();
+
+        envelope.setOutputSoapObject(request);
         int timeout= Params.TIME_OUT;
         Object requestResult=new Object();
+        SoapObject  resultx=new SoapObject();
         for(int index=0;index<Params.SERVICE_REQUEST_COUNT;index++) {
 
             try {
-                HttpTransportSE httpTransport = new HttpTransportSE(ServicesConstants.WSDL_URL,timeout);
+                HttpTransportSE httpTransport = new HttpTransportSE(ServicesConstants.WSDL_URL);
                 httpTransport.debug = true;
-                httpTransport.call(ServicesConstants.WS_ACTION+method, envelope);
+                httpTransport.call(ServicesConstants.WS_ACTION+ServicesConstants.WS_METHOD_NAME_BUSINESS_BY_ID, envelope);
                 break;
             } catch (Exception e) {
                 ErrorMessageInfo bean = new ErrorMessageInfo();
@@ -85,31 +83,66 @@ public class AddBusinessComment extends AsyncTask<Object, Void, Object> {
             try {
                 if(envelope.getResponse() instanceof SoapPrimitive){
                     String str = envelope.getResponse().toString();
-                    if(str==null || str.equalsIgnoreCase("null")){
-                        ErrorMessageInfo bean= new ErrorMessageInfo();
-                        bean.setMessage(this.context.getString(R.string.error_in_connect_server));
-                        return bean;
-                    }else if(str.equalsIgnoreCase("false")){
-                        MessageInfo bean=new MessageInfo();
-                        bean.setValid(false);
-                        return bean;
+                    ArrayList<Stores> list=new ArrayList<Stores>();
+                    try {
+                        int index=0;
 
-                    }else if(str.equalsIgnoreCase("true")){
-                        MessageInfo bean=new MessageInfo();
-                        bean.setValid(true);
-                        return bean;
+                        JSONObject oneObject = new JSONObject(str);
+
+                        Stores bean=new Stores();
+                        bean.setId(oneObject.getString("Id"));
+                        bean.setStoreName(oneObject.getString("BusinessName"));
+                        bean.setAddress1(oneObject.getString("AddressLine1"));
+                        bean.setAddress2(oneObject.getString("AddressLine2"));
+                        bean.setCity(oneObject.getString("City"));
+                        bean.setPhone(oneObject.getString("Phone"));
+                        bean.setMobile(oneObject.getString("Mobile"));
+                        bean.setWebsite(oneObject.getString("Website"));
+                        bean.setFacebook(oneObject.getString("Facebook"));
+                        bean.setRepresentativeName(oneObject.getString("RepresentativeName"));
+                        bean.setEmail(oneObject.getString("Email"));
+                        bean.setLogo(oneObject.getString("Logo"));
+                        bean.setWideLogo(oneObject.getString("WideLogo"));
+                        bean.setLatitude(oneObject.getString("Lat"));
+                        bean.setLongitude(oneObject.getString("Long"));
+                        bean.setOurMessage(oneObject.getString("OurMessage"));
+                        bean.setMission(oneObject.getString("Mission"));
+                        bean.setVision(oneObject.getString("Vision"));
+                        String storeClass=oneObject.getString("Class");
+                        if(storeClass==null || storeClass.length()==0 || storeClass.equalsIgnoreCase("null"))
+                            bean.setStoreClass(0);
+                        else
+                            bean.setStoreClass(Integer.parseInt(storeClass));
+                        String rating=oneObject.getString("Rating");
+                        if(rating!=null){
+                            if(!rating.equalsIgnoreCase("null") && rating.length()>0)
+                                bean.setRating(Integer.parseInt(rating.substring(0,1)));
+                        }
+
+                        String pictures=oneObject.getString("Pictures");
+                        if (pictures != null && !pictures.equalsIgnoreCase("null") && pictures.length() > 0) {
+                            bean.setPictures(pictures.split(";"));
+                        }
+
+                        String discountString = oneObject.optString("DiscountPercentage");
+                        double discount = 0.0;
+                        try {
+                            discount = Double.parseDouble(discountString);
+                        }
+                        catch (Exception e) {
+                            Log.i(AllBusinessAsync.class.getName(), e.getMessage());
+                        }
+                        bean.setDiscountPrecentage(discount);
+
+                        bean.setPosition(index);
+                        index++;
+                        list.add(bean);
+
+                        return list;
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
-
-//                    try {
-//                        JSONObject oneObject = new JSONObject(str);
-//                        bean.setId(oneObject.getString("Id"));
-//                        bean.setFullName(oneObject.getString("FullName"));
-//                        bean.setStatus(oneObject.getInt("Status"));
-//                        return bean;
-//
-//                    } catch (JSONException e) {
-//                        e.printStackTrace();
-//                    }
                 }else{
                     if(envelope.getResponse() instanceof Vector) {
                         Vector response = (Vector) envelope.getResponse();
@@ -180,8 +213,8 @@ public class AddBusinessComment extends AsyncTask<Object, Void, Object> {
      * build request property info.
      * @return SoapObject
      */
-    public SoapObject createRequest(String method) {
-        SoapObject request = new SoapObject(ServicesConstants.WS_NAME_SPACE,method);
+    public SoapObject createRequest() {
+        SoapObject request = new SoapObject(ServicesConstants.WS_NAME_SPACE, ServicesConstants.WS_METHOD_NAME_BUSINESS_BY_ID);
         for(ServiceRequest bean:this.requestList){
             PropertyInfo propInfo=new PropertyInfo();
             propInfo.name=bean.getName();
@@ -192,7 +225,7 @@ public class AddBusinessComment extends AsyncTask<Object, Void, Object> {
         return request;
     }
 
-    protected void onPostExecute(Object serviceResponse) {
+    protected void onPostExecuteSafe(Object serviceResponse) {
         if(serviceResponse!=null) {
             if (serviceResponse instanceof ErrorMessageInfo) {
                 this.listener.onServiceFailed((ErrorMessageInfo) serviceResponse);
