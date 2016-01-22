@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'dreamCard'
             keyPassword 'dream123'
-            storeFile file('D:/projects/dreamCard.jks')
+            storeFile file('../dreamCard.jks')
             storePassword 'dream123'
         }
     }
