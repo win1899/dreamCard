@@ -22,6 +22,7 @@ import com.dreamcard.app.components.TransparentProgressDialog;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.ErrorMessageInfo;
+import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.entity.UserInfo;
 import com.dreamcard.app.services.LoginAsync;
 import com.dreamcard.app.view.activity.BuyDreamCardActivity;
@@ -29,8 +30,13 @@ import com.dreamcard.app.view.activity.MainActivationFormActivity;
 import com.dreamcard.app.view.activity.NavDrawerActivity;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
+import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.UpdateManager;
+
 
 public class MainActivity extends Activity implements View.OnClickListener,IServiceListener{
+
+    private static final String APP_ID = "36bf383e50c742b4b3ca7a48bd270b23";
 
     private EditText txtUsername;
     private EditText txtPassword;
@@ -57,6 +63,22 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
             txtUsername.setText(bean.getEmail());
             txtPassword.setText(bean.getPassword());
         }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        UpdateManager.unregister();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkForCrashes();
+    }
+
+    private void checkForCrashes() {
+        CrashManager.register(this, APP_ID);
     }
 
     private void buildUI() {

@@ -44,8 +44,13 @@ import com.dreamcard.app.view.fragments.StoresListFragment;
 import com.dreamcard.app.view.fragments.SubcategoryFragment;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
 
+import net.hockeyapp.android.CrashManager;
+import net.hockeyapp.android.UpdateManager;
+
 public class NavDrawerActivity extends FragmentActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,View.OnClickListener,OnFragmentInteractionListener {
+
+    private static final String APP_ID = "36bf383e50c742b4b3ca7a48bd270b23";
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -376,9 +381,21 @@ public class NavDrawerActivity extends FragmentActivity
     @Override
     public void onResume() {
         super.onResume();
+        checkForCrashes();
+
         leftNavDrawerFragment.setDrawerMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        UpdateManager.unregister();
+    }
+
+    private void checkForCrashes() {
+        CrashManager.register(this, APP_ID);
+    }
     @Override
     public void doAction(Object b, String fragment) {
         if(fragment.equalsIgnoreCase(Params.FRAGMENT_LATEST_OFFERS)){
