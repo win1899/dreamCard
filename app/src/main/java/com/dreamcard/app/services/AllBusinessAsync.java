@@ -12,6 +12,7 @@ import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.utils.SystemOperation;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
 import org.json.JSONArray;
@@ -221,7 +222,7 @@ public class AllBusinessAsync extends AbstractAsyncTask<Object, Void, Object> {
             PropertyInfo propInfo=new PropertyInfo();
             propInfo.name=bean.getName();
             propInfo.type=bean.getType();
-            propInfo.setValue(bean.getValue());
+            propInfo.setValue(Utils.toEnUs(bean.getValue()));
             request.addProperty(propInfo);
         }
         return request;

@@ -12,6 +12,7 @@ import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.entity.UserInfo;
 import com.dreamcard.app.utils.SystemOperation;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
 import org.json.JSONException;
@@ -177,7 +178,7 @@ public class LikeOfferBusinessAsyncTask extends AbstractAsyncTask<Object, Void, 
             PropertyInfo propInfo=new PropertyInfo();
             propInfo.name=bean.getName();
             propInfo.type=bean.getType();
-            propInfo.setValue(bean.getValue());
+            propInfo.setValue(Utils.toEnUs(bean.getValue()));
             request.addProperty(propInfo);
         }
         return request;

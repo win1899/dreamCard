@@ -11,6 +11,7 @@ import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.utils.SystemOperation;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
 import org.ksoap2.SoapEnvelope;
@@ -186,7 +187,7 @@ public class AddBusinessCommentAsync extends AbstractAsyncTask<Object, Void, Obj
             PropertyInfo propInfo=new PropertyInfo();
             propInfo.name=bean.getName();
             propInfo.type=bean.getType();
-            propInfo.setValue(bean.getValue());
+            propInfo.setValue(Utils.toEnUs(bean.getValue()));
             request.addProperty(propInfo);
         }
         return request;

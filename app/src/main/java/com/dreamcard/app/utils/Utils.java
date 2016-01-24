@@ -11,6 +11,9 @@ import com.android.volley.toolbox.ImageLoader;
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
 
+import org.ksoap2.serialization.PropertyInfo;
+import org.ksoap2.serialization.SoapObject;
+
 /**
  * Created by WIN on 12/19/2015.
  */
@@ -58,5 +61,34 @@ public class Utils {
 
     public static int dpToPx(int dp, DisplayMetrics displayMetrics) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, displayMetrics);
+    }
+
+    public static SoapObject fixLocale(SoapObject request) {
+        SoapObject newRequest = new SoapObject(request.getNamespace(), request.getName());
+
+        for (int i = 0; i < request.getPropertyCount(); i++) {
+            PropertyInfo info = (PropertyInfo) request.getProperty(i);
+            PropertyInfo propertyInfo = new PropertyInfo();
+            propertyInfo.setName(info.getName());
+            propertyInfo.setType(info.getType());
+            propertyInfo.setValue(toEnUs(info.getValue().toString()));
+
+            newRequest.addProperty(propertyInfo);
+        }
+
+        return newRequest;
+    }
+
+    public static Object toEnUs(Object obj) {
+        if (obj == null) {
+            return null;
+        }
+        try {
+            String val = obj.toString();
+            return val.replaceAll("١", "1").replaceAll("٢", "2").replaceAll("٣", "3").replaceAll("٤", "4").replaceAll("٥", "5").replaceAll("٦", "6").replaceAll("٧", "7").replaceAll("٨", "8").replaceAll("٩", "9").replaceAll("٠", "0");
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 }
