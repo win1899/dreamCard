@@ -253,6 +253,26 @@ public class ServicesConstants {
         bean.setValue(info.getFullName());
         list.add(bean);
 
+        if (info.getFullName() != null) {
+            String[] nameParts = info.getFullName().split(" ");
+            bean = new ServiceRequest();
+            bean.setName("FirstName");
+            bean.setType(PropertyInfo.STRING_CLASS);
+            bean.setValue(nameParts[0]);
+            list.add(bean);
+            if (nameParts.length > 1) {
+                bean = new ServiceRequest();
+                bean.setName("LastName");
+                bean.setType(PropertyInfo.STRING_CLASS);
+
+                String lastName = "";
+                for (int i = 1; i < nameParts.length; i++) {
+                    lastName += nameParts[i] + " ";
+                }
+                bean.setValue(lastName);
+                list.add(bean);
+            }
+        }
 
         bean = new ServiceRequest();
         bean.setName("Email");
