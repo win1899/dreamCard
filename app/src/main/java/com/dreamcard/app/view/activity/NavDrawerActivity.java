@@ -522,7 +522,7 @@ public class NavDrawerActivity extends FragmentActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
+            if (resultCode == RESULT_OK || resultCode == Params.NAVIGATE) {
                 if(data != null) {
                     final LocationInfo location = data.getParcelableExtra("location");
                     currentFragment = R.id.btn_location;
