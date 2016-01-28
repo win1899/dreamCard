@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'dreamCard'
             keyPassword 'dream123'
-            storeFile file('../dreamCard.jks')
+            storeFile file('../app/dreamCard.jks')
             storePassword 'dream123'
         }
     }
@@ -14,8 +14,8 @@ android {
     defaultConfig {
         minSdkVersion 17
         targetSdkVersion 19
-        versionCode 10
-        versionName '1.5'
+        versionCode 11
+        versionName '1.6'
     }
     buildTypes {
         release {
