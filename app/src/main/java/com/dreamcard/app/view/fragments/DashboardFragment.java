@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.drawable.GradientDrawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -152,8 +153,13 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onDetach() {
         super.onDetach();
-        totalSavingAsync.cancel(true);
-        consumerDiscountAsyncTask.cancel(true);
+        if (totalSavingAsync != null && totalSavingAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            totalSavingAsync.cancel(true);
+        }
+        if (consumerDiscountAsyncTask != null && consumerDiscountAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
+            consumerDiscountAsyncTask.cancel(true);
+        }
+
         mListener = null;
     }
 
