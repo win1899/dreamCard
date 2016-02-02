@@ -49,14 +49,26 @@ public class Utils {
             maxHeight = dpToPx(maxHeightDp, context.getResources().getDisplayMetrics());
         }
 
-        ImageLoader loader = CustomVolleyRequestQueue.getInstance(context).getImageLoader();
-        loader.get(url, ImageLoader.getImageListener(imageView, R.drawable.error_loading_photo, R.drawable.error_loading_photo),
-                maxWidth, maxHeight, ImageView.ScaleType.CENTER_INSIDE);
+        try {
+            ImageLoader loader = CustomVolleyRequestQueue.getInstance(context).getImageLoader();
+            loader.get(url, ImageLoader.getImageListener(imageView, R.drawable.error_loading_photo, R.drawable.error_loading_photo),
+                    maxWidth, maxHeight, ImageView.ScaleType.CENTER_INSIDE);
+        } catch (OutOfMemoryError e) {
+
+        } catch (Exception e) {
+
+        }
     }
 
     public static void loadImage(Context context, String url, ImageView imageView) {
-        ImageLoader loader = CustomVolleyRequestQueue.getInstance(context).getImageLoader();
-        loader.get(url, ImageLoader.getImageListener(imageView, R.drawable.error_loading_photo, R.drawable.error_loading_photo));
+        try {
+            ImageLoader loader = CustomVolleyRequestQueue.getInstance(context).getImageLoader();
+            loader.get(url, ImageLoader.getImageListener(imageView, R.drawable.error_loading_photo, R.drawable.error_loading_photo));
+        } catch (OutOfMemoryError e) {
+
+        } catch (Exception e) {
+
+        }
     }
 
     public static int dpToPx(int dp, DisplayMetrics displayMetrics) {
