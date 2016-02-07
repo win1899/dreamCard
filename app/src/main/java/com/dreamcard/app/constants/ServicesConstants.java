@@ -539,11 +539,13 @@ public class ServicesConstants {
         ArrayList<ServiceRequest> list=new ArrayList<ServiceRequest>();
 
         ServiceRequest bean = new ServiceRequest();
+
+
+        bean = new ServiceRequest();
         bean.setName("CardNumber");
         bean.setType(PropertyInfo.STRING_CLASS);
         bean.setValue(info.getCardNumber());
         list.add(bean);
-
 
         bean = new ServiceRequest();
         bean.setName("FullName");
@@ -608,7 +610,7 @@ public class ServicesConstants {
             bean = new ServiceRequest();
             bean.setName(BIRTHDAY);
             bean.setType(PropertyInfo.STRING_CLASS);
-            bean.setValue(newDate);
+            bean.setValue(""+newDate);
             list.add(bean);
         } catch (ParseException e) {
             e.printStackTrace();
@@ -626,22 +628,34 @@ public class ServicesConstants {
         if(info.getId()!=null){
             bean = new ServiceRequest();
             bean.setName("consumerID");
-            bean.setType(PropertyInfo.STRING_CLASS);
+            bean.setType(PropertyInfo.INTEGER_CLASS);
             bean.setValue(Integer.parseInt(info.getId()));
             list.add(bean);
         }
 
         bean = new ServiceRequest();
-        bean.setName("Job");
+        bean.setName("workField");
         bean.setType(PropertyInfo.STRING_CLASS);
         bean.setValue(info.getWork());
         list.add(bean);
 
         bean = new ServiceRequest();
         bean.setName("CityId");
-        bean.setType(PropertyInfo.STRING_CLASS);
-        bean.setValue(info.getCity());
-        list.add(bean);
+        bean.setType(PropertyInfo.INTEGER_CLASS);
+        try {
+            bean.setValue(Integer.parseInt(info.getCity()));
+            list.add(bean);
+        } catch (NumberFormatException e) {
+            Log.e(ServicesConstants.class.getName(), "Can't parse CityId");
+        }
+
+        if(info.getCountry()!=null && !info.getCountry().equalsIgnoreCase("null")) {
+            bean = new ServiceRequest();
+            bean.setName("countryId");
+            bean.setType(PropertyInfo.INTEGER_CLASS);
+            bean.setValue(Integer.parseInt(info.getCountry()));
+            list.add(bean);
+        }
 
         bean = new ServiceRequest();
         bean.setName("IdNumber");
@@ -650,18 +664,16 @@ public class ServicesConstants {
         list.add(bean);
 
         bean = new ServiceRequest();
-        bean.setName("countryId");
-        bean.setType(PropertyInfo.STRING_CLASS);
-        bean.setValue(info.getCountry());
-        list.add(bean);
-
-
-        bean = new ServiceRequest();
         bean.setName("Education");
         bean.setType(PropertyInfo.STRING_CLASS);
         bean.setValue(info.getEducation());
         list.add(bean);
 
+        bean = new ServiceRequest();
+        bean.setName("Job");
+        bean.setType(PropertyInfo.STRING_CLASS);
+        bean.setValue(info.getWork());
+        list.add(bean);
 
         return list;
     }
