@@ -560,6 +560,18 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
             }
             cityArray = data;
 
+            String userCity = prefs.getString(Params.USER_INFO_CITY, "");
+            if (userCity != null && !userCity.equalsIgnoreCase("null")) {
+                int position = 0;
+                for (City bean : this.citiesList) {
+                    if (bean.getId().equalsIgnoreCase(userCity)) {
+                        selectedCity = bean;
+                        break;
+                    }
+                    position++;
+                }
+                txtCity.setText(selectedCity.getName());
+            }
 //            ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item
 //                    , data);
 //            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
