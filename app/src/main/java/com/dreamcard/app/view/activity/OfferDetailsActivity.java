@@ -380,9 +380,9 @@ public class OfferDetailsActivity extends Activity
 
             int result =  (int)(diff / (24 * 60 * 60 * 1000));
             if (result > 0) {
-                txtOfferPeriod.setText(" باقي " + result + " يوم على انتهاء الخصومات");
+                txtOfferPeriod.setText(" باقي " + result + "يوم على انتهاء العرض ");
             }else{
-                txtOfferPeriod.setText(" انتهت فترة الخصومات ");
+                txtOfferPeriod.setText(" انتهت فترة العرض ");
             }
         }
         catch (Exception e) {
