@@ -1,15 +1,20 @@
 package com.dreamcard.app.view.activity;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -22,7 +27,9 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dreamcard.app.MainActivity;
 import com.dreamcard.app.R;
@@ -32,6 +39,8 @@ import com.dreamcard.app.entity.Categories;
 import com.dreamcard.app.entity.LocationInfo;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.Stores;
+import com.dreamcard.app.gcm.RegistrationIntentService;
+import com.dreamcard.app.utils.PreferencesGCM;
 import com.dreamcard.app.view.fragments.AboutUsFragment;
 import com.dreamcard.app.view.fragments.CategoriesListFragment;
 import com.dreamcard.app.view.fragments.DashboardFragment;
@@ -43,6 +52,8 @@ import com.dreamcard.app.view.fragments.LocationFragment;
 import com.dreamcard.app.view.fragments.StoresListFragment;
 import com.dreamcard.app.view.fragments.SubcategoryFragment;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
@@ -51,6 +62,9 @@ public class NavDrawerActivity extends FragmentActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,View.OnClickListener,OnFragmentInteractionListener {
 
     private static final String APP_ID = "36bf383e50c742b4b3ca7a48bd270b23";
+
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
+    private static final String TAG = NavDrawerActivity.class.getName();
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -77,6 +91,8 @@ public class NavDrawerActivity extends FragmentActivity
     private Button btnCategories;
     private Button btnLatestOffers;
     private Button btnLocations;
+    private BroadcastReceiver mRegistrationBroadcastReceiver;
+    private ProgressBar mRegistrationProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -169,6 +185,27 @@ public class NavDrawerActivity extends FragmentActivity
         }
         currentFragment=0;
 //        onNavigationDrawerItemSelected(0);
+
+        mRegistrationBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                SharedPreferences sharedPreferences =
+                        PreferenceManager.getDefaultSharedPreferences(context);
+                boolean sentToken = sharedPreferences
+                        .getBoolean(PreferencesGCM.SENT_TOKEN_TO_SERVER, false);
+                if (sentToken) {
+                    Toast.makeText(NavDrawerActivity.this, "Token sent", Toast.LENGTH_LONG);
+                } else {
+                    Toast.makeText(NavDrawerActivity.this, "Error !!!!!", Toast.LENGTH_LONG);
+                }
+            }
+        };
+
+        if (checkPlayServices()) {
+            // Start IntentService to register this application with GCM.
+            Intent intent = new Intent(this, RegistrationIntentService.class);
+            startService(intent);
+        }
     }
 
     private void loadIcons() {
@@ -384,13 +421,16 @@ public class NavDrawerActivity extends FragmentActivity
         checkForCrashes();
 
         leftNavDrawerFragment.setDrawerMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        LocalBroadcastManager.getInstance(this).registerReceiver(mRegistrationBroadcastReceiver,
+                new IntentFilter(PreferencesGCM.REGISTRATION_COMPLETE));
     }
 
 
     @Override
     protected void onPause() {
-        super.onPause();
+        LocalBroadcastManager.getInstance(this).unregisterReceiver(mRegistrationBroadcastReceiver);
         UpdateManager.unregister();
+        super.onPause();
     }
 
     private void checkForCrashes() {
@@ -650,4 +690,19 @@ public class NavDrawerActivity extends FragmentActivity
         }
     }
 
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                Log.i(TAG, "This device is not supported.");
+                finish();
+            }
+            return false;
+        }
+        return true;
+    }
 }
