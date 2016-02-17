@@ -81,6 +81,8 @@ public class NavDrawerActivity extends FragmentActivity
     private Button btnCategories;
     private Button btnLatestOffers;
     private Button btnLocations;
+    private TextView txtStoresBadge;
+    private TextView txtOffersBadge;
 
     private void increaseBadge (){
         AsyncTask<Void, Void, Void> async = new AsyncTask<Void, Void, Void>() {
@@ -162,6 +164,8 @@ public class NavDrawerActivity extends FragmentActivity
         btnLatestOffers=(Button)findViewById(R.id.btn_browse);
         btnLocations=(Button)findViewById(R.id.btn_location);
         btnStores=(Button)findViewById(R.id.btn_store);
+        txtStoresBadge = (TextView)findViewById(R.id.txt_store_badge);
+        txtOffersBadge = (TextView)findViewById(R.id.txt_offers_badge);
 
         btnCategories.setOnClickListener(this);
         btnLatestOffers.setOnClickListener(this);
@@ -532,6 +536,7 @@ public class NavDrawerActivity extends FragmentActivity
                 onNavigationDrawerItemSelected(2);
             }
         }else if(view.getId()==R.id.btn_browse) {
+            txtOffersBadge.setVisibility(View.GONE);
             if(currentFragment!=R.id.btn_browse) {
                 currentFragment = R.id.btn_browse;
                 onNavigationDrawerItemSelected(1);
@@ -542,6 +547,7 @@ public class NavDrawerActivity extends FragmentActivity
                 onNavigationDrawerItemSelected(4);
             }
         }else if(view.getId()==R.id.btn_store){
+            txtStoresBadge.setVisibility(View.GONE);
             if(currentFragment!=R.id.btn_store) {
                 currentFragment = R.id.btn_store;
                 onNavigationDrawerItemSelected(3);
