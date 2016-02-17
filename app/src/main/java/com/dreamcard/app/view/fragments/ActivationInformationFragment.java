@@ -335,6 +335,12 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
                 citiesArray[index] = bean.getName();
                 index++;
             }
+
+            if (list.size() > 0 && (selectedCity == null || selectedCity.isEmpty())) {
+                cityIndex = 0;
+                selectedCity = list.get(0).getId();
+                txtCity.setText(list.get(0).getName());
+            }
         }else if(processType==Params.SERVICE_PROCESS_2){
             ArrayList<City> list= (ArrayList<City>) b;
             this.countriesList=list;
