@@ -1,9 +1,13 @@
 package com.dreamcard.app.view.activity;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -78,10 +82,45 @@ public class NavDrawerActivity extends FragmentActivity
     private Button btnLatestOffers;
     private Button btnLocations;
 
+    private void increaseBadge (){
+        AsyncTask<Void, Void, Void> async = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+
+                try {
+                    ContentResolver localContentResolver = getContentResolver();
+                    Uri localUri = Uri.parse("content://com.sec.badge/apps");
+                    ContentValues localContentValues = new ContentValues();
+                    localContentValues.put("package", "com.dreamcard.app");
+                    localContentValues.put("class", "com.dreamcard.app.view.activity.SplashActivity");
+                    localContentValues.put("badgecount", Integer.valueOf(5));
+                    String str = "package=? AND class=?";
+                    String[] arrayOfString = new String[2];
+                    arrayOfString[0] = "com.dreamcard.app";
+                    arrayOfString[1] = "com.dreamcard.app.view.activity.SplashActivity";
+
+                    int update = localContentResolver.update(localUri, localContentValues, str, arrayOfString);
+
+                    if (update == 0) {
+                        localContentResolver.insert(localUri, localContentValues);
+                    }
+
+                } catch (IllegalArgumentException localIllegalArgumentException) {
+                    Log.e("CHECK", "Samsung1F : " + localIllegalArgumentException.getLocalizedMessage());
+                } catch (Exception localException) {
+                    Log.e("CHECK", "Samsung : " + localException.getLocalizedMessage());
+                }
+                return null;
+            }
+        };
+        async.execute();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nav_drawer_actiity);
+        increaseBadge();
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
