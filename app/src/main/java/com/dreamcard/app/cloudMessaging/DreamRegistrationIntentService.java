@@ -1,4 +1,4 @@
-package com.dreamcard.app.gcm;
+package com.dreamcard.app.cloudMessaging;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -18,12 +18,12 @@ import java.io.IOException;
 /**
  * Created by WIN on 2/16/2016.
  */
-public class RegistrationIntentService extends IntentService {
+public class DreamRegistrationIntentService extends IntentService {
 
-    private static final String TAG = "RegIntentService";
+    private static final String TAG = DreamRegistrationIntentService.class.getName();
     private static final String[] TOPICS = {"global"};
 
-    public RegistrationIntentService() {
+    public DreamRegistrationIntentService() {
         super(TAG);
     }
 
@@ -53,7 +53,6 @@ public class RegistrationIntentService extends IntentService {
             // sent to your server. If the boolean is false, send the token to your server,
             // otherwise your server should have already received the token.
             sharedPreferences.edit().putBoolean(PreferencesGCM.SENT_TOKEN_TO_SERVER, true).apply();
-            // [END register_for_gcm]
         } catch (Exception e) {
             Log.d(TAG, "Failed to complete token refresh", e);
             // If an exception happens while fetching the new token or updating our registration data

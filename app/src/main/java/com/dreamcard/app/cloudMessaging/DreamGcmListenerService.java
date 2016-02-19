@@ -1,4 +1,4 @@
-package com.dreamcard.app.gcm;
+package com.dreamcard.app.cloudMessaging;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -11,6 +11,9 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.dreamcard.app.MainActivity;
+import com.dreamcard.app.R;
+import com.dreamcard.app.view.activity.NavDrawerActivity;
+import com.dreamcard.app.view.activity.SplashActivity;
 import com.google.android.gms.gcm.GcmListenerService;
 
 /**
@@ -21,6 +24,8 @@ public class DreamGcmListenerService extends GcmListenerService {
 
     private static final String TAG = "MyGcmListenerService";
 
+    private static final int NOTIFICATION_ID = 18887721;
+    private static final int REQUEST_ID = 5432;
     /**
      * Called when message is received.
      *
@@ -60,15 +65,15 @@ public class DreamGcmListenerService extends GcmListenerService {
      * @param message GCM message received.
      */
     private void sendNotification(String message) {
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, SplashActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, REQUEST_ID, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                //.setSmallIcon(R.drawable.ic_stat_ic_notification)
-                .setContentTitle("GCM Message")
+                .setSmallIcon(R.drawable.dream_card_app_small)
+                .setContentTitle("Dream Card")
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
@@ -77,7 +82,7 @@ public class DreamGcmListenerService extends GcmListenerService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build());
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
     }
 
 }

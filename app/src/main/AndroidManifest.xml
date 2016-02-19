@@ -43,14 +43,14 @@
             </intent-filter>
         </receiver>
         <service
-            android:name=".gcm.DreamGcmListenerService"
+            android:name=".cloudMessaging.DreamGcmListenerService"
             android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
             </intent-filter>
         </service>
         <service
-            android:name=".gcm.DreamInstanceIDListenerService"
+            android:name=".cloudMessaging.DreamInstanceIDListenerService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.android.gms.iid.InstanceID" />
@@ -58,7 +58,7 @@
         </service>
 
         <service
-            android:name="gcm.RegistrationIntentService"
+            android:name=".cloudMessaging.DreamRegistrationIntentService"
             android:exported="false">
         </service>
 

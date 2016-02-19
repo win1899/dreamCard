@@ -39,7 +39,7 @@ import com.dreamcard.app.entity.Categories;
 import com.dreamcard.app.entity.LocationInfo;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.Stores;
-import com.dreamcard.app.gcm.RegistrationIntentService;
+import com.dreamcard.app.cloudMessaging.DreamRegistrationIntentService;
 import com.dreamcard.app.utils.PreferencesGCM;
 import com.dreamcard.app.view.fragments.AboutUsFragment;
 import com.dreamcard.app.view.fragments.CategoriesListFragment;
@@ -203,7 +203,7 @@ public class NavDrawerActivity extends FragmentActivity
 
         if (checkPlayServices()) {
             // Start IntentService to register this application with GCM.
-            Intent intent = new Intent(this, RegistrationIntentService.class);
+            Intent intent = new Intent(this, DreamRegistrationIntentService.class);
             startService(intent);
         }
     }
