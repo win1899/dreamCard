@@ -27,40 +27,24 @@
         android:icon="@drawable/dream_card_app"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
 
-        <activity android:name="net.hockeyapp.android.UpdateActivity" />
+        <activity
+            android:name=".view.activity.SplashActivity"
+            android:label="@string/app_name"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
-        <receiver
-            android:name="com.google.android.gms.gcm.GcmReceiver"
-            android:exported="true"
-            android:permission="com.google.android.c2dm.permission.SEND" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-                <category android:name="com.dreamcard.app" />
-            </intent-filter>
-        </receiver>
-        <service
-            android:name=".cloudMessaging.DreamGcmListenerService"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
-            </intent-filter>
-        </service>
-        <service
-            android:name=".cloudMessaging.DreamInstanceIDListenerService"
-            android:exported="false">
-            <intent-filter>
-                <action android:name="com.google.android.gms.iid.InstanceID" />
-            </intent-filter>
-        </service>
-
-        <service
-            android:name=".cloudMessaging.DreamRegistrationIntentService"
-            android:exported="false">
-        </service>
+        <activity
+            android:name=".view.activity.NavDrawerActivity"
+            android:label="@string/title_activity_nav_drawer_actiity"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
 
         <activity
             android:name=".MainActivity"
@@ -88,6 +72,14 @@
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
+            android:name=".view.activity.ReviewStore"
+            android:label="@string/title_activity_review_store"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+
+        <activity
             android:name=".view.activity.OfferDetailsActivity"
             android:label="@string/title_activity_offer_details"
             android:screenOrientation="portrait"
@@ -110,18 +102,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
-        <activity
-            android:name=".view.activity.SplashActivity"
-            android:label="@string/app_name"
-            android:noHistory="true"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.NoTitleBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
         <activity
             android:name=".view.activity.SettingActivity"
             android:label="@string/title_activity_setting"
@@ -160,16 +141,48 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
-        <activity
-            android:name=".view.activity.NavDrawerActivity"
-            android:label="@string/title_activity_nav_drawer_actiity"
-            android:theme="@android:style/Theme.NoTitleBar" >
-        </activity>
+
         <activity
             android:name=".view.activity.AddCommentActivity"
             android:label="@string/title_activity_add_comment"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
+
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity android:name="net.hockeyapp.android.UpdateActivity" />
+
+        <receiver
+            android:name="com.google.android.gms.gcm.GcmReceiver"
+            android:exported="true"
+            android:permission="com.google.android.c2dm.permission.SEND" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+                <category android:name="com.dreamcard.app" />
+            </intent-filter>
+        </receiver>
+        <service
+            android:name=".cloudMessaging.DreamGcmListenerService"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".cloudMessaging.DreamInstanceIDListenerService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.android.gms.iid.InstanceID" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".cloudMessaging.DreamRegistrationIntentService"
+            android:exported="false">
+        </service>
+
     </application>
 
 </manifest>

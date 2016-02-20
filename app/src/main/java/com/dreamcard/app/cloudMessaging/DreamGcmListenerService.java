@@ -13,6 +13,7 @@ import android.util.Log;
 import com.dreamcard.app.MainActivity;
 import com.dreamcard.app.R;
 import com.dreamcard.app.view.activity.NavDrawerActivity;
+import com.dreamcard.app.view.activity.ReviewStore;
 import com.dreamcard.app.view.activity.SplashActivity;
 import com.google.android.gms.gcm.GcmListenerService;
 
@@ -65,8 +66,9 @@ public class DreamGcmListenerService extends GcmListenerService {
      * @param message GCM message received.
      */
     private void sendNotification(String message) {
-        Intent intent = new Intent(this, SplashActivity.class);
+        Intent intent = new Intent(this, ReviewStore.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        intent.putExtra(ReviewStore.BUSINESS_ID_EXTRA, "2130");
         PendingIntent pendingIntent = PendingIntent.getActivity(this, REQUEST_ID, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 

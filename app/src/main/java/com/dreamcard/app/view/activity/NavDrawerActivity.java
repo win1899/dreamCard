@@ -92,7 +92,6 @@ public class NavDrawerActivity extends FragmentActivity
     private Button btnLatestOffers;
     private Button btnLocations;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
-    private ProgressBar mRegistrationProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

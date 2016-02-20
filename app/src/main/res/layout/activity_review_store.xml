@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#dddddd"
+            android:isScrollContainer="false">
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_alignParentTop="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/button_login"
+                android:id="@+id/header_pnl">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Store Ratings and Reviews"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    android:textSize="20sp"
+                    android:layout_margin="10dp"
+                    android:layout_below="@+id/img_menu_logo"
+                    android:layout_centerHorizontal="true"/>
+
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="#ffffff"
+            android:layout_below="@+id/header"
+            android:id="@+id/thanks_text_layout">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/review_store_thanks"
+                android:textColor="#222222"
+                android:textSize="20sp"
+                android:layout_margin="20dp"
+                android:id="@+id/thanks_text"/>
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_marginTop="10dp"
+            android:background="#ffffff"
+            android:layout_below="@+id/thanks_text_layout"
+            android:id="@+id/store_thanks_layout">
+
+                <ImageView
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:id="@+id/review_store_logo"
+                    android:src="@drawable/offer_item_bg"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginLeft="20dp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:id="@+id/review_store_name"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:textColor="#222222"
+                    android:layout_alignTop="@+id/review_store_logo"
+                    android:layout_toEndOf="@+id/review_store_logo"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="5dp" />
+
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:singleLine="true"
+                    android:id="@+id/review_store_address"
+                    android:textColor="#444444"
+                    android:layout_below="@+id/review_store_name"
+                    android:textSize="14sp"
+                    android:layout_marginTop="2dp"
+                    android:layout_alignStart="@+id/review_store_name" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/imageView9"
+                    android:src="@drawable/map_store_phone"
+                    android:layout_alignBottom="@+id/review_store_logo"
+                    android:layout_alignStart="@+id/review_store_address" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="New Text"
+                    android:id="@+id/review_store_phone_num"
+                    android:textColor="#444444"
+                    android:textSize="14sp"
+                    android:layout_marginLeft="3dp"
+                    android:layout_alignBottom="@+id/imageView9"
+                    android:layout_marginBottom="5dp"
+                    android:layout_toEndOf="@+id/imageView9" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="#ffffff"
+            android:layout_below="@+id/store_thanks_layout"
+            android:id="@+id/rating_pnl"
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Please Rate Our service"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="20dp"
+                android:textColor="#222222"
+                android:id="@+id/rate_msg_text"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rating"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="20dp"
+                android:textSize="18sp"
+                android:textColor="#999999"
+                android:layout_below="@+id/rate_msg_text"
+                android:id="@+id/rate_text"/>
+            <RatingBar
+                android:progressDrawable="@drawable/stars_rating_review"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/review_ratingBar"
+                android:layout_below="@+id/rate_text"
+                android:numStars="5"
+                android:stepSize="1.0"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="20dp"
+                android:layout_alignParentStart="true"
+                />
+        </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="#ffffff"
+        android:layout_below="@+id/rating_pnl"
+        android:id="@+id/review_pnl"
+        >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Give us a nice review"
+                android:layout_marginRight="5dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="20dp"
+                android:textSize="20sp"
+                android:textColor="#999999"
+                android:id="@+id/review_us_text"/>
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:singleLine="false"
+                android:gravity="top"
+                android:layout_below="@+id/review_us_text"
+                android:layout_marginRight="20dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                android:layout_marginLeft="20dp"
+                android:background="@drawable/edit_text_border"
+                android:id="@+id/review_edit_text"
+                />
+        </RelativeLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@drawable/login_btn_bg"
+            android:layout_below="@+id/review_pnl"
+            android:textColor="#ffffff"
+            android:layout_margin="1dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:id="@+id/finish_review"
+            android:text="Finish"/>
+    </RelativeLayout>
+</ScrollView>
