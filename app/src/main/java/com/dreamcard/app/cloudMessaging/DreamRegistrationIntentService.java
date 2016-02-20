@@ -21,7 +21,9 @@ import java.io.IOException;
 public class DreamRegistrationIntentService extends IntentService {
 
     private static final String TAG = DreamRegistrationIntentService.class.getName();
-    private static final String[] TOPICS = {"global"};
+
+    private static final String[] TOPICS = {PreferencesGCM.GLOBAL_TOPIC, PreferencesGCM.OFFER_TOPIC,
+                                            PreferencesGCM.STORE_TOPIC, PreferencesGCM.PURCHASE_TOPIC};
 
     public DreamRegistrationIntentService() {
         super(TAG);
