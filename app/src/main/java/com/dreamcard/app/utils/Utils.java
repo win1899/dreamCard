@@ -40,7 +40,30 @@ public class Utils {
         }
         return "";
     }
-
+    public static void updateStoreBadge (Activity activity){
+        SharedPreferences prefs = activity.getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
+        int oldStoreBadge = prefs.getInt(Params.STORE_BADGE_COUNT, 0);
+        int newStoreBadge = oldStoreBadge + 1;
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(Params.STORE_BADGE_COUNT,newStoreBadge);
+        editor.commit();
+    }
+    public static int getStoreBadge (Activity activity){
+        SharedPreferences prefs = activity.getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
+        return prefs.getInt(Params.STORE_BADGE_COUNT,0);
+    }
+    public static void updateOffersBadge (Activity activity){
+        SharedPreferences prefs = activity.getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
+        int oldOffersBagde = prefs.getInt(Params.OFFERS_BADGE_COUNT, 0);
+        int newOffersBadge = oldOffersBagde + 1;
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(Params.OFFERS_BADGE_COUNT,newOffersBadge);
+        editor.commit();
+    }
+    public static int getOffersBadge (Activity activity){
+        SharedPreferences prefs = activity.getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
+        return prefs.getInt(Params.OFFERS_BADGE_COUNT,0);
+    }
     public static void loadImage(Context context, String url, ImageView imageView, int maxWidthDp, int maxHeightDp, boolean convert) {
         int maxWidth = maxWidthDp;
         int maxHeight = maxHeightDp;

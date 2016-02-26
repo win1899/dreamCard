@@ -142,7 +142,7 @@
                     android:paddingTop="5dp"/>
 
                 <TextView
-                    android:id="@+id/store_badge_text"
+                    android:id="@+id/txt_store_badge"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignTop="@id/btn_store"
@@ -186,7 +186,7 @@
                         android:text="@string/latest_offers"/>
 
                     <TextView
-                        android:id="@+id/badge_text"
+                        android:id="@+id/txt_offers_badge"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_alignTop="@id/btn_browse"

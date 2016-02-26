@@ -36,6 +36,7 @@ import com.dreamcard.app.entity.Categories;
 import com.dreamcard.app.entity.LocationInfo;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.Stores;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.fragments.AboutUsFragment;
 import com.dreamcard.app.view.fragments.CategoriesListFragment;
 import com.dreamcard.app.view.fragments.DashboardFragment;
@@ -67,7 +68,6 @@ public class NavDrawerActivity extends FragmentActivity
      * Used to store the last screen title. For use in {@link ()}.
      */
     private CharSequence mTitle;
-
     private ImageButton btMenu;
     private ImageButton btnSetting;
     private TextView tvTitle;
@@ -83,6 +83,9 @@ public class NavDrawerActivity extends FragmentActivity
     private Button btnLocations;
     private TextView txtStoresBadge;
     private TextView txtOffersBadge;
+    private int storeNotificationsCount;
+    private int offersNotificationsCount;
+
 
     private void increaseBadge (){
         AsyncTask<Void, Void, Void> async = new AsyncTask<Void, Void, Void>() {
@@ -116,6 +119,16 @@ public class NavDrawerActivity extends FragmentActivity
             }
         };
         async.execute();
+    }
+
+    private void fakeNotificationsGenerator () {
+
+
+            Utils.updateStoreBadge(NavDrawerActivity.this);
+            storeNotificationsCount = Utils.getStoreBadge(NavDrawerActivity.this);
+            txtStoresBadge.setVisibility(View.VISIBLE);
+            txtStoresBadge.setText(storeNotificationsCount);
+
     }
 
     @Override
@@ -531,6 +544,7 @@ public class NavDrawerActivity extends FragmentActivity
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.btn_category) {
+            fakeNotificationsGenerator();
             if(currentFragment!=R.id.btn_category) {
                 currentFragment = R.id.btn_category;
                 onNavigationDrawerItemSelected(2);
