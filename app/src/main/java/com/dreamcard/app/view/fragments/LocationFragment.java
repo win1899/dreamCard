@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -214,7 +215,9 @@ public class LocationFragment extends Fragment implements IServiceListener, View
     @Override
     public void onDetach() {
         super.onDetach();
-        allBusinessAsync.cancel(true);
+        if (allBusinessAsync != null && allBusinessAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            allBusinessAsync.cancel(true);
+        }
         mListener = null;
     }
 

@@ -6,6 +6,7 @@ import com.dreamcard.app.entity.PersonalInfo;
 import com.dreamcard.app.entity.SearchCriteria;
 import com.dreamcard.app.entity.ServiceRequest;
 
+import org.kobjects.util.Strings;
 import org.ksoap2.serialization.PropertyInfo;
 
 import java.text.ParseException;
@@ -342,7 +343,12 @@ public class ServicesConstants {
         bean = new ServiceRequest();
         bean.setName("CityId");
         bean.setType(PropertyInfo.STRING_CLASS);
-        bean.setValue(info.getCity());
+        if (info.getCity() != null && !info.getCity().isEmpty()) {
+            bean.setValue(info.getCity());
+        }
+        else {
+            bean.setValue("7");
+        }
         list.add(bean);
 
         bean = new ServiceRequest();
@@ -553,17 +559,26 @@ public class ServicesConstants {
         bean.setValue(info.getFullName());
         list.add(bean);
 
-        bean = new ServiceRequest();
-        bean.setName("FirstName");
-        bean.setType(PropertyInfo.STRING_CLASS);
-        bean.setValue(info.getFirstName());
-        list.add(bean);
+        if (info.getFullName() != null) {
+            String[] nameParts = info.getFullName().split(" ");
+            bean = new ServiceRequest();
+            bean.setName("FirstName");
+            bean.setType(PropertyInfo.STRING_CLASS);
+            bean.setValue(nameParts[0]);
+            list.add(bean);
+            if (nameParts.length > 1) {
+                bean = new ServiceRequest();
+                bean.setName("LastName");
+                bean.setType(PropertyInfo.STRING_CLASS);
 
-        bean = new ServiceRequest();
-        bean.setName("LastName");
-        bean.setType(PropertyInfo.STRING_CLASS);
-        bean.setValue(info.getLastName());
-        list.add(bean);
+                String lastName = "";
+                for (int i = 1; i < nameParts.length; i++) {
+                    lastName += nameParts[i] + " ";
+                }
+                bean.setValue(lastName);
+                list.add(bean);
+            }
+        }
 
         bean = new ServiceRequest();
         bean.setName("Email");
@@ -632,14 +647,13 @@ public class ServicesConstants {
 
         bean = new ServiceRequest();
         bean.setName("CityId");
-        bean.setType(PropertyInfo.INTEGER_CLASS);
-        try {
-            bean.setValue(Integer.parseInt(info.getCity()));
-            list.add(bean);
-        } catch (NumberFormatException e) {
-            Log.e(ServicesConstants.class.getName(), "Can't parse CityId");
+        bean.setType(PropertyInfo.STRING_CLASS);
+        if (info.getCity() != null && !info.getCity().isEmpty()) {
+            bean.setValue(info.getCity());
         }
-
+        else {
+            bean.setValue("7");
+        }
         if(info.getCountry()!=null && !info.getCountry().equalsIgnoreCase("null")) {
             bean = new ServiceRequest();
             bean.setName("countryId");
