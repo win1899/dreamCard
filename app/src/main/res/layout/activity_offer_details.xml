@@ -302,27 +302,9 @@
                 android:layout_marginTop="25dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginRight="10dp"
-                android:gravity="right"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"/>
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:text="@string/like"-->
-                <!--android:textColor="@android:color/darker_gray"-->
-                <!--android:textSize="20sp"-->
-                <!--android:layout_alignParentLeft="true"-->
-                <!--android:layout_marginLeft="10dp"-->
-                <!--android:id="@+id/txt_like_icon"/>-->
-            <!--<TextView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:textSize="20sp"-->
-                <!--android:textColor="#000000"-->
-                <!--android:text="0"-->
-                <!--android:layout_toRightOf="@+id/txt_like_icon"-->
-                <!--android:layout_marginLeft="10dp"-->
-                <!--android:id="@+id/txt_num_of_likes"/>-->
+                android:layout_marginLeft="10dp"
+                android:gravity="start"
+                android:layout_alignParentStart="true"/>
         </RelativeLayout>
 
         <TextView
@@ -655,70 +637,6 @@
                 </LinearLayout>
             </HorizontalScrollView>
         </RelativeLayout>
-
- <!--   <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical"
-        android:gravity="center_vertical"
-        android:layout_below="@+id/comments_pnl">
-
-
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".25"
-            android:background="@color/location_bg"
-            android:drawableTop="@drawable/main_icon_location"
-            android:textColor="#ffffff"
-            android:text="@string/locations"
-            android:textSize="15sp"
-            android:id="@+id/btn_location"
-            android:paddingTop="10dp"
-            android:paddingBottom="5dp"/>
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".25"
-            android:background="@color/stores_bg"
-            android:drawableTop="@drawable/main_icon_stores"
-            android:textColor="#ffffff"
-            android:text="@string/stores"
-            android:textSize="15sp"
-            android:id="@+id/btn_store"
-            android:paddingTop="10dp"
-            android:paddingBottom="5dp"/>
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".25"
-            android:background="@color/categories_bg"
-            android:drawableTop="@drawable/main_icon_categories"
-            android:textColor="#ffffff"
-            android:text="@string/categories"
-            android:textSize="15sp"
-            android:id="@+id/btn_category"
-            android:paddingTop="10dp"
-            android:paddingBottom="5dp"/>
-
-        <Button
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight=".25"
-            android:background="@color/latest_offer_bg"
-            android:drawableTop="@drawable/main_icon_sales"
-            android:textColor="#ffffff"
-            android:text="@string/latest_offers"
-            android:textSize="15sp"
-            android:id="@+id/btn_browse"
-            android:paddingTop="10dp"
-            android:paddingBottom="5dp"/>
-
-    </LinearLayout>-->
 
     </RelativeLayout>
 
