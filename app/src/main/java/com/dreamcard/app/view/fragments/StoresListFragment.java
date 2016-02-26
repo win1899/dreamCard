@@ -2,6 +2,7 @@ package com.dreamcard.app.view.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -145,7 +146,9 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
     @Override
     public void onDetach() {
         super.onDetach();
-        allBusinessAsync.cancel(true);
+        if (allBusinessAsync != null && allBusinessAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            allBusinessAsync.cancel(true);
+        }
         mListener = null;
     }
 
