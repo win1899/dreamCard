@@ -142,12 +142,13 @@
                     android:paddingTop="5dp"/>
 
                 <TextView
+                    android:visibility="invisible"
                     android:id="@+id/txt_store_badge"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_alignTop="@id/btn_store"
                     android:layout_alignLeft="@id/btn_store"
-                    android:text="20"
+                    android:text=" "
                     android:textColor="#FFF"
                     android:textSize="16sp"
                     android:textStyle="bold"
@@ -186,12 +187,13 @@
                         android:text="@string/latest_offers"/>
 
                     <TextView
+                        android:visibility="invisible"
                         android:id="@+id/txt_offers_badge"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_alignTop="@id/btn_browse"
                         android:layout_alignLeft="@id/btn_browse"
-                        android:text="20"
+                        android:text=" "
                         android:textColor="#FFF"
                         android:textAlignment="center"
                         android:textSize="16sp"
