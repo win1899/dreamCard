@@ -134,4 +134,10 @@ public class Params {
      */
     public static final String QUESTION_EXTRA = "questionExtra";
     public static final String ANSWER_EXTRA = "answerExtra";
+
+    /*
+    Badges
+    */
+    public static final String STORE_BADGE_COUNT = "StoreBadgeCount";
+    public static final String OFFERS_BADGE_COUNT = "OffersBadgeCount";
 }
