@@ -57,6 +57,8 @@ import com.dreamcard.app.view.adapters.StoreOffersGridAdapter;
 import com.dreamcard.app.view.interfaces.AddCommentListener;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class StoreDetailsActivity extends Activity implements View.OnClickListener, IServiceListener, AddCommentListener {
@@ -99,6 +101,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     private Button btnLatest;
     private boolean firstLoad = true;
     private TextView txtAbout;
+    private TextView txtStoreName;
 
     private Stores bean = new Stores();
 
@@ -145,6 +148,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         storeIcon = (ImageView) findViewById(R.id.main_store_icon);
         txtAddress = (TextView) findViewById(R.id.store_address);
         txtAddress.setOnClickListener(this);
+        txtStoreName = (TextView) findViewById(R.id.store_name_details);
         commentsListView.setOnTouchListener(new ListView.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -215,6 +219,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         this.bean = bean;
 
         txtBusinessName.setText(bean.getStoreName());
+        txtStoreName.setText(bean.getStoreName());
         if (bean.getDiscountPrecentage() > 0.0) {
             txtAnnualDiscount.setText(Integer.toString((int)bean.getDiscountPrecentage()) + "%");
             txtAnnualDiscount.setVisibility(View.VISIBLE);

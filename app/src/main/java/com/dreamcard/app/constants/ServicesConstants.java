@@ -27,6 +27,7 @@ public class ServicesConstants {
     public static String WS_METHOD_NAME_ALL_OFFERS= "SelectAllOffers";
     public static String WS_METHOD_NAME_BUSINESS_BY_ID="SelectBusinessByID";
     public static final String WS_METHOD_ALL_BUSINESS="SelectAllBusinesses";
+    public static final String WS_METHOD_ALL_SELLING_STORES="SelectCardSellingStores";
     public static final String WS_METHOD_CATEGORIES="SelectAllCategories";
     public static final String WS_METHOD_TOTAL_SEVING="GetTotalSavings";
     public static final String WS_METHOD_TOTAL_OFFER_LIKES="GetLikesCountForOffer";
