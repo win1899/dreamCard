@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -83,85 +84,93 @@ public class Utils {
         return prefs.getInt(Params.OFFERS_BADGE_COUNT,0);
     }
 
-    public static void updateMainBadge(Activity activity){
+    public static void updateMainBadge(final Activity activity){
 
-        String manufactureStr = Build.MANUFACTURER;
+        AsyncTask<Void,Void,Void> async = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
+                String manufactureStr = Build.MANUFACTURER;
 
-        if (manufactureStr != null) {
+                if (manufactureStr != null) {
 
-            boolean bool2 = manufactureStr.toLowerCase(Locale.US).contains("htc");
-            boolean bool3 = manufactureStr.toLowerCase(Locale.US).contains("sony");
-            boolean bool4 = manufactureStr.toLowerCase(Locale.US).contains("samsung");
+                    boolean bool2 = manufactureStr.toLowerCase(Locale.US).contains("htc");
+                    boolean bool3 = manufactureStr.toLowerCase(Locale.US).contains("sony");
+                    boolean bool4 = manufactureStr.toLowerCase(Locale.US).contains("samsung");
 
-            // Sony Ericssion
-            if (bool3) {
-                try {
-                    Intent intent = new Intent();
-                    intent.setAction("com.sonyericsson.home.action.UPDATE_BADGE");
-                    intent.putExtra("com.sonyericsson.home.intent.extra.badge.ACTIVITY_NAME", "com.dreamcard.app.view.activity.SplashActivity");
-                    intent.putExtra("com.sonyericsson.home.intent.extra.badge.SHOW_MESSAGE", true);
-                    int s = Utils.getStoreBadge(activity);
-                    int o = Utils.getOffersBadge(activity);
-                    int badgeCount = s + o;
-                    intent.putExtra("com.sonyericsson.home.intent.extra.badge.MESSAGE", badgeCount);
-                    intent.putExtra("com.sonyericsson.home.intent.extra.badge.PACKAGE_NAME", "com.dreamcard.app");
+                    // Sony Ericssion
+                    if (bool3) {
+                        try {
+                            Intent intent = new Intent();
+                            intent.setAction("com.sonyericsson.home.action.UPDATE_BADGE");
+                            intent.putExtra("com.sonyericsson.home.intent.extra.badge.ACTIVITY_NAME", "com.dreamcard.app.view.activity.SplashActivity");
+                            intent.putExtra("com.sonyericsson.home.intent.extra.badge.SHOW_MESSAGE", true);
+                            int s = Utils.getStoreBadge(activity);
+                            int o = Utils.getOffersBadge(activity);
+                            int badgeCount = s + o;
+                            intent.putExtra("com.sonyericsson.home.intent.extra.badge.MESSAGE", badgeCount);
+                            intent.putExtra("com.sonyericsson.home.intent.extra.badge.PACKAGE_NAME", "com.dreamcard.app");
 
-                    activity.sendBroadcast(intent);
-                } catch (Exception localException) {
-                    Log.e("CHECK", "Sony : " + localException.getLocalizedMessage());
-                }
-            }
-
-            // HTC
-            if (bool2) {
-                try {
-                    Intent localIntent1 = new Intent("com.htc.launcher.action.UPDATE_SHORTCUT");
-                    localIntent1.putExtra("packagename", "com.dreamcard.app");
-                    int s = Utils.getStoreBadge(activity);
-                    int o = Utils.getOffersBadge(activity);
-                    int badgeCount = s + o;
-                    localIntent1.putExtra("count", badgeCount);
-                    activity.sendBroadcast(localIntent1);
-
-                    Intent localIntent2 = new Intent("com.htc.launcher.action.SET_NOTIFICATION");
-                    ComponentName localComponentName = new ComponentName(activity, "com.dreamcard.app.view.activity.SplashActivity");
-                    localIntent2.putExtra("com.htc.launcher.extra.COMPONENT", localComponentName.flattenToShortString());
-                    localIntent2.putExtra("com.htc.launcher.extra.COUNT", 10);
-                    activity.sendBroadcast(localIntent2);
-                } catch (Exception localException) {
-                    Log.e("CHECK", "HTC : " + localException.getLocalizedMessage());
-                }
-            }
-            if (bool4) {
-                // Samsung
-                try {
-                    ContentResolver localContentResolver = activity.getContentResolver();
-                    Uri localUri = Uri.parse("content://com.sec.badge/apps");
-                    ContentValues localContentValues = new ContentValues();
-                    localContentValues.put("package", "com.dreamcard.app");
-                    localContentValues.put("class", "com.dreamcard.app.view.activity.SplashActivity");
-                    int s = Utils.getStoreBadge(activity);
-                    int o = Utils.getOffersBadge(activity);
-                    int badgeCount = s + o;
-                    localContentValues.put("badgecount", badgeCount);
-                    String str = "package=? AND class=?";
-                    String[] arrayOfString = new String[2];
-                    arrayOfString[0] = "com.dreamcard.appe";
-                    arrayOfString[1] = "com.dreamcard.app.view.activity.SplashActivity";
-
-                    int update = localContentResolver.update(localUri, localContentValues, str, arrayOfString);
-
-                    if (update == 0) {
-                        localContentResolver.insert(localUri, localContentValues);
+                            activity.sendBroadcast(intent);
+                        } catch (Exception localException) {
+                            Log.e("CHECK", "Sony : " + localException.getLocalizedMessage());
+                        }
                     }
 
-                } catch (IllegalArgumentException localIllegalArgumentException) {
-                    Log.e("CHECK", "Samsung1F : " + localIllegalArgumentException.getLocalizedMessage());
-                } catch (Exception localException) {
-                    Log.e("CHECK", "Samsung : " + localException.getLocalizedMessage());
+                    // HTC
+                    if (bool2) {
+                        try {
+                            Intent localIntent1 = new Intent("com.htc.launcher.action.UPDATE_SHORTCUT");
+                            localIntent1.putExtra("packagename", "com.dreamcard.app");
+                            int s = Utils.getStoreBadge(activity);
+                            int o = Utils.getOffersBadge(activity);
+                            int badgeCount = s + o;
+                            localIntent1.putExtra("count", badgeCount);
+                            activity.sendBroadcast(localIntent1);
+
+                            Intent localIntent2 = new Intent("com.htc.launcher.action.SET_NOTIFICATION");
+                            ComponentName localComponentName = new ComponentName(activity, "com.dreamcard.app.view.activity.SplashActivity");
+                            localIntent2.putExtra("com.htc.launcher.extra.COMPONENT", localComponentName.flattenToShortString());
+                            localIntent2.putExtra("com.htc.launcher.extra.COUNT", 10);
+                            activity.sendBroadcast(localIntent2);
+                        } catch (Exception localException) {
+                            Log.e("CHECK", "HTC : " + localException.getLocalizedMessage());
+                        }
+                    }
+                    if (bool4) {
+                        // Samsung
+
+                        try {
+                            ContentResolver localContentResolver = activity.getContentResolver();
+                            Uri localUri = Uri.parse("content://com.sec.badge/apps");
+                            ContentValues localContentValues = new ContentValues();
+                            localContentValues.put("package", "com.dreamcard.app");
+                            localContentValues.put("class", "com.dreamcard.app.view.activity.SplashActivity");
+                            int s = Utils.getStoreBadge(activity);
+                            int o = Utils.getOffersBadge(activity);
+                            int badgeCount = s + o;
+                            localContentValues.put("badgecount", badgeCount);
+                            String str = "package=? AND class=?";
+                            String[] arrayOfString = new String[2];
+                            arrayOfString[0] = "com.dreamcard.appe";
+                            arrayOfString[1] = "com.dreamcard.app.view.activity.SplashActivity";
+
+                            int update = localContentResolver.update(localUri, localContentValues, str, arrayOfString);
+
+                            if (update == 0) {
+                                localContentResolver.insert(localUri, localContentValues);
+                            }
+
+                        } catch (IllegalArgumentException localIllegalArgumentException) {
+                            Log.e("CHECK", "Samsung1F : " + localIllegalArgumentException.getLocalizedMessage());
+                        } catch (Exception localException) {
+                            Log.e("CHECK", "Samsung : " + localException.getLocalizedMessage());
+                        }
+                    }
                 }
+                return null;
             }
-        }
+        };
+        async.execute();
     }
 
     public static void loadImage(Context context, String url, ImageView imageView, int maxWidthDp, int maxHeightDp, boolean convert) {

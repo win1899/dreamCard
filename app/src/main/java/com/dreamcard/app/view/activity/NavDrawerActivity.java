@@ -90,22 +90,41 @@ public class NavDrawerActivity extends FragmentActivity
     private int storeNotificationsCount;
     private int offersNotificationsCount;
 
+    private void updateMainBadge(){
+        AsyncTask<Void,Void,Void> async = new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... voids) {
 
-    private void fakeNotificationsGenerator () {
+                try {
+                    ContentResolver localContentResolver = NavDrawerActivity.this.getContentResolver();
+                    Uri localUri = Uri.parse("content://com.sec.badge/apps");
+                    ContentValues localContentValues = new ContentValues();
+                    localContentValues.put("package", "com.dreamcard.app");
+                    localContentValues.put("class", "com.dreamcard.app.view.activity.SplashActivity");
+                    int s = Utils.getStoreBadge(NavDrawerActivity.this);
+                    int o = Utils.getOffersBadge(NavDrawerActivity.this);
+                    int badgeCount = s + o;
+                    localContentValues.put("badgecount", Integer.valueOf(badgeCount));
+                    String str = "package=? AND class=?";
+                    String[] arrayOfString = new String[2];
+                    arrayOfString[0] = "com.dreamcard.appe";
+                    arrayOfString[1] = "com.dreamcard.app.view.activity.SplashActivity";
 
+                    int update = localContentResolver.update(localUri, localContentValues, str, arrayOfString);
 
-            Utils.updateStoreBadge(NavDrawerActivity.this, 1);
-            storeNotificationsCount = Utils.getStoreBadge(NavDrawerActivity.this);
-            txtStoresBadge.setVisibility(View.VISIBLE);
-            txtStoresBadge.setText("" + storeNotificationsCount);
+                    if (update == 0) {
+                        localContentResolver.insert(localUri, localContentValues);
+                    }
 
-            Utils.updateOffersBadge(NavDrawerActivity.this, 1);
-            offersNotificationsCount = Utils.getOffersBadge(NavDrawerActivity.this);
-            txtOffersBadge.setVisibility(View.VISIBLE);
-            txtOffersBadge.setText("" + offersNotificationsCount);
-
-            Utils.updateMainBadge(NavDrawerActivity.this);
-
+                } catch (IllegalArgumentException localIllegalArgumentException) {
+                    Log.e("CHECK", "Samsung1F : " + localIllegalArgumentException.getLocalizedMessage());
+                } catch (Exception localException) {
+                    Log.e("CHECK", "Samsung : " + localException.getLocalizedMessage());
+                }
+                return null;
+            }
+        };
+        async.execute();
     }
 
     @Override
@@ -529,7 +548,7 @@ public class NavDrawerActivity extends FragmentActivity
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.btn_category) {
-            fakeNotificationsGenerator();
+          //  fakeNotificationsGenerator();
             if(currentFragment!=R.id.btn_category) {
                 currentFragment = R.id.btn_category;
                 onNavigationDrawerItemSelected(2);
@@ -537,7 +556,7 @@ public class NavDrawerActivity extends FragmentActivity
         }else if(view.getId()==R.id.btn_browse) {
             Utils.updateOffersBadge(NavDrawerActivity.this, 0);
             txtOffersBadge.setVisibility(View.GONE);
-            Utils.updateMainBadge(NavDrawerActivity.this);
+            updateMainBadge();
             if(currentFragment!=R.id.btn_browse) {
                 currentFragment = R.id.btn_browse;
                 onNavigationDrawerItemSelected(1);
@@ -550,7 +569,7 @@ public class NavDrawerActivity extends FragmentActivity
         }else if(view.getId()==R.id.btn_store){
             Utils.updateStoreBadge(NavDrawerActivity.this, 0);
             txtStoresBadge.setVisibility(View.GONE);
-            Utils.updateMainBadge(NavDrawerActivity.this);
+            updateMainBadge();
             if(currentFragment!=R.id.btn_store) {
                 currentFragment = R.id.btn_store;
                 onNavigationDrawerItemSelected(3);
