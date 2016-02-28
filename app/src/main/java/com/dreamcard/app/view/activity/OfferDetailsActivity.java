@@ -163,7 +163,6 @@ public class OfferDetailsActivity extends Activity
         txtDescription = (TextView) findViewById(R.id.txt_description);
         txtMobile = (TextView) findViewById(R.id.txt_mobile);
         txtOfferPeriod = (TextView) findViewById(R.id.txt_offer_period_until);
-       // txtOfferValidFrom = (TextView) findViewById(R.id.txt_offer_period);
         txtPhone = (TextView) findViewById(R.id.txt_phone);
         txtNewPrice = (TextView) findViewById(R.id.txt_new_price);
         txtYouSaveLbl = (TextView) findViewById(R.id.txt_you_save_lbl);
@@ -360,15 +359,10 @@ public class OfferDetailsActivity extends Activity
                     c.add(Calendar.DATE, Integer.parseInt(period));
             }
 
-         //    String x = df.format("dd/MM/yyyy", c.getTime()).toString();
-         //   txtOfferPeriod.setText(x);
 
             Date validUntil = new Date(Long.parseLong(bean.getValidFrom().replaceAll(".*?(\\d+).*", "$1")));
             Calendar valid = Calendar.getInstance();
             valid.setTime(validUntil);
-
-          //  String v = df.format("dd/MM/yyyy", valid.getTime()).toString();
-          //  txtOfferValidFrom.setText(v);
 
 
             // Get the represented dates in milliseconds
