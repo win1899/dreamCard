@@ -3,7 +3,6 @@ package com.dreamcard.app.view.activity;
 import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
@@ -12,14 +11,11 @@ import android.widget.TextView;
 
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
-import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.ErrorMessageInfo;
-import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.services.AllBusinessAsync;
-import com.dreamcard.app.services.ContentBySlagAsync;
-import com.dreamcard.app.services.GetInvoiceForOfferAsync;
+import com.dreamcard.app.services.SellingStoresAsync;
 import com.dreamcard.app.view.adapters.SellingAreasAdapter;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
@@ -37,7 +33,7 @@ public class BuyDreamCardActivity extends Activity
     private ProgressBar progressBar;
     private TextView noMatchs;
 
-    private AllBusinessAsync businessAsync;
+    private SellingStoresAsync sellingBusinessAsync;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,8 +45,8 @@ public class BuyDreamCardActivity extends Activity
         progressBar.setVisibility(View.VISIBLE);
         noMatchs = (TextView) findViewById(R.id.buy_dream_no_matches);
 
-        businessAsync = new AllBusinessAsync(this, new ArrayList<ServiceRequest>(), Params.SERVICE_PROCESS_1);
-        businessAsync.execute(this);
+        sellingBusinessAsync = new SellingStoresAsync(this, new ArrayList<ServiceRequest>(), Params.SERVICE_PROCESS_1);
+        sellingBusinessAsync.execute(this);
     }
 
 
@@ -76,8 +72,8 @@ public class BuyDreamCardActivity extends Activity
 
     @Override
     protected void onDestroy() {
-        if (businessAsync != null && businessAsync.getStatus() == AsyncTask.Status.RUNNING) {
-            businessAsync.cancel(true);
+        if (sellingBusinessAsync != null && sellingBusinessAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            sellingBusinessAsync.cancel(true);
         }
         super.onDestroy();
     }

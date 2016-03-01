@@ -6,6 +6,7 @@ import com.dreamcard.app.entity.PersonalInfo;
 import com.dreamcard.app.entity.SearchCriteria;
 import com.dreamcard.app.entity.ServiceRequest;
 
+import org.kobjects.util.Strings;
 import org.ksoap2.serialization.PropertyInfo;
 
 import java.text.ParseException;
@@ -26,6 +27,7 @@ public class ServicesConstants {
     public static String WS_METHOD_NAME_ALL_OFFERS= "SelectAllOffers";
     public static String WS_METHOD_NAME_BUSINESS_BY_ID="SelectBusinessByID";
     public static final String WS_METHOD_ALL_BUSINESS="SelectAllBusinesses";
+    public static final String WS_METHOD_ALL_SELLING_STORES="SelectCardSellingStores";
     public static final String WS_METHOD_CATEGORIES="SelectAllCategories";
     public static final String WS_METHOD_TOTAL_SEVING="GetTotalSavings";
     public static final String WS_METHOD_TOTAL_OFFER_LIKES="GetLikesCountForOffer";
@@ -342,7 +344,12 @@ public class ServicesConstants {
         bean = new ServiceRequest();
         bean.setName("CityId");
         bean.setType(PropertyInfo.STRING_CLASS);
-        bean.setValue(info.getCity());
+        if (info.getCity() != null && !info.getCity().isEmpty()) {
+            bean.setValue(info.getCity());
+        }
+        else {
+            bean.setValue("7");
+        }
         list.add(bean);
 
         bean = new ServiceRequest();
@@ -641,14 +648,13 @@ public class ServicesConstants {
 
         bean = new ServiceRequest();
         bean.setName("CityId");
-        bean.setType(PropertyInfo.INTEGER_CLASS);
-        try {
-            bean.setValue(Integer.parseInt(info.getCity()));
-            list.add(bean);
-        } catch (NumberFormatException e) {
-            Log.e(ServicesConstants.class.getName(), "Can't parse CityId");
+        bean.setType(PropertyInfo.STRING_CLASS);
+        if (info.getCity() != null && !info.getCity().isEmpty()) {
+            bean.setValue(info.getCity());
         }
-
+        else {
+            bean.setValue("7");
+        }
         if(info.getCountry()!=null && !info.getCountry().equalsIgnoreCase("null")) {
             bean = new ServiceRequest();
             bean.setName("countryId");

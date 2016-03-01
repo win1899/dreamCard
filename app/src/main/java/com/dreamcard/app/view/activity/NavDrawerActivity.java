@@ -1,12 +1,18 @@
 package com.dreamcard.app.view.activity;
 
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
@@ -39,6 +45,7 @@ import com.dreamcard.app.entity.Categories;
 import com.dreamcard.app.entity.LocationInfo;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.Stores;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.cloudMessaging.DreamRegistrationIntentService;
 import com.dreamcard.app.utils.PreferencesGCM;
 import com.dreamcard.app.view.fragments.AboutUsFragment;
@@ -57,6 +64,8 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
+
+import java.util.Locale;
 
 public class NavDrawerActivity extends FragmentActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks,View.OnClickListener,OnFragmentInteractionListener {
@@ -77,7 +86,6 @@ public class NavDrawerActivity extends FragmentActivity
      * Used to store the last screen title. For use in {@link ()}.
      */
     private CharSequence mTitle;
-
     private ImageButton btMenu;
     private ImageButton btnSetting;
     private TextView tvTitle;
@@ -91,7 +99,29 @@ public class NavDrawerActivity extends FragmentActivity
     private Button btnCategories;
     private Button btnLatestOffers;
     private Button btnLocations;
+    private TextView txtStoresBadge;
+    private TextView txtOffersBadge;
+    private int storeNotificationsCount;
+    private int offersNotificationsCount;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
+
+
+    private void fakeNotificationsGenerator () {
+
+
+            Utils.updateStoreBadge(NavDrawerActivity.this, 1);
+            storeNotificationsCount = Utils.getStoreBadge(NavDrawerActivity.this);
+            txtStoresBadge.setVisibility(View.VISIBLE);
+            txtStoresBadge.setText("" + storeNotificationsCount);
+
+            Utils.updateOffersBadge(NavDrawerActivity.this, 1);
+            offersNotificationsCount = Utils.getOffersBadge(NavDrawerActivity.this);
+            txtOffersBadge.setVisibility(View.VISIBLE);
+            txtOffersBadge.setText("" + offersNotificationsCount);
+
+            Utils.updateMainBadge(NavDrawerActivity.this);
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +168,18 @@ public class NavDrawerActivity extends FragmentActivity
         btnLatestOffers=(Button)findViewById(R.id.btn_browse);
         btnLocations=(Button)findViewById(R.id.btn_location);
         btnStores=(Button)findViewById(R.id.btn_store);
-
+        txtStoresBadge = (TextView)findViewById(R.id.txt_store_badge);
+        txtOffersBadge = (TextView)findViewById(R.id.txt_offers_badge);
+        storeNotificationsCount = Utils.getStoreBadge(NavDrawerActivity.this);
+        offersNotificationsCount = Utils.getOffersBadge(NavDrawerActivity.this);
+        if (storeNotificationsCount > 0) {
+            txtStoresBadge.setVisibility(View.VISIBLE);
+            txtStoresBadge.setText("" + storeNotificationsCount);
+        }
+        if (offersNotificationsCount > 0) {
+            txtOffersBadge.setVisibility(View.VISIBLE);
+            txtOffersBadge.setText("" + offersNotificationsCount);
+        }
         btnCategories.setOnClickListener(this);
         btnLatestOffers.setOnClickListener(this);
         btnLocations.setOnClickListener(this);
@@ -527,11 +568,15 @@ public class NavDrawerActivity extends FragmentActivity
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.btn_category) {
+            fakeNotificationsGenerator();
             if(currentFragment!=R.id.btn_category) {
                 currentFragment = R.id.btn_category;
                 onNavigationDrawerItemSelected(2);
             }
         }else if(view.getId()==R.id.btn_browse) {
+            Utils.updateOffersBadge(NavDrawerActivity.this, 0);
+            txtOffersBadge.setVisibility(View.GONE);
+            Utils.updateMainBadge(NavDrawerActivity.this);
             if(currentFragment!=R.id.btn_browse) {
                 currentFragment = R.id.btn_browse;
                 onNavigationDrawerItemSelected(1);
@@ -542,6 +587,9 @@ public class NavDrawerActivity extends FragmentActivity
                 onNavigationDrawerItemSelected(4);
             }
         }else if(view.getId()==R.id.btn_store){
+            Utils.updateStoreBadge(NavDrawerActivity.this, 0);
+            txtStoresBadge.setVisibility(View.GONE);
+            Utils.updateMainBadge(NavDrawerActivity.this);
             if(currentFragment!=R.id.btn_store) {
                 currentFragment = R.id.btn_store;
                 onNavigationDrawerItemSelected(3);

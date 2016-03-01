@@ -39,12 +39,16 @@ public class TransparentProgressDialog extends Dialog {
 
     @Override
     public void show() {
-        super.show();
-        RotateAnimation anim = new RotateAnimation(0.0f, 360.0f , Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
-        anim.setInterpolator(new LinearInterpolator());
-        anim.setRepeatCount(Animation.INFINITE);
-        anim.setDuration(3000);
-        iv.setAnimation(anim);
-        iv.startAnimation(anim);
+        try {
+            super.show();
+            RotateAnimation anim = new RotateAnimation(0.0f, 360.0f, Animation.RELATIVE_TO_SELF, .5f, Animation.RELATIVE_TO_SELF, .5f);
+            anim.setInterpolator(new LinearInterpolator());
+            anim.setRepeatCount(Animation.INFINITE);
+            anim.setDuration(3000);
+            iv.setAnimation(anim);
+            iv.startAnimation(anim);
+        } catch (Exception e) {
+
+        }
     }
 }
