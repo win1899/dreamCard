@@ -132,8 +132,8 @@ public class Utils {
                     intent.putExtra("com.sonyericsson.home.intent.extra.badge.SHOW_MESSAGE", true);
                     int storeBadge = Utils.getStoreBadge(context);
                     int offersBadge = Utils.getOffersBadge(context);
-                    int notificationBage = Utils.getNotificationBadge(context);
-                    int badgeCount = storeBadge + offersBadge + notificationBage;
+                    int notificationBadge = Utils.getNotificationBadge(context);
+                    int badgeCount = storeBadge + offersBadge + notificationBadge;
                     intent.putExtra("com.sonyericsson.home.intent.extra.badge.MESSAGE", badgeCount);
                     intent.putExtra("com.sonyericsson.home.intent.extra.badge.PACKAGE_NAME", "com.dreamcard.app");
 
@@ -148,9 +148,10 @@ public class Utils {
                 try {
                     Intent localIntent1 = new Intent("com.htc.launcher.action.UPDATE_SHORTCUT");
                     localIntent1.putExtra("packagename", "com.dreamcard.app");
-                    int s = Utils.getStoreBadge(context);
-                    int o = Utils.getOffersBadge(context);
-                    int badgeCount = s + o;
+                    int storeBadge = Utils.getStoreBadge(context);
+                    int offersBadge = Utils.getOffersBadge(context);
+                    int notificationBadge = Utils.getNotificationBadge(context);
+                    int badgeCount = storeBadge + offersBadge + notificationBadge;
                     localIntent1.putExtra("count", badgeCount);
                     context.sendBroadcast(localIntent1);
 
@@ -171,13 +172,15 @@ public class Utils {
                     ContentValues localContentValues = new ContentValues();
                     localContentValues.put("package", "com.dreamcard.app");
                     localContentValues.put("class", "com.dreamcard.app.view.activity.SplashActivity");
-                    int s = Utils.getStoreBadge(context);
-                    int o = Utils.getOffersBadge(context);
-                    int badgeCount = s + o;
+                    int storeBadge = Utils.getStoreBadge(context);
+                    int offersBadge = Utils.getOffersBadge(context);
+                    int notificationBadge = Utils.getNotificationBadge(context);
+                    int badgeCount = storeBadge + offersBadge + notificationBadge;
+
                     localContentValues.put("badgecount", badgeCount);
                     String str = "package=? AND class=?";
                     String[] arrayOfString = new String[2];
-                    arrayOfString[0] = "com.dreamcard.appe";
+                    arrayOfString[0] = "com.dreamcard.app";
                     arrayOfString[1] = "com.dreamcard.app.view.activity.SplashActivity";
 
                     int update = localContentResolver.update(localUri, localContentValues, str, arrayOfString);
