@@ -57,6 +57,7 @@ public class Params {
     public static final String TYPE="TYPE";
     public static final int MODE_EDIT=1;
     public static final int MODE_ADD=0;
+    public static final String CONSUMER_ID = "ConsumerID";
 
     public static ArrayList<Offers> DISCOUNT_LIST;
 
@@ -140,4 +141,5 @@ public class Params {
     */
     public static final String STORE_BADGE_COUNT = "StoreBadgeCount";
     public static final String OFFERS_BADGE_COUNT = "OffersBadgeCount";
+    public static final String NOTIFICATION_BADGE_COUNT = "NotificationBadgeCount";
 }

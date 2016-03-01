@@ -1,5 +1,6 @@
 package com.dreamcard.app.constants;
 
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.dreamcard.app.entity.PersonalInfo;
@@ -34,6 +35,7 @@ public class ServicesConstants {
     public static final String WS_METHOD_OFFER_COMMENTS="SelectCommentsByOffer";
     public static final String WS_METHOD_OFFER_BY_BUSINESS= "SelectOffersByBusinessId";
     public static final String WS_METHOD_CONSUMER_LOGIN="VerifyConsumerLogin";
+    public static final String WS_METHOD_ADD_GCM_TOKEN="AddGCMConsumerToken";
     public static final String WS_METHOD_LIKE_OFFER="LikeOffer";
     public static final String WS_METHOD_DISLIKE_OFFER="DislikeOffer";
     public static final String WS_METHOD_LATEST_OFFERS="SelectLatestOffers";
@@ -79,6 +81,7 @@ public class ServicesConstants {
     public static final String MOBILE_NUMBER="MobileNumber";
     public static final String CATEGORY_ID="categoryID";
     public static final String COMMENT="Comment";
+
 
     public static ArrayList<ServiceRequest> getTotalSavingRequestList(String id){
         ArrayList<ServiceRequest> list=new ArrayList<ServiceRequest>();
@@ -209,6 +212,7 @@ public class ServicesConstants {
 
         return list;
     }
+
     public static ArrayList<ServiceRequest> getLoginRequestList(String userName,String password){
         ArrayList<ServiceRequest> list=new ArrayList<ServiceRequest>();
 
@@ -227,7 +231,25 @@ public class ServicesConstants {
         return list;
     }
 
-    public static ArrayList<ServiceRequest> getActivationCardRequestList(String cardNum){
+    public static ArrayList<ServiceRequest> getRegisterationList(String token, String consumerId) {
+        ArrayList<ServiceRequest> list=new ArrayList<ServiceRequest>();
+
+        ServiceRequest bean = new ServiceRequest();
+        bean.setName("conusmerId");
+        bean.setType(PropertyInfo.STRING_CLASS);
+        bean.setValue(consumerId);
+        list.add(bean);
+
+        bean = new ServiceRequest();
+        bean.setName("GCMToken");
+        bean.setType(PropertyInfo.STRING_CLASS);
+        bean.setValue(token);
+        list.add(bean);
+
+        return list;
+    }
+
+    public static ArrayList<ServiceRequest> getActivationCardRequestList(String cardNum) {
         ArrayList<ServiceRequest> list=new ArrayList<ServiceRequest>();
 
         ServiceRequest bean = new ServiceRequest();

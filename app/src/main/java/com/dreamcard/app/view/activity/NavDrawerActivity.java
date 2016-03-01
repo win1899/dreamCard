@@ -103,6 +103,7 @@ public class NavDrawerActivity extends FragmentActivity
     private TextView txtOffersBadge;
     private int storeNotificationsCount;
     private int offersNotificationsCount;
+    private int notificationCount;
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
 
@@ -118,9 +119,6 @@ public class NavDrawerActivity extends FragmentActivity
             offersNotificationsCount = Utils.getOffersBadge(NavDrawerActivity.this);
             txtOffersBadge.setVisibility(View.VISIBLE);
             txtOffersBadge.setText("" + offersNotificationsCount);
-
-            Utils.updateMainBadge(NavDrawerActivity.this);
-
     }
 
     @Override
@@ -172,6 +170,8 @@ public class NavDrawerActivity extends FragmentActivity
         txtOffersBadge = (TextView)findViewById(R.id.txt_offers_badge);
         storeNotificationsCount = Utils.getStoreBadge(NavDrawerActivity.this);
         offersNotificationsCount = Utils.getOffersBadge(NavDrawerActivity.this);
+        notificationCount = Utils.getNotificationBadge(NavDrawerActivity.this);
+
         if (storeNotificationsCount > 0) {
             txtStoresBadge.setVisibility(View.VISIBLE);
             txtStoresBadge.setText("" + storeNotificationsCount);
@@ -179,6 +179,9 @@ public class NavDrawerActivity extends FragmentActivity
         if (offersNotificationsCount > 0) {
             txtOffersBadge.setVisibility(View.VISIBLE);
             txtOffersBadge.setText("" + offersNotificationsCount);
+        }
+        if (notificationCount > 0) {
+            //TODO : notification count increase ...
         }
         btnCategories.setOnClickListener(this);
         btnLatestOffers.setOnClickListener(this);
@@ -576,7 +579,6 @@ public class NavDrawerActivity extends FragmentActivity
         }else if(view.getId()==R.id.btn_browse) {
             Utils.updateOffersBadge(NavDrawerActivity.this, 0);
             txtOffersBadge.setVisibility(View.GONE);
-            Utils.updateMainBadge(NavDrawerActivity.this);
             if(currentFragment!=R.id.btn_browse) {
                 currentFragment = R.id.btn_browse;
                 onNavigationDrawerItemSelected(1);
@@ -589,7 +591,6 @@ public class NavDrawerActivity extends FragmentActivity
         }else if(view.getId()==R.id.btn_store){
             Utils.updateStoreBadge(NavDrawerActivity.this, 0);
             txtStoresBadge.setVisibility(View.GONE);
-            Utils.updateMainBadge(NavDrawerActivity.this);
             if(currentFragment!=R.id.btn_store) {
                 currentFragment = R.id.btn_store;
                 onNavigationDrawerItemSelected(3);

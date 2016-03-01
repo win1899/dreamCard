@@ -49,8 +49,9 @@ public class Utils {
         }
         return "";
     }
-    public static void updateStoreBadge (Activity activity, int value){
-        SharedPreferences prefs = activity.getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
+
+    public static void updateStoreBadge (Context context, int value) {
+        SharedPreferences prefs = context.getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
         int oldStoreBadge = prefs.getInt(Params.STORE_BADGE_COUNT, 0);
         int newStoreBadge;
         if (value == 0) {
@@ -61,29 +62,58 @@ public class Utils {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(Params.STORE_BADGE_COUNT,newStoreBadge);
         editor.commit();
+
+        updateMainBadge(context);
     }
-    public static int getStoreBadge (Activity activity){
-        SharedPreferences prefs = activity.getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
-        return prefs.getInt(Params.STORE_BADGE_COUNT,0);
+
+    public static void updateNotificationBadge(Context context, int value) {
+        SharedPreferences prefs = context.getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
+        int oldVal = prefs.getInt(Params.NOTIFICATION_BADGE_COUNT, 0);
+        int newVal;
+        if (value == 0) {
+            newVal = 0;
+        }
+        else {
+            newVal = oldVal + 1;
+        }
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(Params.NOTIFICATION_BADGE_COUNT, newVal);
+        editor.commit();
+        updateMainBadge(context);
+
     }
-    public static void updateOffersBadge (Activity activity, int value){
-        SharedPreferences prefs = activity.getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
+
+    public static void updateOffersBadge (Context context, int value) {
+        SharedPreferences prefs = context.getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
         int oldOffersBagde = prefs.getInt(Params.OFFERS_BADGE_COUNT, 0);
-        int newOffersBadge ;
-        if (value ==0)
+        int newOffersBadge;
+        if (value == 0)
             newOffersBadge = 0;
         else
             newOffersBadge = oldOffersBagde + 1;
         SharedPreferences.Editor editor = prefs.edit();
-        editor.putInt(Params.OFFERS_BADGE_COUNT,newOffersBadge);
+        editor.putInt(Params.OFFERS_BADGE_COUNT, newOffersBadge);
         editor.commit();
+        updateMainBadge(context);
+
     }
-    public static int getOffersBadge (Activity activity){
-        SharedPreferences prefs = activity.getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
+
+    public static int getStoreBadge (Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
+        return prefs.getInt(Params.STORE_BADGE_COUNT,0);
+    }
+
+    public static int getOffersBadge (Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
         return prefs.getInt(Params.OFFERS_BADGE_COUNT,0);
     }
 
-    public static void updateMainBadge(Activity activity){
+    public static int getNotificationBadge(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
+        return prefs.getInt(Params.NOTIFICATION_BADGE_COUNT, 0);
+    }
+
+    private static void updateMainBadge(Context context) {
 
         String manufactureStr = Build.MANUFACTURER;
 
@@ -100,13 +130,14 @@ public class Utils {
                     intent.setAction("com.sonyericsson.home.action.UPDATE_BADGE");
                     intent.putExtra("com.sonyericsson.home.intent.extra.badge.ACTIVITY_NAME", "com.dreamcard.app.view.activity.SplashActivity");
                     intent.putExtra("com.sonyericsson.home.intent.extra.badge.SHOW_MESSAGE", true);
-                    int s = Utils.getStoreBadge(activity);
-                    int o = Utils.getOffersBadge(activity);
-                    int badgeCount = s + o;
+                    int storeBadge = Utils.getStoreBadge(context);
+                    int offersBadge = Utils.getOffersBadge(context);
+                    int notificationBage = Utils.getNotificationBadge(context);
+                    int badgeCount = storeBadge + offersBadge + notificationBage;
                     intent.putExtra("com.sonyericsson.home.intent.extra.badge.MESSAGE", badgeCount);
                     intent.putExtra("com.sonyericsson.home.intent.extra.badge.PACKAGE_NAME", "com.dreamcard.app");
 
-                    activity.sendBroadcast(intent);
+                    context.sendBroadcast(intent);
                 } catch (Exception localException) {
                     Log.e("CHECK", "Sony : " + localException.getLocalizedMessage());
                 }
@@ -117,17 +148,17 @@ public class Utils {
                 try {
                     Intent localIntent1 = new Intent("com.htc.launcher.action.UPDATE_SHORTCUT");
                     localIntent1.putExtra("packagename", "com.dreamcard.app");
-                    int s = Utils.getStoreBadge(activity);
-                    int o = Utils.getOffersBadge(activity);
+                    int s = Utils.getStoreBadge(context);
+                    int o = Utils.getOffersBadge(context);
                     int badgeCount = s + o;
                     localIntent1.putExtra("count", badgeCount);
-                    activity.sendBroadcast(localIntent1);
+                    context.sendBroadcast(localIntent1);
 
                     Intent localIntent2 = new Intent("com.htc.launcher.action.SET_NOTIFICATION");
-                    ComponentName localComponentName = new ComponentName(activity, "com.dreamcard.app.view.activity.SplashActivity");
+                    ComponentName localComponentName = new ComponentName(context, "com.dreamcard.app.view.activity.SplashActivity");
                     localIntent2.putExtra("com.htc.launcher.extra.COMPONENT", localComponentName.flattenToShortString());
                     localIntent2.putExtra("com.htc.launcher.extra.COUNT", 10);
-                    activity.sendBroadcast(localIntent2);
+                    context.sendBroadcast(localIntent2);
                 } catch (Exception localException) {
                     Log.e("CHECK", "HTC : " + localException.getLocalizedMessage());
                 }
@@ -135,13 +166,13 @@ public class Utils {
             if (bool4) {
                 // Samsung
                 try {
-                    ContentResolver localContentResolver = activity.getContentResolver();
+                    ContentResolver localContentResolver = context.getContentResolver();
                     Uri localUri = Uri.parse("content://com.sec.badge/apps");
                     ContentValues localContentValues = new ContentValues();
                     localContentValues.put("package", "com.dreamcard.app");
                     localContentValues.put("class", "com.dreamcard.app.view.activity.SplashActivity");
-                    int s = Utils.getStoreBadge(activity);
-                    int o = Utils.getOffersBadge(activity);
+                    int s = Utils.getStoreBadge(context);
+                    int o = Utils.getOffersBadge(context);
                     int badgeCount = s + o;
                     localContentValues.put("badgecount", badgeCount);
                     String str = "package=? AND class=?";

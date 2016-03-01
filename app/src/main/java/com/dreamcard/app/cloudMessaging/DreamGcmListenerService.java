@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.dreamcard.app.R;
 import com.dreamcard.app.utils.PreferencesGCM;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.activity.ReviewStore;
 import com.dreamcard.app.view.activity.SplashActivity;
 import com.google.android.gms.gcm.GcmListenerService;
@@ -40,23 +41,22 @@ public class DreamGcmListenerService extends GcmListenerService {
 
         if (from.startsWith("/topics/")) {
             String topic = from.replaceFirst("/topics/", "");
+
             if (topic.equalsIgnoreCase(PreferencesGCM.GLOBAL_TOPIC)) {
+                Utils.updateNotificationBadge(this, 1);
                 sendGeneralNotification(message);
             }
             else if (topic.equalsIgnoreCase(PreferencesGCM.OFFER_TOPIC)) {
-                // TODO: increase badge by 1 for offers.
+                Utils.updateOffersBadge(this, 1);
                 sendGeneralNotification("New offers available.");
             }
             else if (topic.equalsIgnoreCase(PreferencesGCM.STORE_TOPIC)) {
-                // TODO: increase badge by 1 for stores.
+                Utils.updateStoreBadge(this, 1);
                 sendGeneralNotification("New stores are added");
-            }
-            else if (topic.equalsIgnoreCase(PreferencesGCM.PURCHASE_TOPIC)) {
-                sendReviewNotification(message);
             }
         }
 
-        sendGeneralNotification(message);
+        sendReviewNotification(message);
     }
 
     /**

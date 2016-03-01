@@ -1,5 +1,6 @@
 package com.dreamcard.app.cloudMessaging;
 
+import android.app.Activity;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,7 +9,13 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.dreamcard.app.R;
+import com.dreamcard.app.constants.Params;
+import com.dreamcard.app.constants.ServicesConstants;
+import com.dreamcard.app.entity.ErrorMessageInfo;
+import com.dreamcard.app.services.LoginAsync;
+import com.dreamcard.app.services.RegisterDeviceGCMAsync;
 import com.dreamcard.app.utils.PreferencesGCM;
+import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
 import com.google.android.gms.iid.InstanceID;
@@ -18,12 +25,14 @@ import java.io.IOException;
 /**
  * Created by WIN on 2/16/2016.
  */
-public class DreamRegistrationIntentService extends IntentService {
+public class DreamRegistrationIntentService extends IntentService implements IServiceListener {
 
     private static final String TAG = DreamRegistrationIntentService.class.getName();
 
     private static final String[] TOPICS = {PreferencesGCM.GLOBAL_TOPIC, PreferencesGCM.OFFER_TOPIC,
                                             PreferencesGCM.STORE_TOPIC, PreferencesGCM.PURCHASE_TOPIC};
+
+    private RegisterDeviceGCMAsync registerDeviceGCMAsync;
 
     public DreamRegistrationIntentService() {
         super(TAG);
@@ -75,7 +84,10 @@ public class DreamRegistrationIntentService extends IntentService {
      * @param token The new token.
      */
     private void sendRegistrationToServer(String token) {
-        // Add custom implementation, as needed.
+        SharedPreferences prefs = getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
+        registerDeviceGCMAsync = new RegisterDeviceGCMAsync(this, ServicesConstants.getRegisterationList(token, prefs.getString(Params.CONSUMER_ID, "")),
+                Params.SERVICE_PROCESS_1);
+        registerDeviceGCMAsync.execute(this);
     }
 
     /**
@@ -89,5 +101,15 @@ public class DreamRegistrationIntentService extends IntentService {
         for (String topic : TOPICS) {
             pubSub.subscribe(token, "/topics/" + topic, null);
         }
+    }
+
+    @Override
+    public void onServiceSuccess(Object b, int processType) {
+        Log.d(DreamRegistrationIntentService.class.getName(), "Service registered");
+    }
+
+    @Override
+    public void onServiceFailed(ErrorMessageInfo info) {
+        Log.d(DreamRegistrationIntentService.class.getName(), "Service registration failed");
     }
 }

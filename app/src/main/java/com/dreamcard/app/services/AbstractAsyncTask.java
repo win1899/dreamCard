@@ -1,6 +1,7 @@
 package com.dreamcard.app.services;
 
 import android.app.Activity;
+import android.app.IntentService;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -22,10 +23,15 @@ public abstract class AbstractAsyncTask<Params, Progress, Result> extends AsyncT
 
     @Override
     protected void onPostExecute(Object serviceResponse) {
-        if (((Activity) context).isFinishing()) {
-            Log.e(AbstractAsyncTask.class.getName(), "Activity is finishing, ignoring late callback");
-            return;
+        try {
+            if (((Activity) context).isFinishing()) {
+                Log.e(AbstractAsyncTask.class.getName(), "Activity is finishing, ignoring late callback");
+                return;
+            }
+            onPostExecuteSafe(serviceResponse);
+        } catch (ClassCastException e) {
+            // might be a service context
+            onPostExecuteSafe(serviceResponse);
         }
-        onPostExecuteSafe(serviceResponse);
     }
 }
