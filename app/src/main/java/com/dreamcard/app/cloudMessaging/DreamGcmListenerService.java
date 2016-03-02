@@ -45,14 +45,17 @@ public class DreamGcmListenerService extends GcmListenerService {
             if (topic.equalsIgnoreCase(PreferencesGCM.GLOBAL_TOPIC)) {
                 Utils.updateNotificationBadge(this, 1);
                 sendGeneralNotification(message);
+                return;
             }
             else if (topic.equalsIgnoreCase(PreferencesGCM.OFFER_TOPIC)) {
                 Utils.updateOffersBadge(this, 1);
-                sendGeneralNotification("New offers available.");
+                sendGeneralNotification("New offers are available on Dream Card.");
+                return;
             }
             else if (topic.equalsIgnoreCase(PreferencesGCM.STORE_TOPIC)) {
                 Utils.updateStoreBadge(this, 1);
-                sendGeneralNotification("New stores are added");
+                sendGeneralNotification("New store just joined Dream Card.");
+                return;
             }
         }
 

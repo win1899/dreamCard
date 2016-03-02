@@ -161,7 +161,8 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
 
     @Override
     public void onServiceFailed(ErrorMessageInfo info) {
-        Toast.makeText(this, getResources().getString(R.string.rate_business_not_sent), Toast.LENGTH_LONG).show();
+        Toast.makeText(this, "حدث خلل اثناء الاتصال", Toast.LENGTH_LONG).show();
+        finish();
     }
 
     @Override
