@@ -1,0 +1,41 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:orientation="vertical" android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#eeeeee"
+                android:paddingTop="10dp"
+                android:paddingBottom="10dp">
+
+
+    <ImageView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:id="@+id/notification_logo"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignBottom="@+id/tt"
+        android:layout_alignParentEnd="true"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="شكرا لاستخدامك كرت الاحلام"
+        android:id="@+id/notification_text"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentTop="true"
+        android:layout_toStartOf="@+id/notification_logo"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="اضغط هنا لتقييم تعاملك"
+        android:id="@+id/tt"
+        android:textSize="16sp"
+        android:textColor="#000000"
+        android:layout_marginRight="10dp"
+        android:layout_below="@+id/notification_text"
+        android:layout_toStartOf="@+id/notification_logo"/>
+
+</RelativeLayout>

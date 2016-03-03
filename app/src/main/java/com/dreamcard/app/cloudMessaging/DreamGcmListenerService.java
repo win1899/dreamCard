@@ -1,9 +1,11 @@
 package com.dreamcard.app.cloudMessaging;
 
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,11 +13,15 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.dreamcard.app.R;
+import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.utils.PreferencesGCM;
 import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.activity.ReviewStore;
 import com.dreamcard.app.view.activity.SplashActivity;
 import com.google.android.gms.gcm.GcmListenerService;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by WIN on 2/16/2016.
@@ -65,12 +71,12 @@ public class DreamGcmListenerService extends GcmListenerService {
     /**
      * Create and show a simple notification containing the review intent.
      *
-     * @param message store id that purchase happened at.
+     * @param storeId store id that purchase happened at.
      */
-    private void sendReviewNotification(String message) {
+    private void sendReviewNotification(String storeId) {
         Intent intent = new Intent(this, ReviewStore.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        intent.putExtra(ReviewStore.BUSINESS_ID_EXTRA, message);
+        intent.putExtra(ReviewStore.BUSINESS_ID_EXTRA, storeId);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, REQUEST_ID, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
@@ -86,6 +92,21 @@ public class DreamGcmListenerService extends GcmListenerService {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
+
+        SharedPreferences prefs = getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
+        HashSet<String> newSet = new HashSet<String>();
+        newSet.add(storeId);
+        HashSet<String> set = (HashSet<String>) prefs.getStringSet(Params.STORES_TO_REVIEW_KEY, new HashSet<String>());
+        if (set.size() > 0) {
+            newSet.addAll(set);
+        }
+
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.remove(Params.STORES_TO_REVIEW_KEY);
+        editor.putStringSet(Params.STORES_TO_REVIEW_KEY, newSet);
+        editor.apply();
+
+        Utils.updateNotificationBadge(this, 1);
     }
 
     /**

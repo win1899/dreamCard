@@ -27,6 +27,7 @@ import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -143,6 +144,7 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
                 return;
             }
             if (_count.incrementAndGet() == 2) {
+                removeStore();
                 finish();
             }
         }
@@ -154,8 +156,29 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
                 return;
             }
             if (_count.incrementAndGet() == 2) {
+                removeStore();
                 finish();
             }
+        }
+    }
+
+    private void removeStore() {
+        SharedPreferences prefs = getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
+
+        HashSet<String> set = (HashSet<String>) prefs.getStringSet(Params.STORES_TO_REVIEW_KEY, new HashSet<String>());
+        if (set != null && set.size() > 0) {
+            HashSet<String> newStores = new HashSet<String>();
+            for (String storeId : set) {
+                if (!storeId.equalsIgnoreCase(_store.getId())) {
+                    newStores.add(storeId);
+                }
+            }
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.remove(Params.STORES_TO_REVIEW_KEY);
+            editor.putStringSet(Params.STORES_TO_REVIEW_KEY, newStores);
+            editor.commit();
+
+            Utils.updateNotificationBadge(ReviewStore.this, -1);
         }
     }
 

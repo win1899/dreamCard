@@ -40,7 +40,7 @@
             android:noHistory="true"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar"
-            android:launchMode="singleInstance">
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -50,7 +50,7 @@
         <activity
             android:name=".view.activity.NavDrawerActivity"
             android:label="@string/title_activity_nav_drawer_actiity"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
 
@@ -59,7 +59,7 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
         <activity
@@ -98,7 +98,7 @@
             android:name=".view.activity.MainActivationFormActivity"
             android:label="@string/title_activity_main_activation_form"
             android:screenOrientation="portrait"
-            android:launchMode="singleInstance"
+            android:launchMode="singleTask"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
 
@@ -134,6 +134,13 @@
         <activity
             android:name=".view.activity.BuyDreamCardActivity"
             android:label="@string/title_activity_buy_dream_card"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar">
+        </activity>
+
+        <activity
+            android:name=".view.activity.NotificationActivity"
+            android:label="NotificationActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar">
         </activity>

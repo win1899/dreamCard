@@ -90,6 +90,7 @@ public class NavDrawerActivity extends FragmentActivity
     private ImageButton btnSetting;
     private TextView tvTitle;
     private ImageView imgLogo;
+    private ImageView notificationLogo;
 //    private RelativeLayout headerPnl;
 
     private DrawerLayout mDrawer;
@@ -101,6 +102,7 @@ public class NavDrawerActivity extends FragmentActivity
     private Button btnLocations;
     private TextView txtStoresBadge;
     private TextView txtOffersBadge;
+    private TextView txtNotificationBadge;
     private int storeNotificationsCount;
     private int offersNotificationsCount;
     private int notificationCount;
@@ -168,6 +170,10 @@ public class NavDrawerActivity extends FragmentActivity
         btnStores=(Button)findViewById(R.id.btn_store);
         txtStoresBadge = (TextView)findViewById(R.id.txt_store_badge);
         txtOffersBadge = (TextView)findViewById(R.id.txt_offers_badge);
+        txtNotificationBadge = (TextView) findViewById(R.id.txt_notification_badge);
+        notificationLogo = (ImageView) findViewById(R.id.notifications_icon);
+        notificationLogo.setOnClickListener(this);
+
         storeNotificationsCount = Utils.getStoreBadge(NavDrawerActivity.this);
         offersNotificationsCount = Utils.getOffersBadge(NavDrawerActivity.this);
         notificationCount = Utils.getNotificationBadge(NavDrawerActivity.this);
@@ -181,7 +187,8 @@ public class NavDrawerActivity extends FragmentActivity
             txtOffersBadge.setText("" + offersNotificationsCount);
         }
         if (notificationCount > 0) {
-            //TODO : notification count increase ...
+            txtNotificationBadge.setVisibility(View.VISIBLE);
+            txtNotificationBadge.setText("" + notificationCount);
         }
         btnCategories.setOnClickListener(this);
         btnLatestOffers.setOnClickListener(this);
@@ -370,10 +377,12 @@ public class NavDrawerActivity extends FragmentActivity
                 DatabaseController.getInstance(this).deleteLogin();
                 SharedPreferences pref=getSharedPreferences(Params.APP_DATA,MODE_PRIVATE);
                 pref.edit().clear().commit();
+                Utils.updateMainBadge(NavDrawerActivity.this);
                 intent=new Intent(this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
                 overridePendingTransition( R.anim.push_down_in, R.anim.push_down_out );
+                finish();
                 break;
         }
 
@@ -576,30 +585,42 @@ public class NavDrawerActivity extends FragmentActivity
                 currentFragment = R.id.btn_category;
                 onNavigationDrawerItemSelected(2);
             }
-        }else if(view.getId()==R.id.btn_browse) {
+        }
+        else if(view.getId()==R.id.btn_browse) {
             Utils.updateOffersBadge(NavDrawerActivity.this, 0);
             txtOffersBadge.setVisibility(View.GONE);
             if(currentFragment!=R.id.btn_browse) {
                 currentFragment = R.id.btn_browse;
                 onNavigationDrawerItemSelected(1);
             }
-        }else if(view.getId()==R.id.btn_location){
+        }
+        else if(view.getId()==R.id.btn_location){
             if(currentFragment!=view.getId()) {
                 currentFragment=view.getId();
                 onNavigationDrawerItemSelected(4);
             }
-        }else if(view.getId()==R.id.btn_store){
+        }
+        else if(view.getId()==R.id.btn_store){
             Utils.updateStoreBadge(NavDrawerActivity.this, 0);
             txtStoresBadge.setVisibility(View.GONE);
             if(currentFragment!=R.id.btn_store) {
                 currentFragment = R.id.btn_store;
                 onNavigationDrawerItemSelected(3);
             }
-        }else if(view.getId()==R.id.btn_notifications) {
+        }
+        else if(view.getId()==R.id.btn_notifications) {
             callSetting();
-        }else if(view.getId()==R.id.img_menu_logo){
+        }
+        else if(view.getId()==R.id.img_menu_logo){
             LeftNavDrawerFragment.setDrawerMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             onNavigationDrawerItemSelected(0);
+        }
+        else if (view.getId() == R.id.notifications_icon) {
+            Intent intent = new Intent(NavDrawerActivity.this, NotificationActivity.class);
+            startActivity(intent);
+
+            Utils.updateNotificationBadge(NavDrawerActivity.this, 0);
+            txtNotificationBadge.setVisibility(View.GONE);
         }
     }
 

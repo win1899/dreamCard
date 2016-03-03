@@ -142,4 +142,6 @@ public class Params {
     public static final String STORE_BADGE_COUNT = "StoreBadgeCount";
     public static final String OFFERS_BADGE_COUNT = "OffersBadgeCount";
     public static final String NOTIFICATION_BADGE_COUNT = "NotificationBadgeCount";
+
+    public static final String STORES_TO_REVIEW_KEY = "StroesSet";
 }

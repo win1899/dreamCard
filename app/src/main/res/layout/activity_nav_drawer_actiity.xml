@@ -77,7 +77,8 @@
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp">
+                    android:layout_marginBottom="10dp"
+                    android:id="@+id/relativeLayout">
 
                     <ImageButton
                         android:layout_width="30dp"
@@ -92,6 +93,36 @@
 
                 </RelativeLayout>
 
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toStartOf="@+id/relativeLayout"
+                    android:layout_marginRight="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_centerHorizontal="true"
+                    >
+                    <ImageView
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:id="@+id/notifications_icon"
+                        android:scaleType="fitXY"
+                        android:src="@drawable/feedback_screen"/>
+                    <TextView
+                        android:id="@+id/txt_notification_badge"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:layout_alignTop="@+id/notifications_icon"
+                        android:layout_alignLeft="@+id/notifications_icon"
+                        android:textColor="#FFF"
+                        android:textSize="8sp"
+                        android:textStyle="bold"
+                        android:background="@drawable/circle"
+                        android:gravity="center"
+                        android:text="32"
+                        android:visibility="gone"
+                        android:drawablePadding="70dp"
+                        />
+                </RelativeLayout>
 
             </RelativeLayout>
 

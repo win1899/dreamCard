@@ -7,7 +7,6 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:id="@+id/buy_areas_store_logo"
-        android:src="@drawable/facebook"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
         android:layout_margin="10dp"/>
@@ -15,7 +14,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Cafe La Vie"
         android:id="@+id/buy_areas_store_name"
         android:layout_alignParentTop="true"
         android:layout_toEndOf="@+id/buy_areas_store_logo"
@@ -28,7 +26,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Ramallah, Al wakalat St., Plaza Mall, Masher building"
         android:id="@+id/buy_areas_store_address"
         android:layout_below="@+id/buy_areas_store_name"
         android:layout_toEndOf="@+id/buy_areas_store_logo"
@@ -41,7 +38,6 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="02-2989999888"
         android:id="@+id/buy_areas_store_phone"
         android:layout_below="@+id/buy_areas_store_address"
         android:layout_toEndOf="@+id/buy_areas_store_logo"

@@ -74,7 +74,7 @@ public class Utils {
             newVal = 0;
         }
         else {
-            newVal = oldVal + 1;
+            newVal = oldVal + value;
         }
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(Params.NOTIFICATION_BADGE_COUNT, newVal);
@@ -113,7 +113,7 @@ public class Utils {
         return prefs.getInt(Params.NOTIFICATION_BADGE_COUNT, 0);
     }
 
-    private static void updateMainBadge(Context context) {
+    public static void updateMainBadge(Context context) {
 
         String manufactureStr = Build.MANUFACTURER;
 
@@ -217,7 +217,7 @@ public class Utils {
         }
     }
 
-    public static void loadImage(Context context, String url, ImageView imageView) {
+    public synchronized static void loadImage(Context context, String url, ImageView imageView) {
         try {
             ImageLoader loader = CustomVolleyRequestQueue.getInstance(context).getImageLoader();
             loader.get(url, ImageLoader.getImageListener(imageView, R.drawable.error_loading_photo, R.drawable.error_loading_photo));
