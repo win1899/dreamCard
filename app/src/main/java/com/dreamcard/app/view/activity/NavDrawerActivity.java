@@ -580,7 +580,6 @@ public class NavDrawerActivity extends FragmentActivity
     @Override
     public void onClick(View view) {
         if(view.getId()==R.id.btn_category) {
-            fakeNotificationsGenerator();
             if(currentFragment!=R.id.btn_category) {
                 currentFragment = R.id.btn_category;
                 onNavigationDrawerItemSelected(2);
