@@ -106,7 +106,7 @@
                         android:layout_height="30dp"
                         android:id="@+id/notifications_icon"
                         android:scaleType="fitXY"
-                        android:src="@drawable/feedback_screen"/>
+                        android:src="@drawable/notifications_icon"/>
                     <TextView
                         android:id="@+id/txt_notification_badge"
                         android:layout_width="20dp"
