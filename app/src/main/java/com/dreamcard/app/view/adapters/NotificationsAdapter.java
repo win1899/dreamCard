@@ -58,12 +58,14 @@ public class NotificationsAdapter extends BaseAdapter {
             vi.setTag(holder);
         } else {
             holder = (NotificationHolder) vi.getTag();
+            holder.notificationLogo.setImageBitmap(null);
         }
 
         final Stores store = data.get(position);
 
         holder.notificationText.setText("شكرا لاستخدامك كرت الاحلام في " + store.getStoreName() + ".");
-        Utils.loadImage(activity, store.getLogo(), holder.notificationLogo);
+        //Utils.loadImage(activity, store.getLogo(), holder.notificationLogo);
+        holder.notificationLogo.setVisibility(View.GONE);
 
         vi.setOnClickListener(new View.OnClickListener() {
             @Override

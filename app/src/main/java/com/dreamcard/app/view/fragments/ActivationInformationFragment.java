@@ -209,7 +209,8 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
             }
         }
         else if(view.getId()==R.id.txt_birth_date) {
-            DialogFragment newFragment = new DatePickerFragment(this.listener, 0, getBirthdayDate());
+            DatePickerFragment newFragment = new DatePickerFragment();
+            newFragment.setArgs(this.listener, 0, getBirthdayDate());
             newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
         } else if(view.getId()==R.id.txt_country){
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

@@ -843,7 +843,8 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-            DialogFragment newFragment = new DatePickerFragment(this.listener, 0, getBirthdayDate());
+            DatePickerFragment newFragment = new DatePickerFragment();
+            newFragment.setArgs(this.listener, 0, getBirthdayDate());
             newFragment.show(getSupportFragmentManager(), "datePicker");
         }
         return false;

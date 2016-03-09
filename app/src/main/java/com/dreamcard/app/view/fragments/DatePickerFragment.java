@@ -22,11 +22,11 @@ public class DatePickerFragment extends DialogFragment implements DatePickerDial
     private Date time;
     private boolean cancelled = false;
 
-    public DatePickerFragment(IDatePickerListener listener) {
-        this.listener=listener;
+    public DatePickerFragment() {
+
     }
 
-    public DatePickerFragment(IDatePickerListener listener,int processId, Date time) {
+    public void setArgs(IDatePickerListener listener,int processId, Date time) {
         this.listener=listener;
         this.processId=processId;
         this.time = time;

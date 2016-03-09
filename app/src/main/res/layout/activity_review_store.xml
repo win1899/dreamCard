@@ -36,29 +36,12 @@
             </RelativeLayout>
         </LinearLayout>
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="#ffffff"
             android:layout_below="@+id/header"
-            android:id="@+id/thanks_text_layout">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/review_store_thanks"
-                android:textColor="#222222"
-                android:textSize="20sp"
-                android:layout_margin="20dp"
-                android:id="@+id/thanks_text"/>
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="100dp"
-            android:layout_marginTop="10dp"
-            android:background="#ffffff"
-            android:layout_below="@+id/thanks_text_layout"
             android:id="@+id/store_thanks_layout">
 
                 <ImageView
@@ -66,59 +49,53 @@
                     android:layout_height="90dp"
                     android:id="@+id/review_store_logo"
                     android:src="@drawable/offer_item_bg"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginBottom="5dp"
-                    android:layout_marginLeft="20dp"/>
+                    android:layout_marginRight="20dp"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_centerVertical="true"
+                    android:layout_alignParentEnd="true"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="New Text"
-                    android:id="@+id/review_store_name"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
+                    android:text="@string/review_store_thanks"
                     android:textColor="#222222"
-                    android:layout_alignTop="@+id/review_store_logo"
-                    android:layout_toEndOf="@+id/review_store_logo"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="5dp" />
-
-            <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="New Text"
-                    android:singleLine="true"
-                    android:id="@+id/review_store_address"
-                    android:textColor="#444444"
-                    android:layout_below="@+id/review_store_name"
-                    android:textSize="14sp"
-                    android:layout_marginTop="2dp"
-                    android:layout_above="@+id/imageView9"
-                    android:layout_marginBottom="2dp"
-                    android:layout_alignStart="@+id/review_store_name" />
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/imageView9"
-                    android:src="@drawable/map_store_phone"
-                    android:layout_alignBottom="@+id/review_store_logo"
-                    android:layout_alignStart="@+id/review_store_address" />
+                    android:textSize="20sp"
+                    android:id="@+id/thanks_text"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toStartOf="@+id/review_store_logo"/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="New Text"
-                    android:id="@+id/review_store_phone_num"
-                    android:textColor="#444444"
-                    android:textSize="14sp"
-                    android:layout_marginLeft="3dp"
-                    android:layout_alignBottom="@+id/imageView9"
-                    android:layout_marginBottom="5dp"
-                    android:layout_toEndOf="@+id/imageView9" />
+                    android:text="@string/you_saved_dots"
+                    android:textColor="#222222"
+                    android:textSize="20sp"
+                    android:id="@+id/you_saved"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_below="@+id/thanks_text"
+                    android:layout_toStartOf="@+id/review_store_logo"
+                    android:visibility="gone"
+                     />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="220"
+                    android:textColor="@color/button_login"
+                    android:textSize="20sp"
+                    android:id="@+id/you_saved_val"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="3dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_below="@+id/thanks_text"
+                    android:layout_toStartOf="@+id/you_saved"
+                    android:visibility="gone"
+                    />
 
         </RelativeLayout>
 
@@ -133,40 +110,39 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Please Rate Our service"
+                android:text="الرجاء تقييم الخدمة"
                 android:textStyle="bold"
                 android:textSize="18sp"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
                 android:textColor="#222222"
-                android:id="@+id/rate_msg_text"/>
+                android:id="@+id/rate_msg_text"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Rating"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:text="التقييم"
+                android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
                 android:textSize="18sp"
                 android:textColor="#999999"
+                android:id="@+id/rate_text"
                 android:layout_below="@+id/rate_msg_text"
-                android:id="@+id/rate_text"/>
+                android:layout_alignParentEnd="true" />
             <RatingBar
                 android:progressDrawable="@drawable/stars_rating_review"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/review_ratingBar"
-                android:layout_below="@+id/rate_text"
                 android:numStars="5"
                 android:stepSize="1.0"
-                android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginRight="20dp"
                 android:layout_marginLeft="20dp"
-                android:layout_alignParentStart="true"
-                />
+                android:layout_marginBottom="10dp"
+                android:layout_below="@+id/rate_text"
+                android:layout_alignParentEnd="true"/>
         </RelativeLayout>
 
     <RelativeLayout
@@ -180,14 +156,16 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Give us a nice review"
+                android:text="ما رايك بخدمتنا"
                 android:layout_marginRight="5dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
                 android:layout_marginLeft="20dp"
+                android:layout_marginTop="10dp"
+
                 android:textSize="20sp"
                 android:textColor="#999999"
-                android:id="@+id/review_us_text"/>
+                android:id="@+id/review_us_text"
+                android:layout_alignParentTop="true"
+                android:layout_alignEnd="@+id/review_edit_text"/>
 
             <EditText
                 android:layout_width="match_parent"
@@ -197,7 +175,7 @@
                 android:layout_below="@+id/review_us_text"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="5dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="10dp"
                 android:layout_marginLeft="20dp"
                 android:background="@drawable/edit_text_border"
                 android:id="@+id/review_edit_text"
@@ -214,6 +192,6 @@
             android:textSize="20sp"
             android:textStyle="bold"
             android:id="@+id/finish_review"
-            android:text="Finish"/>
+            android:text="ارسال"/>
     </RelativeLayout>
 </ScrollView>

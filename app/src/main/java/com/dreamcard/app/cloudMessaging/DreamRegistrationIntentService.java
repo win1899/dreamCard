@@ -54,7 +54,6 @@ public class DreamRegistrationIntentService extends IntentService implements ISe
             // [END get_token]
             Log.i(TAG, "GCM Registration Token: " + token);
 
-            // TODO: Implement this method to send any registration to your app's servers.
             sendRegistrationToServer(token);
 
             // Subscribe to topic channels
@@ -88,6 +87,7 @@ public class DreamRegistrationIntentService extends IntentService implements ISe
         registerDeviceGCMAsync = new RegisterDeviceGCMAsync(this, ServicesConstants.getRegisterationList(token, prefs.getString(Params.CONSUMER_ID, "")),
                 Params.SERVICE_PROCESS_1);
         registerDeviceGCMAsync.execute(this);
+        Log.e(TAG, token+"");
     }
 
     /**

@@ -19,8 +19,10 @@ import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.MessageInfo;
+import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.services.AddBusinessCommentAsync;
+import com.dreamcard.app.services.ConsumerDiscountAsyncTask;
 import com.dreamcard.app.services.GetBussinesByIdAsync;
 import com.dreamcard.app.services.RateBusinessAsyncTask;
 import com.dreamcard.app.utils.Utils;
@@ -42,10 +44,14 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
     private GetBussinesByIdAsync _getBussinesByIdAsync;
     private RateBusinessAsyncTask _rateStoreAsync;
     private AddBusinessCommentAsync _addBussinessComment;
+    private ConsumerDiscountAsyncTask _consumerDiscountAsyncTask;
     private Stores _store;
+    private String _discount;
 
     private RatingBar _ratingBar;
     private EditText _reviewText;
+    private TextView _youSaved;
+    private TextView _youSavedVal;
 
     private volatile AtomicInteger _count;
 
@@ -70,6 +76,7 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
         _getBussinesByIdAsync = new GetBussinesByIdAsync(this, ServicesConstants.getBusinessById(_storeId),
                 Params.SERVICE_PROCESS_9);
         _getBussinesByIdAsync.execute(this);
+
     }
 
     private void buildUI() {
@@ -81,17 +88,22 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
         ImageView storeIcon = (ImageView) findViewById(R.id.review_store_logo);
         Utils.loadImage(this, _store.getLogo(), storeIcon);
 
-        TextView storeName = (TextView) findViewById(R.id.review_store_name);
-        storeName.setText(_store.getStoreName());
+        _youSaved = (TextView) findViewById(R.id.you_saved);
+        _youSavedVal = (TextView) findViewById(R.id.you_saved_val);
 
-        TextView storeAddr = (TextView) findViewById(R.id.review_store_address);
-        storeAddr.setText(_store.getAddress1());
-
-        TextView storePhone = (TextView) findViewById(R.id.review_store_phone_num);
-        storePhone.setText(_store.getPhone());
+        if (_discount != null && !_discount.equalsIgnoreCase("")) {
+            _youSaved.setVisibility(View.VISIBLE);
+            _youSavedVal.setVisibility(View.VISIBLE);
+            _youSavedVal.setText(_discount);
+        }
+        else {
+            _youSaved.setVisibility(View.GONE);
+            _youSavedVal.setVisibility(View.GONE);
+        }
 
         Button finishButton = (Button) findViewById(R.id.finish_review);
         finishButton.setOnClickListener(this);
+
 
         _ratingBar = (RatingBar) findViewById(R.id.review_ratingBar);
         _reviewText = (EditText) findViewById(R.id.review_edit_text);
@@ -109,6 +121,9 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
         if (_addBussinessComment != null && _addBussinessComment.getStatus() == AsyncTask.Status.RUNNING) {
             _addBussinessComment.cancel(true);
         }
+        if (_consumerDiscountAsyncTask != null && _consumerDiscountAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
+            _consumerDiscountAsyncTask.cancel(true);
+        }
         super.onPause();
     }
 
@@ -122,13 +137,20 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
                 for (Stores s : list) {
                     if (s.getId().equalsIgnoreCase(_storeId)) {
                         _store = s;
-                        return;
+                        break;
                     }
                 }
             }
 
             if (_store != null) {
                 Log.d(LOG, "Found store, Building UI");
+                SharedPreferences prefs = getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
+                String id = prefs.getString(Params.USER_INFO_ID, "");
+
+                _consumerDiscountAsyncTask = new ConsumerDiscountAsyncTask(this
+                        , ServicesConstants.getTotalSavingRequestList(id)
+                        , Params.SERVICE_PROCESS_2);
+                _consumerDiscountAsyncTask.execute(this);
                 buildUI();
             }
             else {
@@ -158,6 +180,26 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
             if (_count.incrementAndGet() == 2) {
                 removeStore();
                 finish();
+            }
+        }
+        else if (processType == Params.SERVICE_PROCESS_2) {
+            ArrayList<Offers> list = (ArrayList<Offers>) b;
+            if (list.size() > 0) {
+                for (Offers offer : list) {
+                    if (offer.getBusinessName().equalsIgnoreCase(_store.getStoreName())) {
+                        double discount = offer.getAmountBeforeDicount() - offer.getAmountAfterDiscount();
+                        String disTxt = String.valueOf(discount);
+                        if (String.valueOf(discount).lastIndexOf(".") != -1) {
+                            disTxt = String.valueOf(discount).substring(0, String.valueOf(discount).lastIndexOf("."));
+                        }
+
+                        _discount = String.format("%s%s", disTxt, getString(R.string.ils));
+                        _youSaved.setVisibility(View.VISIBLE);
+                        _youSavedVal.setVisibility(View.VISIBLE);
+                        _youSavedVal.setText(_discount);
+                        break;
+                    }
+                }
             }
         }
     }
