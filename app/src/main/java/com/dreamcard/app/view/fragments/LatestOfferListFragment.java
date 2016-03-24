@@ -189,8 +189,12 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
             return;
         }
         if (this.process == Params.SERVICE_PROCESS_1) {
-            progressBar.setVisibility(View.GONE);
-            grid.setVisibility(View.VISIBLE);
+            if (progressBar != null) {
+                progressBar.setVisibility(View.GONE);
+            }
+            if (grid != null) {
+                grid.setVisibility(View.VISIBLE);
+            }
             Toast.makeText(getActivity(), info.getMessage(), Toast.LENGTH_LONG).show();
         } else {
             this.count++;
