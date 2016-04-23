@@ -2,11 +2,9 @@ package com.dreamcard.app.view.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-//import android.app.Fragment;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,9 +22,11 @@ import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.ConsumerInfo;
 import com.dreamcard.app.entity.ErrorMessageInfo;
+import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.services.ConsumerDiscountAsyncTask;
+import com.dreamcard.app.services.TotalCashPointsAsync;
 import com.dreamcard.app.services.TotalSavingAsync;
 import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.adapters.NotificationGridAdapter;
@@ -52,6 +52,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
 
     private String mParam1;
     private String mParam2;
+    private String _totalSavings = "0";
 
     private OnFragmentInteractionListener mListener;
 
@@ -64,6 +65,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
 
     private TotalSavingAsync totalSavingAsync;
     private ConsumerDiscountAsyncTask consumerDiscountAsyncTask;
+    private TotalCashPointsAsync _totaTotalCashPointsAsync;
     private ArrayList<Offers> notificationList = new ArrayList<Offers>();
     private Button btnGas;
     private Button btnCashPoints;
@@ -134,6 +136,9 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
                 , Params.SERVICE_PROCESS_3);
         consumerDiscountAsyncTask.execute(getActivity());
 
+        _totaTotalCashPointsAsync = new TotalCashPointsAsync(this, ServicesConstants.getTotalPointsSaved(id), Params.SERVICE_PROCESS_4);
+        _totaTotalCashPointsAsync.execute(getActivity());
+
         ArrayList<ServiceRequest> list = ServicesConstants.getLatestOfferRequestList("100");
         return view;
     }
@@ -158,6 +163,9 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
         }
         if (consumerDiscountAsyncTask != null && consumerDiscountAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
             consumerDiscountAsyncTask.cancel(true);
+        }
+        if (_totaTotalCashPointsAsync != null && _totaTotalCashPointsAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            _totaTotalCashPointsAsync.cancel(true);
         }
 
         mListener = null;
@@ -191,7 +199,8 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
 
             btnCashPoints.setBackground(getResources().getDrawable(R.color.button_selected));
 
-            comingSoonDialog();
+            showTotalSavingDialog("Total Cash points");
+
         } else if (view.getId() == R.id.btn_mobile) {
             btnCash.setBackgroundColor(getResources().getColor(R.color.button_not_seleted));
             btnGas.setBackground(getResources().getDrawable(R.color.button_not_seleted));
@@ -222,7 +231,18 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
                 })
                 .setIcon(android.R.drawable.ic_dialog_info)
                 .show();
+    }
 
+    private void showTotalSavingDialog(String title) {
+        new AlertDialog.Builder(this.getActivity())
+                .setTitle(title)
+                .setMessage(_totalSavings + " " + getResources().getString(R.string.ils))
+                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                    }
+                })
+                .setIcon(android.R.drawable.ic_dialog_info)
+                .show();
     }
 
 
@@ -260,6 +280,9 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
             if (list.size() > 0) {
                 setDiscountInfo(list);
             }
+        } else if (processType == Params.SERVICE_PROCESS_4) {
+            _totalSavings = ((MessageInfo) b).getValue();
+            _totalSavings = _totalSavings.replaceAll("\"", "");
         }
     }
 
