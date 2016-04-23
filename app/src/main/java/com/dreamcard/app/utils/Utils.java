@@ -59,6 +59,11 @@ public class Utils {
         }
         else
             newStoreBadge= oldStoreBadge + 1;
+
+        if (newStoreBadge < 0) {
+            newStoreBadge = 0;
+        }
+
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(Params.STORE_BADGE_COUNT,newStoreBadge);
         editor.commit();
@@ -76,6 +81,11 @@ public class Utils {
         else {
             newVal = oldVal + value;
         }
+
+        if (newVal < 0) {
+            newVal = 0;
+        }
+
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(Params.NOTIFICATION_BADGE_COUNT, newVal);
         editor.commit();
@@ -91,6 +101,11 @@ public class Utils {
             newOffersBadge = 0;
         else
             newOffersBadge = oldOffersBagde + 1;
+
+        if (newOffersBadge < 0) {
+            newOffersBadge = 0;
+        }
+
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(Params.OFFERS_BADGE_COUNT, newOffersBadge);
         editor.commit();
@@ -134,6 +149,11 @@ public class Utils {
                     int offersBadge = Utils.getOffersBadge(context);
                     int notificationBadge = Utils.getNotificationBadge(context);
                     int badgeCount = storeBadge + offersBadge + notificationBadge;
+
+                    if (badgeCount < 0) {
+                        badgeCount = 0;
+                    }
+
                     intent.putExtra("com.sonyericsson.home.intent.extra.badge.MESSAGE", badgeCount);
                     intent.putExtra("com.sonyericsson.home.intent.extra.badge.PACKAGE_NAME", "com.dreamcard.app");
 
@@ -152,6 +172,11 @@ public class Utils {
                     int offersBadge = Utils.getOffersBadge(context);
                     int notificationBadge = Utils.getNotificationBadge(context);
                     int badgeCount = storeBadge + offersBadge + notificationBadge;
+
+                    if (badgeCount < 0) {
+                        badgeCount = 0;
+                    }
+
                     localIntent1.putExtra("count", badgeCount);
                     context.sendBroadcast(localIntent1);
 
@@ -176,6 +201,10 @@ public class Utils {
                     int offersBadge = Utils.getOffersBadge(context);
                     int notificationBadge = Utils.getNotificationBadge(context);
                     int badgeCount = storeBadge + offersBadge + notificationBadge;
+
+                    if (badgeCount < 0) {
+                        badgeCount = 0;
+                    }
 
                     localContentValues.put("badgecount", badgeCount);
                     String str = "package=? AND class=?";
