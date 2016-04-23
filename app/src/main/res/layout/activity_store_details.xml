@@ -154,7 +154,21 @@
                     android:textStyle="bold"
                     android:layout_centerVertical="true"
                     android:layout_toEndOf="@+id/imageView7"
-                    android:layout_marginStart="23dp" />
+                    android:layout_marginStart="23dp"
+                    android:id="@+id/cash_points_title"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0"
+                    android:textSize="18sp"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="#ffffff"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true"
+                    android:layout_toEndOf="@+id/cash_points_title"
+                    android:layout_marginStart="23dp"
+                    android:id="@+id/cash_points_value"/>
 
             </RelativeLayout>
 

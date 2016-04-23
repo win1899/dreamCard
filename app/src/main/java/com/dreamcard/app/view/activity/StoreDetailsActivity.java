@@ -69,6 +69,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     private TextView txtLikeBtn;
     private TextView txtAnnualDiscount;
     private TextView txtAddress;
+    private TextView _cashPointsTxt;
     private ListView commentsListView;
     private ImageView btnAddComment;
     private AddCommentDialog commentDialog;
@@ -149,6 +150,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         txtAddress = (TextView) findViewById(R.id.store_address);
         txtAddress.setOnClickListener(this);
         txtStoreName = (TextView) findViewById(R.id.store_name_details);
+        _cashPointsTxt = (TextView) findViewById(R.id.cash_points_value);
         commentsListView.setOnTouchListener(new ListView.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -268,6 +270,8 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
             txtAbout.setText(vision);
         }
         txtAddress.setText(bean.getAddress1());
+
+        _cashPointsTxt.setText(bean.getCashPoints());
 
         imgAdapter = new StoreImagePagerAdapter(this, bean);
         imgPager.setAdapter(imgAdapter);

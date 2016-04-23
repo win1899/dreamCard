@@ -236,7 +236,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
     private void showTotalSavingDialog(String title) {
         new AlertDialog.Builder(this.getActivity())
                 .setTitle(title)
-                .setMessage(_totalSavings + " " + getResources().getString(R.string.ils))
+                .setMessage(_totalSavings)
                 .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                     }

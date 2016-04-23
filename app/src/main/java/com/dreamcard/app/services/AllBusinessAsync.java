@@ -137,6 +137,14 @@ public class AllBusinessAsync extends AbstractAsyncTask<Object, Void, Object> {
                             }
                             bean.setDiscountPrecentage(discount);
 
+                            JSONObject pointsObject = oneObject.getJSONObject("StorePoints");
+                            if (pointsObject != null) {
+                                String cashPoints = pointsObject.getString("Points");
+                                if (cashPoints == null || cashPoints.equalsIgnoreCase("null")) {
+                                    cashPoints = "0";
+                                }
+                                bean.setCashPoints(cashPoints);
+                            }
                             bean.setPosition(index);
                             index++;
                             list.add(bean);
