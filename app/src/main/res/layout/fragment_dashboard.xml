@@ -54,6 +54,7 @@
             android:layout_marginLeft="10dp"
             android:textColor="#ffffff"
             android:textSize="18sp"
+            android:text="---"
             android:layout_alignParentStart="true" />
 
         <ImageView
@@ -95,6 +96,7 @@
             android:layout_alignParentEnd="true"
             android:gravity="center"
             android:singleLine="true"
+            android:text="0"
              />
 
 
@@ -127,7 +129,8 @@
                 android:textSize="30sp"
                 android:layout_below="@+id/textView5"
                 android:layout_centerHorizontal="true"
-                 />
+                android:text="0"
+                />
         </RelativeLayout>
 
 

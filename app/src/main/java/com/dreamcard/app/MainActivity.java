@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,16 +23,27 @@ import com.dreamcard.app.components.TransparentProgressDialog;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.ErrorMessageInfo;
-import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.entity.UserInfo;
 import com.dreamcard.app.services.LoginAsync;
 import com.dreamcard.app.view.activity.BuyDreamCardActivity;
 import com.dreamcard.app.view.activity.MainActivationFormActivity;
 import com.dreamcard.app.view.activity.NavDrawerActivity;
 import com.dreamcard.app.view.interfaces.IServiceListener;
+import com.facebook.CallbackManager;
+import com.facebook.FacebookCallback;
+import com.facebook.FacebookException;
+import com.facebook.GraphRequest;
+import com.facebook.GraphResponse;
+import com.facebook.login.LoginResult;
+import com.facebook.login.widget.LoginButton;
 
 import net.hockeyapp.android.CrashManager;
 import net.hockeyapp.android.UpdateManager;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.Arrays;
 
 
 public class MainActivity extends Activity implements View.OnClickListener,IServiceListener{
@@ -44,6 +56,8 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
     private Button btnForgotPass;
     private Button whereToBuyDreamCard;
     private LinearLayout activationPnl;
+    private LoginButton loginButton;
+    private CallbackManager callbackManager;
 
     private LoginAsync loginAsync;
 
@@ -92,6 +106,53 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
         btnForgotPass.setOnClickListener(this);
         whereToBuyDreamCard.setOnClickListener(this);
         activationPnl.setOnClickListener(this);
+        loginButton = (LoginButton) findViewById(R.id.facebook_login_button);
+
+        loginButton.setReadPermissions(Arrays.asList(
+                "public_profile"));
+        // If using in a fragment
+        callbackManager = CallbackManager.Factory.create();
+        // Callback registration
+        loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+            @Override
+            public void onSuccess(LoginResult loginResult) {
+                GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
+                    @Override
+                    public void onCompleted(JSONObject jsonResponse, GraphResponse response) {
+                        Log.v("LoginActivity", jsonResponse.toString());
+                        try {
+                            UserInfo userInfo = new UserInfo();
+                            userInfo.setFullName(jsonResponse.getString("name"));
+                            userInfo.setGender(jsonResponse.getString("gender"));
+                            userInfo.setId(jsonResponse.getString("id"));
+                            userInfo.setStatus(1);
+                            userInfo.setIsFacebook(true);
+
+                            loginSuccessful(userInfo);
+                        }
+                        catch (JSONException e) {
+                            Log.e("MainActivty", "Failed to parse json from facebook");
+                        }
+                    }
+                });
+
+                Bundle parameters = new Bundle();
+                parameters.putString("fields", "id,name,email,gender,birthday");
+                request.setParameters(parameters);
+                request.executeAsync();
+            }
+
+            @Override
+            public void onCancel() {
+                Log.e("FacebookLogin", "Cancelled");
+            }
+
+            @Override
+            public void onError(FacebookException exception) {
+                Log.e("FacebookLogin", "error: " + exception.getMessage());
+
+            }
+        });
 
         handler = new Handler();
         progress = new TransparentProgressDialog(this, R.drawable.loading);
@@ -197,52 +258,58 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
         }
     }
 
+    private void loginSuccessful(UserInfo userInfo) {
+        if(userInfo.getStatus() == 1) {
+            SharedPreferences pref = getSharedPreferences(Params.APP_DATA, MODE_PRIVATE);
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putString(Params.USER_INFO_ID, userInfo.getId());
+            editor.putString(Params.USER_INFO_EMAIL, txtUsername.getText().toString());
+            editor.putString(Params.USER_INFO_NAME, userInfo.getFullName());
+            editor.putString(Params.USER_INFO_PASSWORD, txtPassword.getText().toString());
+            editor.putString(Params.USER_INFO_FIRST_NAME, userInfo.getFirstName());
+            editor.putString(Params.USER_INFO_LAST_NAME, userInfo.getLastName());
+            editor.putString(Params.USER_INFO_MOBILE, userInfo.getMobile());
+            editor.putString(Params.USER_INFO_GENDER, userInfo.getGender());
+            editor.putString(Params.USER_INFO_WORK, userInfo.getWork());
+            editor.putString(Params.USER_INFO_BIRTHDAY, userInfo.getBirthday());
+            editor.putString(Params.USER_INFO_CITY, userInfo.getCity());
+            editor.putString(Params.USER_INFO_COUNTRY, userInfo.getCountry());
+            editor.putString(Params.USER_INFO_PHONE, userInfo.getPhone());
+            editor.putString(Params.USER_INFO_ID_NUM, userInfo.getIdNum());
+            editor.putString(Params.USER_INFO_ADDRESS, userInfo.getAddress());
+            editor.putString(Params.USER_INFO_EDUCATION, userInfo.getEducation());
+            editor.putString(Params.USER_INFO_FULL_NAME, userInfo.getFullName());
+            editor.putString(Params.USER_INFO_CARD_NUMBER, userInfo.getCardNumber());
+            editor.putBoolean(Params.USER_FACEBOOK_LOGIN, userInfo.getIsFacebook());
+            editor.commit();
+
+            DatabaseController.getInstance(this).saveLogin(txtUsername.getText().toString()
+                    , txtPassword.getText().toString());
+
+            Intent intent = new Intent(this, NavDrawerActivity.class);
+            startActivity(intent);
+            overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+            finish();
+        }
+        else {
+            new AlertDialog.Builder(this)
+                    .setTitle(getResources().getString(R.string.error_in_login))
+                    .setMessage(getString(R.string.please_insert_username_password_valid))
+                    .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                        }
+                    })
+                    .setIcon(android.R.drawable.ic_dialog_alert)
+                    .show();
+        }
+    }
+
     @Override
     public void onServiceSuccess(Object b, int processType) {
         progress.dismiss();
         if(b!=null){
-            UserInfo bean= (UserInfo) b;
-            if(bean.getStatus()==1) {
-                SharedPreferences pref = getSharedPreferences(Params.APP_DATA, MODE_PRIVATE);
-                SharedPreferences.Editor editor = pref.edit();
-                editor.putString(Params.USER_INFO_ID, bean.getId());
-                editor.putString(Params.USER_INFO_EMAIL, txtUsername.getText().toString());
-                editor.putString(Params.USER_INFO_NAME,bean.getFullName());
-                editor.putString(Params.USER_INFO_PASSWORD,txtPassword.getText().toString());
-                editor.putString(Params.USER_INFO_FIRST_NAME,bean.getFirstName());
-                editor.putString(Params.USER_INFO_LAST_NAME,bean.getLastName());
-                editor.putString(Params.USER_INFO_MOBILE,bean.getMobile());
-                editor.putString(Params.USER_INFO_GENDER,bean.getGender());
-                editor.putString(Params.USER_INFO_WORK,bean.getWork());
-                editor.putString(Params.USER_INFO_BIRTHDAY,bean.getBirthday());
-                editor.putString(Params.USER_INFO_CITY,bean.getCity());
-                editor.putString(Params.USER_INFO_COUNTRY,bean.getCountry());
-                editor.putString(Params.USER_INFO_PHONE,bean.getPhone());
-                editor.putString(Params.USER_INFO_ID_NUM,bean.getIdNum());
-                editor.putString(Params.USER_INFO_ADDRESS,bean.getAddress());
-                editor.putString(Params.USER_INFO_EDUCATION,bean.getEducation());
-                editor.putString(Params.USER_INFO_FULL_NAME,bean.getFullName());
-                editor.putString(Params.USER_INFO_CARD_NUMBER,bean.getCardNumber());
-                editor.commit();
-
-                DatabaseController.getInstance(this).saveLogin(txtUsername.getText().toString()
-                        ,txtPassword.getText().toString());
-
-                Intent intent = new Intent(this, NavDrawerActivity.class);
-                startActivity(intent);
-                overridePendingTransition( R.anim.push_right_in, R.anim.push_right_out );
-                finish();
-            } else {
-                new AlertDialog.Builder(this)
-                        .setTitle(getResources().getString(R.string.error_in_login))
-                        .setMessage(getString(R.string.please_insert_username_password_valid))
-                        .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                            }
-                        })
-                        .setIcon(android.R.drawable.ic_dialog_alert)
-                        .show();
-            }
+            ((UserInfo)b).setIsFacebook(false);
+            loginSuccessful((UserInfo) b);
         }
     }
 
@@ -258,5 +325,11 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        callbackManager.onActivityResult(requestCode, resultCode, data);
     }
 }

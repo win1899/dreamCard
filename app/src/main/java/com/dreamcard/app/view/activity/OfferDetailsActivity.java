@@ -542,6 +542,9 @@ public class OfferDetailsActivity extends Activity
             startActivity(intent);
             overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
         } else if (view.getId() == R.id.edit_rating_pnl) {
+            if (Utils.promoteActivation(this)) {
+                return;
+            }
             Intent intent = new Intent(this, RateBusinessActivity.class);
             intent.putExtra(Params.RATING_TYPE, Params.TYPE_OFFER);
             intent.putExtra(Params.BUSINESS_ID, this.bean.getId());
@@ -636,6 +639,10 @@ public class OfferDetailsActivity extends Activity
     }
 
     private void addCommentDialog() {
+        if (Utils.promoteActivation(this)) {
+            return;
+        }
+
         Intent intent = new Intent(this, AddCommentActivity.class);
         intent.putExtra(Params.OFFER_ID, this.bean.getId());
         intent.putExtra(Params.TYPE, Params.TYPE_OFFER);

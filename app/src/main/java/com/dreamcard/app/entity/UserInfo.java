@@ -14,6 +14,17 @@ public class UserInfo {
     private int status;
     private String cardNumber;
 
+    public boolean getIsFacebook() {
+        return isFacebook;
+    }
+
+    public void setIsFacebook(boolean isFacebook) {
+        this.isFacebook = isFacebook;
+    }
+
+    private boolean isFacebook;
+
+
     public int getStatus() {
         return status;
     }

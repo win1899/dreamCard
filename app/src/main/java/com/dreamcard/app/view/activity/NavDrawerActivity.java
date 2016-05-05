@@ -59,6 +59,7 @@ import com.dreamcard.app.view.fragments.LocationFragment;
 import com.dreamcard.app.view.fragments.StoresListFragment;
 import com.dreamcard.app.view.fragments.SubcategoryFragment;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
+import com.facebook.login.LoginManager;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
@@ -346,6 +347,9 @@ public class NavDrawerActivity extends FragmentActivity
 
                 break;
             case 5:
+                if (Utils.promoteActivation(this)) {
+                    return;
+                }
                 intent=new Intent(this,SettingActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.push_down_in, R.anim.push_down_in);
@@ -367,6 +371,9 @@ public class NavDrawerActivity extends FragmentActivity
                 break;
 
             case 8:
+                if (Utils.promoteActivation(this)) {
+                    return;
+                }
                 fragment = new FeedbackFragment();
                 fragmentTag=Params.FRAGMENT_FEEDBACK;
                 this.isOfferListSelected=false;
@@ -378,6 +385,7 @@ public class NavDrawerActivity extends FragmentActivity
                 SharedPreferences pref=getSharedPreferences(Params.APP_DATA,MODE_PRIVATE);
                 pref.edit().clear().commit();
                 Utils.updateMainBadge(NavDrawerActivity.this);
+                LoginManager.getInstance().logOut();
                 intent=new Intent(this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
@@ -615,6 +623,10 @@ public class NavDrawerActivity extends FragmentActivity
             onNavigationDrawerItemSelected(0);
         }
         else if (view.getId() == R.id.notifications_icon) {
+            if (Utils.promoteActivation(this)) {
+                return;
+            }
+
             Intent intent = new Intent(NavDrawerActivity.this, NotificationActivity.class);
             startActivity(intent);
 

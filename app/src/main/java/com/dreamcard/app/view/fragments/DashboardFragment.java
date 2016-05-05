@@ -191,6 +191,10 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
 
             btnCash.setBackgroundColor(getResources().getColor(R.color.button_selected));
 
+            if (Utils.promoteActivation(getActivity())) {
+                return;
+            }
+
             showSavedAmountDialog("Cash saved", totalSave);
         } else if (view.getId() == R.id.btn_cash_points) {
             btnCash.setBackgroundColor(getResources().getColor(R.color.button_not_seleted));
@@ -199,6 +203,9 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
 
             btnCashPoints.setBackground(getResources().getDrawable(R.color.button_selected));
 
+            if (Utils.promoteActivation(getActivity())) {
+                return;
+            }
             showTotalSavingDialog("Total Cash points");
 
         } else if (view.getId() == R.id.btn_mobile) {
@@ -208,6 +215,9 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
 
             btnMobile.setBackground(getResources().getDrawable(R.color.button_selected));
 
+            if (Utils.promoteActivation(getActivity())) {
+                return;
+            }
             comingSoonDialog();
         }
         else if (view.getId() == R.id.btn_gas) {
@@ -217,6 +227,9 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
 
             btnGas.setBackground(getResources().getDrawable(R.color.button_selected));
 
+            if (Utils.promoteActivation(getActivity())) {
+                return;
+            }
             comingSoonDialog();
         }
     }

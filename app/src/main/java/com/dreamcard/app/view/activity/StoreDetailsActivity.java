@@ -282,14 +282,9 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         }
     }
 
-    private int dpToPx(int dp) {
-        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, getResources().getDisplayMetrics());
-    }
-
     private void setRating(int rating) {
         for (int index = 0; index < rating; index++) {
             ratingPnl.addView(insertRating(index, 20, 20));
-
         }
     }
 
@@ -368,10 +363,16 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     public void onClick(View view) {
         if (view.getId() == R.id.txt_back || view.getId() == R.id.txt_arrow)
             finish();
-        else if (view.getId() == R.id.img_add_comment)
+        else if (view.getId() == R.id.img_add_comment) {
+
             addCommentDialog();
-        else if (view.getId() == R.id.rating_pnl)
+        }
+        else if (view.getId() == R.id.rating_pnl) {
+            if (Utils.promoteActivation(StoreDetailsActivity.this)) {
+                return;
+            }
             callRatingActivity();
+        }
         else if (view.getId() == R.id.img_offer_logo) {
             Intent intent = new Intent(this, ImageViewerActivity.class);
             intent.putExtra("imageURL", bean.getWideLogo());
@@ -513,6 +514,9 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     }
 
     private void callRatingActivity() {
+        if (Utils.promoteActivation(StoreDetailsActivity.this)) {
+            return;
+        }
         Intent intent = new Intent(this, RateBusinessActivity.class);
         intent.putExtra(Params.BUSINESS_ID, this.bean.getId());
         startActivityForResult(intent, Params.STATUS_ADD_RATING);
@@ -538,6 +542,10 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     }
 
     private void addCommentDialog() {
+        if (Utils.promoteActivation(StoreDetailsActivity.this)) {
+            return;
+        }
+
         Intent intent = new Intent(this, AddCommentActivity.class);
         intent.putExtra(Params.OFFER_ID, this.bean.getId());
         intent.putExtra(Params.TYPE, Params.TYPE_BUSINESS);

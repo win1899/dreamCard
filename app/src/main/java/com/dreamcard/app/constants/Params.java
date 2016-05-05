@@ -49,6 +49,7 @@ public class Params {
     public static final String USER_INFO_COUNTRY="USER_INFO_COUNTRY";
     public static final String USER_INFO_EDUCATION="USER_INFO_EDUCATION";
     public static final String USER_INFO_CARD_NUMBER="USER_INFO_CARD_NUMBER";
+    public static final String USER_FACEBOOK_LOGIN = "USER_FACEBOOK_LOGIN";
 
     public static final String APP_DATA="APP_DATA";
     public static final String RATING_TYPE="RATING_TYPE";

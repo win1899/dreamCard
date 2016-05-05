@@ -1,10 +1,12 @@
 package com.dreamcard.app.utils;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -288,5 +290,24 @@ public class Utils {
         catch (Exception e) {
             return null;
         }
+    }
+
+    public static boolean promoteActivation(Context context) {
+        SharedPreferences pref = context.getSharedPreferences(Params.APP_DATA, context.MODE_PRIVATE);
+        boolean isFacebook = pref.getBoolean(Params.USER_FACEBOOK_LOGIN, false);
+        if (isFacebook) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+            dialog.setTitle(context.getString(R.string.promote_facebook_title_dialog))
+                    .setMessage(context.getString(R.string.promote_facebook_title_message))
+                    .setPositiveButton(context.getString(R.string.promote_facebook_title_button), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            dialog.show();
+            return true;
+        }
+        return false;
     }
 }

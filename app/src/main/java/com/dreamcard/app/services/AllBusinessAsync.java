@@ -139,7 +139,7 @@ public class AllBusinessAsync extends AbstractAsyncTask<Object, Void, Object> {
 
                             JSONObject pointsObject = oneObject.getJSONObject("StorePoints");
                             if (pointsObject != null) {
-                                String cashPoints = pointsObject.getString("Points");
+                                String cashPoints = pointsObject.optString("PointsValue");
                                 if (cashPoints == null || cashPoints.equalsIgnoreCase("null")) {
                                     cashPoints = "0";
                                 }
@@ -153,6 +153,9 @@ public class AllBusinessAsync extends AbstractAsyncTask<Object, Void, Object> {
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        ErrorMessageInfo bean=new ErrorMessageInfo();
+                        bean.setMessage(this.context.getString(R.string.error_in_access_server));
+                        return bean;
                     }
                 }else{
                     if(envelope.getResponse() instanceof Vector) {
@@ -169,6 +172,9 @@ public class AllBusinessAsync extends AbstractAsyncTask<Object, Void, Object> {
 
             } catch (SoapFault soapFault) {
                 soapFault.printStackTrace();
+                ErrorMessageInfo bean=new ErrorMessageInfo();
+                bean.setMessage(this.context.getString(R.string.error_in_access_server));
+                return bean;
             }
         } else if (envelope.bodyIn instanceof SoapFault) {
             SoapFault soapFault = (SoapFault) envelope.bodyIn;
@@ -178,7 +184,6 @@ public class AllBusinessAsync extends AbstractAsyncTask<Object, Void, Object> {
             return bean;
         }else{
             ErrorMessageInfo bean=new ErrorMessageInfo();
-//            bean.setStatus(""+Params.STATUS_FAILED);
             bean.setMessage(this.context.getString(R.string.error_in_access_server));
             return bean;
         }

@@ -35,6 +35,7 @@ import com.dreamcard.app.entity.Categories;
 import com.dreamcard.app.entity.LocationInfo;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.Stores;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.adapters.NavDrawerItem;
 import com.dreamcard.app.view.adapters.NavDrawerListAdapter;
 import com.dreamcard.app.view.fragments.CategoriesListFragment;
@@ -383,6 +384,9 @@ public class SlidingMenuActivity extends FragmentActivity implements FragmentMai
     }
 
     private void callSetting() {
+        if (Utils.promoteActivation(this)) {
+            return;
+        }
         Intent intent=new Intent(this,SettingActivity.class);
         startActivity(intent);
         overridePendingTransition( R.anim.push_down_in, R.anim.push_down_in );
