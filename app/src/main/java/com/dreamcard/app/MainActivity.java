@@ -25,6 +25,7 @@ import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.UserInfo;
 import com.dreamcard.app.services.LoginAsync;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.activity.BuyDreamCardActivity;
 import com.dreamcard.app.view.activity.MainActivationFormActivity;
 import com.dreamcard.app.view.activity.NavDrawerActivity;
@@ -32,8 +33,10 @@ import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
+import com.facebook.FacebookSdk;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 
@@ -55,7 +58,7 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
     private Button btnLogin;
     private Button btnForgotPass;
     private Button whereToBuyDreamCard;
-    private LinearLayout activationPnl;
+    private Button activationPnl;
     private LoginButton loginButton;
     private CallbackManager callbackManager;
 
@@ -64,18 +67,33 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
     private TransparentProgressDialog progress;
     private Runnable runnable;
     private Handler handler;
+    private JSONObject _jsonResponse;
+    private boolean _facebookClicked = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (!FacebookSdk.isInitialized()) {
+            FacebookSdk.sdkInitialize(getApplicationContext());
+        }
+
+        LoginManager.getInstance().logOut();
+
         setContentView(R.layout.activity_main);
 
         buildUI();
 
         UserInfo bean= DatabaseController.getInstance(this).getLoginInfo();
         if(bean != null){
-            txtUsername.setText(bean.getEmail());
-            txtPassword.setText(bean.getPassword());
+            if (!bean.getEmail().endsWith("@dreamcarduser.com")) {
+                txtUsername.setText(bean.getEmail());
+                txtPassword.setText(bean.getPassword());
+            }
+            else {
+                DatabaseController.getInstance(this).deleteLogin();
+                SharedPreferences pref=getSharedPreferences(Params.APP_DATA,MODE_PRIVATE);
+                pref.edit().clear().commit();
+            }
         }
     }
 
@@ -101,7 +119,7 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
         btnForgotPass=(Button)findViewById(R.id.btn_forgot_pass);
         whereToBuyDreamCard = (Button) findViewById(R.id.where_to_buy);
         btnLogin=(Button)findViewById(R.id.btn_login);
-        activationPnl=(LinearLayout)findViewById(R.id.activation_pnl);
+        activationPnl=(Button)findViewById(R.id.activation_pnl);
         btnLogin.setOnClickListener(this);
         btnForgotPass.setOnClickListener(this);
         whereToBuyDreamCard.setOnClickListener(this);
@@ -110,34 +128,42 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
 
         loginButton.setReadPermissions(Arrays.asList(
                 "public_profile"));
+        loginButton.setReadPermissions("email");
+
         // If using in a fragment
         callbackManager = CallbackManager.Factory.create();
         // Callback registration
         loginButton.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
             @Override
             public void onSuccess(LoginResult loginResult) {
+                _facebookClicked = true;
                 GraphRequest request = GraphRequest.newMeRequest(loginResult.getAccessToken(), new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject jsonResponse, GraphResponse response) {
+                        if (jsonResponse == null) {
+                            loginAsync=new LoginAsync(MainActivity.this, ServicesConstants.getLoginRequestList(""
+                                    , "")
+                                    , Params.SERVICE_PROCESS_9);
+                            loginAsync.execute(MainActivity.this);
+                            return;
+                        }
                         Log.v("LoginActivity", jsonResponse.toString());
-                        try {
-                            UserInfo userInfo = new UserInfo();
-                            userInfo.setFullName(jsonResponse.getString("name"));
-                            userInfo.setGender(jsonResponse.getString("gender"));
-                            userInfo.setId(jsonResponse.getString("id"));
-                            userInfo.setStatus(1);
-                            userInfo.setIsFacebook(true);
 
-                            loginSuccessful(userInfo);
-                        }
-                        catch (JSONException e) {
-                            Log.e("MainActivty", "Failed to parse json from facebook");
-                        }
+                        String userName = Utils.getFacebookUserName(jsonResponse.optString("id"));
+
+                        _jsonResponse = jsonResponse;
+
+                        progress = new TransparentProgressDialog(MainActivity.this, R.drawable.loading);
+                        progress.show();
+                        loginAsync=new LoginAsync(MainActivity.this, ServicesConstants.getLoginRequestList(userName
+                                , jsonResponse.optString("id"))
+                                , Params.SERVICE_PROCESS_9);
+                        loginAsync.execute(MainActivity.this);
                     }
                 });
 
                 Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email,gender,birthday");
+                parameters.putString("fields", "id,name,email,gender,first_name,last_name");
                 request.setParameters(parameters);
                 request.executeAsync();
             }
@@ -283,13 +309,35 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
             editor.putBoolean(Params.USER_FACEBOOK_LOGIN, userInfo.getIsFacebook());
             editor.commit();
 
-            DatabaseController.getInstance(this).saveLogin(txtUsername.getText().toString()
-                    , txtPassword.getText().toString());
-
+            if (!userInfo.getIsFacebook() && !_facebookClicked) {
+                DatabaseController.getInstance(this).saveLogin(txtUsername.getText().toString()
+                        , txtPassword.getText().toString());
+            }
+            else if (_jsonResponse != null) {
+                String userName = Utils.getFacebookUserName(Utils.getFacebookUserName(_jsonResponse.optString("id")));
+                DatabaseController.getInstance(this).saveLogin(userName, _jsonResponse.optString("id"));
+            }
+            _facebookClicked = false;
             Intent intent = new Intent(this, NavDrawerActivity.class);
             startActivity(intent);
             overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
             finish();
+        }
+        else if (_jsonResponse != null) {
+            UserInfo fbUserInfo = new UserInfo();
+            fbUserInfo.setFullName(_jsonResponse.optString("name"));
+            fbUserInfo.setFirstName(_jsonResponse.optString("first_name"));
+            fbUserInfo.setLastName(_jsonResponse.optString("last_name"));
+            fbUserInfo.setGender(_jsonResponse.optString("gender"));
+            fbUserInfo.setId(_jsonResponse.optString("id"));
+            fbUserInfo.setEmail(_jsonResponse.optString("email"));
+            fbUserInfo.setStatus(1);
+            fbUserInfo.setIsFacebook(true);
+
+            _jsonResponse = null;
+            _facebookClicked = false;
+
+            loginSuccessful(fbUserInfo);
         }
         else {
             new AlertDialog.Builder(this)
@@ -301,6 +349,8 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
                     })
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show();
+            _facebookClicked = false;
+
         }
     }
 
@@ -310,7 +360,9 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
         if(b!=null){
             ((UserInfo)b).setIsFacebook(false);
             loginSuccessful((UserInfo) b);
+            return;
         }
+        _facebookClicked = false;
     }
 
     @Override
@@ -325,6 +377,7 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
                 })
                 .setIcon(android.R.drawable.ic_dialog_alert)
                 .show();
+        _facebookClicked = false;
     }
 
     @Override

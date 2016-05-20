@@ -80,7 +80,7 @@ public class RegisterConsumerAsync extends AbstractAsyncTask<Object, Void, Objec
             try {
                 if(envelope.getResponse() instanceof SoapPrimitive){
                     String str = envelope.getResponse().toString();
-                    if(str==null || str.equalsIgnoreCase("null")){
+                    if(str==null || str.equalsIgnoreCase("null") || str.equalsIgnoreCase("0")){
                         ErrorMessageInfo bean= new ErrorMessageInfo();
                         bean.setMessage(this.context.getString(R.string.error_in_connect_server));
                         return bean;
@@ -121,6 +121,7 @@ public class RegisterConsumerAsync extends AbstractAsyncTask<Object, Void, Objec
         }
         return result;
     }
+
     private Object parseSOAPResponse(SoapObject response){
         String status = response.getPrimitivePropertySafelyAsString("SelectAllOffersResult");
 //        if(status.equalsIgnoreCase(""+Params.STATUS_NO_DATA_FOUND)){

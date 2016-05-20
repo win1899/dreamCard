@@ -310,4 +310,8 @@ public class Utils {
         }
         return false;
     }
+
+    public static String getFacebookUserName(String name) {
+        return  name.replaceAll(" ", "") + "@dreamcarduser.com";
+    }
 }

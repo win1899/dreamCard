@@ -3,7 +3,9 @@ package com.dreamcard.app.view.fragments;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -24,12 +26,14 @@ import com.dreamcard.app.entity.PersonalInfo;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.services.CitiesAsyncTask;
 import com.dreamcard.app.services.CountryAsyncTask;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.interfaces.IDatePickerListener;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -77,15 +81,16 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
     private EditText txtPhone;
 
     private String[] citiesArray;
-    private  ArrayList<City> citiesList=new  ArrayList<City>();
+    private ArrayList<City> citiesList=new  ArrayList<City>();
 
     private String[] countriesArray;
-    private  ArrayList<City> countriesList=new  ArrayList<City>();
+    private ArrayList<City> countriesList=new  ArrayList<City>();
 
     private int cityIndex;
     private String selectedCity;
     private int countryIndex;
     private String selectedCountry;
+    private boolean isFacebook = false;
 
     private int gender;
 
@@ -116,50 +121,58 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.fragment_activation_information, container, false);
+        View view;
+        if (isFacebook) {
+            view = inflater.inflate(R.layout.fragment_activiation_facebook, container, false);
+        }
+        else {
+            view = inflater.inflate(R.layout.fragment_activation_information, container, false);
+        }
 
-        btnFemale=(Button)view.findViewById(R.id.btn_female);
-        btnMale=(Button)view.findViewById(R.id.btn_male);
-        txtBirthday=(EditText)view.findViewById(R.id.txt_birth_date);
-        txtFirstName=(EditText)view.findViewById(R.id.txt_full_name);
-//        txtLastName=(EditText)view.findViewById(R.id.txt_last_name);
-        txtPassword=(EditText)view.findViewById(R.id.txt_password);
-        txtRepeatPassword=(EditText)view.findViewById(R.id.txt_repeat_password);
-        txtUsername=(EditText)view.findViewById(R.id.txt_username);
-        txtMobile=(EditText)view.findViewById(R.id.txt_mobile);
-        txtAddress=(EditText)view.findViewById(R.id.txt_address);
-        txtCity=(EditText)view.findViewById(R.id.txt_city);
-        txtCountry=(EditText)view.findViewById(R.id.txt_country);
-        txtEducation=(EditText)view.findViewById(R.id.txt_education);
-        txtId=(EditText)view.findViewById(R.id.txt_id);
-        txtPhone=(EditText)view.findViewById(R.id.txt_phone);
-        txtWork=(EditText)view.findViewById(R.id.txt_work);
+        txtMobile = (EditText) view.findViewById(R.id.txt_mobile);
+        txtId = (EditText) view.findViewById(R.id.txt_id);
 
-        txtBirthday.setOnClickListener(this);
-        txtBirthday.setClickable(false);
-        txtBirthday.setFocusable(false);
-        txtBirthday.setFocusableInTouchMode(false);
+        if (!isFacebook) {
+            btnFemale = (Button) view.findViewById(R.id.btn_female);
+            btnMale = (Button) view.findViewById(R.id.btn_male);
+            txtBirthday = (EditText) view.findViewById(R.id.txt_birth_date);
+            txtFirstName = (EditText) view.findViewById(R.id.txt_full_name);
+            txtPassword = (EditText) view.findViewById(R.id.txt_password);
+            txtRepeatPassword = (EditText) view.findViewById(R.id.txt_repeat_password);
+            txtUsername = (EditText) view.findViewById(R.id.txt_username);
+            txtAddress = (EditText) view.findViewById(R.id.txt_address);
+            txtCity = (EditText) view.findViewById(R.id.txt_city);
+            txtCountry = (EditText) view.findViewById(R.id.txt_country);
+            txtEducation = (EditText) view.findViewById(R.id.txt_education);
+            txtPhone = (EditText) view.findViewById(R.id.txt_phone);
+            txtWork = (EditText) view.findViewById(R.id.txt_work);
 
-        txtCountry.setOnClickListener(this);
-        txtCountry.setClickable(false);
-        txtCountry.setFocusable(false);
-        txtCountry.setFocusableInTouchMode(false);
+            txtBirthday.setOnClickListener(this);
+            txtBirthday.setClickable(false);
+            txtBirthday.setFocusable(false);
+            txtBirthday.setFocusableInTouchMode(false);
 
-        txtCity.setOnClickListener(this);
-        txtCity.setClickable(false);
-        txtCity.setFocusable(false);
-        txtCity.setFocusableInTouchMode(false);
+            txtCountry.setOnClickListener(this);
+            txtCountry.setClickable(false);
+            txtCountry.setFocusable(false);
+            txtCountry.setFocusableInTouchMode(false);
 
-        btnMale.setOnClickListener(this);
-        btnFemale.setOnClickListener(this);
+            txtCity.setOnClickListener(this);
+            txtCity.setClickable(false);
+            txtCity.setFocusable(false);
+            txtCity.setFocusableInTouchMode(false);
 
-        citiesAsyncTask=new CitiesAsyncTask(this, new ArrayList<ServiceRequest>()
-                , Params.SERVICE_PROCESS_1);
-        citiesAsyncTask.execute(getActivity());
+            btnMale.setOnClickListener(this);
+            btnFemale.setOnClickListener(this);
 
-        countriesAsyncTask=new CountryAsyncTask(this, new ArrayList<ServiceRequest>()
-                , Params.SERVICE_PROCESS_2);
-        countriesAsyncTask.execute(getActivity());
+            citiesAsyncTask = new CitiesAsyncTask(this, new ArrayList<ServiceRequest>()
+                    , Params.SERVICE_PROCESS_1);
+            citiesAsyncTask.execute(getActivity());
+
+            countriesAsyncTask = new CountryAsyncTask(this, new ArrayList<ServiceRequest>()
+                    , Params.SERVICE_PROCESS_2);
+            countriesAsyncTask.execute(getActivity());
+        }
 
         return view;
     }
@@ -184,8 +197,12 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
     @Override
     public void onDetach() {
         super.onDetach();
-        citiesAsyncTask.cancel(true);
-        countriesAsyncTask.cancel(true);
+        if (citiesAsyncTask != null && citiesAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
+            citiesAsyncTask.cancel(true);
+        }
+        if (countriesAsyncTask != null && countriesAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
+            countriesAsyncTask.cancel(true);
+        }
         mListener = null;
     }
 
@@ -256,6 +273,7 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
         }
 
     }
+
     public PersonalInfo getData(){
         PersonalInfo bean=new PersonalInfo();
         bean.setPassword(txtPassword.getText().toString());
@@ -357,5 +375,54 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
     @Override
     public void onServiceFailed(ErrorMessageInfo info) {
 
+    }
+
+    public void setIsFacebook(boolean isFacebook) {
+        this.isFacebook = isFacebook;
+    }
+
+    private void hideOptions() {
+        btnMale.setVisibility(View.INVISIBLE);
+        btnFemale.setVisibility(View.INVISIBLE);
+        txtFirstName.setVisibility(View.INVISIBLE);
+        txtPassword.setVisibility(View.INVISIBLE);
+        txtRepeatPassword.setVisibility(View.INVISIBLE);
+        txtBirthday.setVisibility(View.INVISIBLE);
+        txtUsername.setVisibility(View.INVISIBLE);
+        txtCountry.setVisibility(View.INVISIBLE);
+        txtCity.setVisibility(View.INVISIBLE);
+        txtEducation.setVisibility(View.INVISIBLE);
+        txtWork.setVisibility(View.INVISIBLE);
+        txtAddress.setVisibility(View.INVISIBLE);
+        txtPhone.setVisibility(View.INVISIBLE);
+    }
+
+    public PersonalInfo getFacebookData() {
+        SharedPreferences pref = getActivity().getSharedPreferences(Params.APP_DATA, getActivity().MODE_PRIVATE);
+
+        PersonalInfo bean=new PersonalInfo();
+        bean.setPassword(pref.getString(Params.USER_INFO_ID, ""));
+        bean.setBirthday("1/1/1975");
+        bean.setFullName(pref.getString(Params.USER_INFO_FULL_NAME, ""));
+        bean.setUsername(Utils.getFacebookUserName(pref.getString(Params.USER_INFO_ID, "")));
+
+        bean.setMobile(txtMobile.getText().toString());
+        bean.setAddress("");
+        bean.setCity("7");
+        bean.setCountry("1");
+        bean.setIdNum(txtId.getText().toString());
+
+        String fGender = pref.getString(Params.USER_INFO_GENDER, "Male");
+        String gender = "F";
+        if (fGender.equalsIgnoreCase("Male")) {
+            gender = "M";
+        }
+
+        bean.setGender(gender);
+
+        Calendar date = Calendar.getInstance();
+        date.set(1975, 1, 1);
+        bean.setBirthdayDate(date.getTime());
+        return bean;
     }
 }

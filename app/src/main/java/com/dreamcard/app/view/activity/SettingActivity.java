@@ -345,14 +345,18 @@ public class SettingActivity extends FragmentActivity implements IServiceListene
         txtEmailLbl.setText(id);
 
         if (birthday != null && birthday.length() > 0) {
-            Date date = new Date(Long.parseLong(birthday.replaceAll(".*?(\\d+).*", "$1")));
-            android.text.format.DateFormat df = new android.text.format.DateFormat();
-            Calendar c = Calendar.getInstance();
-            c.setTime(date);
+            try {
+                Date date = new Date(Long.parseLong(birthday.replaceAll(".*?(\\d+).*", "$1")));
+                android.text.format.DateFormat df = new android.text.format.DateFormat();
+                Calendar c = Calendar.getInstance();
+                c.setTime(date);
 
-            String x = df.format("dd/MM/yyyy", c.getTime()).toString();
-            txtBirthday.setText(x);
-            txtBirthdayLbl.setText(x);
+                String x = df.format("dd/MM/yyyy", c.getTime()).toString();
+                txtBirthday.setText(x);
+                txtBirthdayLbl.setText(x);
+            } catch (Exception e) {
+
+            }
         }
 
         if (gender != null) {

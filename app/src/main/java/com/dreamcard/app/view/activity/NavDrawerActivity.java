@@ -357,20 +357,28 @@ public class NavDrawerActivity extends FragmentActivity
                 break;
 
             case 6:
+                Intent activationIntent=new Intent(this, MainActivationFormActivity.class);
+                activationIntent.putExtra(Params.FACEBOOK_EXTRA, true);
+                startActivity(activationIntent);
+                overridePendingTransition( R.anim.push_right_in, R.anim.push_right_out );
+                finish();
+                break;
+
+            case 7:
                 fragment = new FAQFragment();
                 fragmentTag=Params.FRAGMENT_FAQ;
                 this.isOfferListSelected=false;
                 btnSetting.setVisibility(View.GONE);
                 break;
 
-            case 7:
+            case 8:
                 fragment = new AboutUsFragment();
                 fragmentTag=Params.FRAGMENT_ABOUTUS;
                 this.isOfferListSelected=false;
                 btnSetting.setVisibility(View.GONE);
                 break;
 
-            case 8:
+            case 9:
                 if (Utils.promoteActivation(this)) {
                     return;
                 }
@@ -380,7 +388,7 @@ public class NavDrawerActivity extends FragmentActivity
                 btnSetting.setVisibility(View.GONE);
                 break;
 
-            case 9:
+            case 10:
                 DatabaseController.getInstance(this).deleteLogin();
                 SharedPreferences pref=getSharedPreferences(Params.APP_DATA,MODE_PRIVATE);
                 pref.edit().clear().commit();

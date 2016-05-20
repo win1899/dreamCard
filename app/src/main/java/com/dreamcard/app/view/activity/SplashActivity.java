@@ -34,18 +34,29 @@ public class SplashActivity extends Activity implements IServiceListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fresco.initialize(this);
-        FacebookSdk.sdkInitialize(getApplicationContext());
+        if (!FacebookSdk.isInitialized()) {
+            FacebookSdk.sdkInitialize(getApplicationContext());
+        }
 
         setContentView(R.layout.activity_splash);
 
         UserInfo bean = DatabaseController.getInstance(SplashActivity.this).getLoginInfo();
 
         if (bean != null) {
-            if (bean.getEmail().equalsIgnoreCase("")) {
+            SharedPreferences pref = getSharedPreferences(Params.APP_DATA, MODE_PRIVATE);
+            if (pref.getBoolean(Params.USER_FACEBOOK_LOGIN, false)) {
                 AccessToken accessToken = AccessToken.getCurrentAccessToken();
                 GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
                     @Override
                     public void onCompleted(JSONObject jsonResponse, GraphResponse response) {
+                        if (jsonResponse == null) {
+                            UserInfo userInfo = new UserInfo();
+                            userInfo.setStatus(0);
+                            userInfo.setIsFacebook(true);
+
+                            checkLogin(userInfo);
+                            return;
+                        }
                         Log.v("LoginActivity", jsonResponse.toString());
                         try {
                             UserInfo userInfo = new UserInfo();

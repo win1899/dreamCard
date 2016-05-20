@@ -60,6 +60,8 @@ public class Params {
     public static final int MODE_ADD=0;
     public static final String CONSUMER_ID = "ConsumerID";
 
+    public static final String FACEBOOK_EXTRA = "FaceBookLogin";
+
     public static ArrayList<Offers> DISCOUNT_LIST;
 
     public static final class CURRENCY{

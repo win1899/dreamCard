@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 import com.dreamcard.app.MainActivity;
 import com.dreamcard.app.R;
+import com.dreamcard.app.common.DatabaseController;
 import com.dreamcard.app.components.TransparentProgressDialog;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
@@ -30,6 +32,7 @@ import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.entity.PersonalInfo;
 import com.dreamcard.app.services.CheckActivationAsync;
 import com.dreamcard.app.services.RegisterConsumerAsync;
+import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.fragments.ActivationCardNumFragment;
 import com.dreamcard.app.view.fragments.ActivationFinalFragment;
 import com.dreamcard.app.view.fragments.ActivationInformationFragment;
@@ -37,6 +40,7 @@ import com.dreamcard.app.view.fragments.ActivationSettingFragment;
 import com.dreamcard.app.view.fragments.ActivationTermsFragment;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
+import com.facebook.login.LoginManager;
 
 public class MainActivationFormActivity extends FragmentActivity implements View.OnClickListener
         , OnFragmentInteractionListener, IServiceListener {
@@ -70,11 +74,14 @@ public class MainActivationFormActivity extends FragmentActivity implements View
     private ActivationTermsFragment termsFragment = new ActivationTermsFragment();
     private ActivationFinalFragment finalFragment = new ActivationFinalFragment();
 
+    private boolean isFaceBookUser = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_activation_form);
+
+        isFaceBookUser = getIntent().getBooleanExtra(Params.FACEBOOK_EXTRA, false);
 
         buildUI();
         initFragment(0);
@@ -134,6 +141,10 @@ public class MainActivationFormActivity extends FragmentActivity implements View
                 btn3.setBackground(null);
                 imgStage1.setVisibility(View.VISIBLE);
                 btnBack.setVisibility(View.VISIBLE);
+                if (isFaceBookUser) {
+                    informationFragment.setIsFacebook(true);
+                }
+
                 break;
             case 2:
                 settingFragment = ActivationSettingFragment.newInstance(this.userId, "");
@@ -151,6 +162,7 @@ public class MainActivationFormActivity extends FragmentActivity implements View
                 btn3.setBackground(null);
                 btn5.setBackground(null);
                 imgStage3.setVisibility(View.VISIBLE);
+
                 break;
             case 4:
                 String fullName = this.personalInfo.getFullName();
@@ -160,7 +172,7 @@ public class MainActivationFormActivity extends FragmentActivity implements View
                         fullName = "";
                     }
                 }
-                finalFragment = ActivationFinalFragment.newInstance(fullName, personalInfo.getUsername(), personalInfo.getPassword());
+                finalFragment = ActivationFinalFragment.newInstance(fullName, personalInfo.getUsername(), personalInfo.getPassword(), isFaceBookUser);
                 fragment = finalFragment;
                 tag = Params.FRAGMENT_ACTIVATION_4;
                 btn5.setBackgroundColor(getResources().getColor(R.color.list_sliding_item));
@@ -210,9 +222,7 @@ public class MainActivationFormActivity extends FragmentActivity implements View
     private void nextPressed() {
         boolean isValid = true;
         if (this.currentPage == 4) {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-            finish();
+            clearCredentials();
         } else {
             if (currentPage == 0) {
                 isValid = cardNumFragment.isValidInput();
@@ -230,9 +240,8 @@ public class MainActivationFormActivity extends FragmentActivity implements View
                     async.execute(this);
                 }
             } else if (this.currentPage == 1) {
-                isValid = informationFragment.isValidInput();
-                if (isValid) {
-                    this.personalInfo = informationFragment.getData();
+                if (isFaceBookUser) {
+                    this.personalInfo = informationFragment.getFacebookData();
                     if (this.userId != null)
                         this.personalInfo.setId(userId);
                     else
@@ -244,6 +253,23 @@ public class MainActivationFormActivity extends FragmentActivity implements View
                             , ServicesConstants.getActivationInformationList(this.cardNum, this.personalInfo)
                             , Params.SERVICE_PROCESS_2);
                     async.execute(this);
+                }
+                else {
+                    isValid = informationFragment.isValidInput();
+                    if (isValid && !isFaceBookUser) {
+                        this.personalInfo = informationFragment.getData();
+                        if (this.userId != null)
+                            this.personalInfo.setId(userId);
+                        else
+                            this.personalInfo.setId(null);
+                        progress.show();
+                        handler.postDelayed(runnable, 5000);
+
+                        RegisterConsumerAsync async = new RegisterConsumerAsync(this
+                                , ServicesConstants.getActivationInformationList(this.cardNum, this.personalInfo)
+                                , Params.SERVICE_PROCESS_2);
+                        async.execute(this);
+                    }
                 }
             } else if (this.currentPage == 2) {
                 currentPage++;
@@ -311,6 +337,19 @@ public class MainActivationFormActivity extends FragmentActivity implements View
         }
     }
 
+    private void clearCredentials() {
+        DatabaseController.getInstance(this).deleteLogin();
+        SharedPreferences pref=getSharedPreferences(Params.APP_DATA,MODE_PRIVATE);
+        pref.edit().clear().commit();
+        Utils.updateMainBadge(MainActivationFormActivity.this);
+        LoginManager.getInstance().logOut();
+        Intent intent  = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        overridePendingTransition( R.anim.push_down_in, R.anim.push_down_out );
+        finish();
+    }
+
     @Override
     public void onServiceFailed(ErrorMessageInfo info) {
         progress.dismiss();
@@ -320,9 +359,6 @@ public class MainActivationFormActivity extends FragmentActivity implements View
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        Intent intent = new Intent(this, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+        clearCredentials();
     }
 }
