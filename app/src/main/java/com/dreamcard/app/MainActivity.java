@@ -314,7 +314,7 @@ public class MainActivity extends Activity implements View.OnClickListener,IServ
                         , txtPassword.getText().toString());
             }
             else if (_jsonResponse != null) {
-                String userName = Utils.getFacebookUserName(Utils.getFacebookUserName(_jsonResponse.optString("id")));
+                String userName = Utils.getFacebookUserName(_jsonResponse.optString("id"));
                 DatabaseController.getInstance(this).saveLogin(userName, _jsonResponse.optString("id"));
             }
             _facebookClicked = false;

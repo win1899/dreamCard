@@ -43,43 +43,7 @@ public class SplashActivity extends Activity implements IServiceListener {
         UserInfo bean = DatabaseController.getInstance(SplashActivity.this).getLoginInfo();
 
         if (bean != null) {
-            SharedPreferences pref = getSharedPreferences(Params.APP_DATA, MODE_PRIVATE);
-            if (pref.getBoolean(Params.USER_FACEBOOK_LOGIN, false)) {
-                AccessToken accessToken = AccessToken.getCurrentAccessToken();
-                GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
-                    @Override
-                    public void onCompleted(JSONObject jsonResponse, GraphResponse response) {
-                        if (jsonResponse == null) {
-                            UserInfo userInfo = new UserInfo();
-                            userInfo.setStatus(0);
-                            userInfo.setIsFacebook(true);
-
-                            checkLogin(userInfo);
-                            return;
-                        }
-                        Log.v("LoginActivity", jsonResponse.toString());
-                        try {
-                            UserInfo userInfo = new UserInfo();
-                            userInfo.setFullName(jsonResponse.getString("name"));
-                            userInfo.setGender(jsonResponse.getString("gender"));
-                            userInfo.setId(jsonResponse.getString("id"));
-                            userInfo.setStatus(1);
-                            userInfo.setIsFacebook(true);
-
-                            checkLogin(userInfo);
-                        }
-                        catch (JSONException e) {
-                            Log.e("MainActivty", "Failed to parse json from facebook");
-                        }
-                    }
-                });
-
-                Bundle parameters = new Bundle();
-                parameters.putString("fields", "id,name,email,gender,birthday");
-                request.setParameters(parameters);
-                request.executeAsync();
-            }
-            else {
+            if (!checkFacebookLogin()) {
                 email = bean.getEmail();
                 password = bean.getPassword();
                 LoginAsync loginAsync = new LoginAsync(SplashActivity.this
@@ -87,14 +51,55 @@ public class SplashActivity extends Activity implements IServiceListener {
                         , Params.SERVICE_PROCESS_1);
                 loginAsync.execute(this);
             }
-
         } else {
-            Intent intent = new Intent(SplashActivity.this, MainActivity.class);
-            startActivity(intent);
-            overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+            if (!checkFacebookLogin()) {
+                Intent intent = new Intent(SplashActivity.this, MainActivity.class);
+                startActivity(intent);
+                overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
+            }
         }
     }
 
+    private boolean checkFacebookLogin() {
+        SharedPreferences pref = getSharedPreferences(Params.APP_DATA, MODE_PRIVATE);
+        if (pref.getBoolean(Params.USER_FACEBOOK_LOGIN, false)) {
+            AccessToken accessToken = AccessToken.getCurrentAccessToken();
+            GraphRequest request = GraphRequest.newMeRequest(accessToken, new GraphRequest.GraphJSONObjectCallback() {
+                @Override
+                public void onCompleted(JSONObject jsonResponse, GraphResponse response) {
+                    if (jsonResponse == null) {
+                        UserInfo userInfo = new UserInfo();
+                        userInfo.setStatus(0);
+                        userInfo.setIsFacebook(true);
+
+                        checkLogin(userInfo);
+                        return;
+                    }
+                    Log.v("LoginActivity", jsonResponse.toString());
+                    try {
+                        UserInfo userInfo = new UserInfo();
+                        userInfo.setFullName(jsonResponse.getString("name"));
+                        userInfo.setGender(jsonResponse.getString("gender"));
+                        userInfo.setId(jsonResponse.getString("id"));
+                        userInfo.setStatus(1);
+                        userInfo.setIsFacebook(true);
+
+                        checkLogin(userInfo);
+                    }
+                    catch (JSONException e) {
+                        Log.e("MainActivty", "Failed to parse json from facebook");
+                    }
+                }
+            });
+
+            Bundle parameters = new Bundle();
+            parameters.putString("fields", "id,name,email,gender,birthday");
+            request.setParameters(parameters);
+            request.executeAsync();
+            return true;
+        }
+        return false;
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
