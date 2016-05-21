@@ -168,6 +168,7 @@
         <item>@drawable/icon_stores</item>
         <item>@drawable/icon_map_marker</item>
         <item>@drawable/icon_account</item>
+        <item>@drawable/icon_activation</item>
         <item>@drawable/icon_faq</item>
         <item>@drawable/icon_about</item>
         <item>@drawable/feedback_menu</item>
@@ -226,4 +227,7 @@
     <string name="promote_facebook_title_message">لا يمكن اتمام هذه العملية، الرجاء التاكد من تفعيل بطاقة Dream Card من خلال تسجيل الخروج وتفعيل البطاقة، او التاكد من استخدام البريد الالكتروني والرقم السري لتسجيل الدخول.</string>
     <string name="promote_facebook_title_button">موافق</string>
 
+    <string name="active_card_title_dialog">بطاقة Dream card مفعلة</string>
+    <string name="active_card_title_message">بطاقة Dream card الخاصة بك مفعلة، لتفعيل بطاقة جديدة الرجاء تسجيل الخروج وتسجيل بطاقة جديدة مع حساب جديد، شكرا لك.</string>
+    <string name="active_card_title_button">موافق</string>
 </resources>

@@ -311,6 +311,25 @@ public class Utils {
         return false;
     }
 
+    public static boolean isCardActivated(Context context) {
+        SharedPreferences pref = context.getSharedPreferences(Params.APP_DATA, context.MODE_PRIVATE);
+        boolean isFacebook = pref.getBoolean(Params.USER_FACEBOOK_LOGIN, false);
+        if (!isFacebook) {
+            AlertDialog.Builder dialog = new AlertDialog.Builder(context);
+            dialog.setTitle(context.getString(R.string.active_card_title_dialog))
+                    .setMessage(context.getString(R.string.active_card_title_message))
+                    .setPositiveButton(context.getString(R.string.active_card_title_button), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.dismiss();
+                        }
+                    });
+            dialog.show();
+            return true;
+        }
+        return false;
+    }
+
     public static String getFacebookUserName(String name) {
         return  name.replaceAll(" ", "") + "@dreamcarduser.com";
     }
