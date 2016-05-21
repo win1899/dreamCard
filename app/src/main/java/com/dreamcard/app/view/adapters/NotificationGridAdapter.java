@@ -70,7 +70,7 @@ public class NotificationGridAdapter extends BaseAdapter {
         //holder.getRelativeLayout().setOnClickListener(this.listener);
         //holder.getImgOffer().setOnClickListener(this.listener);
 
-        double discount = bean.getAmountBeforeDicount() - bean.getAmountAfterDiscount();
+        double discount = bean.getAmountAfterDiscount();
         String discSt = String.valueOf(discount);
         if (String.valueOf(discount).lastIndexOf(".") != -1) {
             discSt = String.valueOf(discount).substring(0, String.valueOf(discount).lastIndexOf("."));

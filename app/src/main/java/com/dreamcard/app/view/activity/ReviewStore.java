@@ -191,7 +191,7 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
                 for (Offers offer : list) {
                     if ((offer.getBusinessName() != null && offer.getBusinessName().equalsIgnoreCase(_store.getStoreName()))
                             || (offer.getBusinessId() != null && offer.getBusinessId().equalsIgnoreCase(_store.getId()))) {
-                        double discount = offer.getAmountBeforeDicount() - offer.getAmountAfterDiscount();
+                        double discount = offer.getAmountAfterDiscount();
                         String disTxt = String.valueOf(discount);
                         if (String.valueOf(discount).lastIndexOf(".") != -1) {
                             disTxt = String.valueOf(discount).substring(0, String.valueOf(discount).lastIndexOf("."));
