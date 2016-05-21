@@ -7,8 +7,12 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import com.dreamcard.app.constants.Params;
+import com.dreamcard.app.entity.NotificationDB;
 import com.dreamcard.app.entity.SearchCriteria;
 import com.dreamcard.app.entity.UserInfo;
+
+import java.util.ArrayList;
+import java.util.Calendar;
 
 /**
  * Created by Moayed on 9/27/2014.
@@ -23,24 +27,31 @@ public class DatabaseController extends SQLiteOpenHelper{
         }
         return db;
     }
+
     public DatabaseController(Context context) {
         super(context, Params.SYSTEM_DB, null, Params.DB_VERSION);
     }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(LOGIN_CREATE_TABLE);
         db.execSQL(SEARCH_CRITERIA_CREATE_TABLE);
+        db.execSQL(NOTIFICATION_TABLE_CREATE);
     }
+
     @Override
     public void onUpgrade(SQLiteDatabase db, int position, int position2) {
         db.execSQL(LOGIN_CREATE_TABLE);
         db.execSQL(SEARCH_CRITERIA_CREATE_TABLE);
+        db.execSQL(NOTIFICATION_TABLE_CREATE);
     }
+
     /**
      * Login type
      */
     public static final String TABLE_LOGIN="LOGIN_tbl";
     public static final String TABLE_SEARCH_CRITERIA="SEARCH_CRITERIA_TBL";
+    public static final String TABLE_NOTIFICATIONS = "NOTIFICATION_TABLE";
 
     public static final String LOGIN_COLUMN_EMAIL="TXT_EMAIL";
     public static final String LOGIN_COLUMN_PASSWORD="TXT_PASSWORD";
@@ -50,6 +61,10 @@ public class DatabaseController extends SQLiteOpenHelper{
     public static final String SEARCH_CRITERIA_CATEGORIES="TXT_CATEGORIES";
     public static final String SEARCH_CRITERIA_DISC_RATE="TXT_DISC_RATE";
     public static final String SEARCH_CRITERIA_RATE="TXT_RATE";
+
+    private static final String NOTIFICATION_TYPE_COLUMN = "Type";
+    private static final String NOTIFICATION_ID_COLUMN = "id";
+    private static final String NOTIFICATION_TIMESTAMP = "TimeStamp";
 
     private String LOGIN_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "
             + TABLE_LOGIN
@@ -67,6 +82,69 @@ public class DatabaseController extends SQLiteOpenHelper{
             + SEARCH_CRITERIA_DISC_RATE + " VARCHAR,"
             + SEARCH_CRITERIA_RATE + " VARCHAR"
             + ")";
+
+    private String NOTIFICATION_TABLE_CREATE = "CREATE TABLE IF NOT EXISTS "
+            + TABLE_NOTIFICATIONS
+            + "("
+            + NOTIFICATION_TYPE_COLUMN + " VARCHAR, "
+            + NOTIFICATION_ID_COLUMN + " VARCHAR, "
+            + NOTIFICATION_TIMESTAMP + " NUMBER"
+            + ")";
+
+    public long saveNotificaiton(NotificationDB notification){
+        SQLiteDatabase db = getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(NOTIFICATION_TYPE_COLUMN, notification.type);
+        values.put(NOTIFICATION_ID_COLUMN, notification.id);
+        values.put(NOTIFICATION_TIMESTAMP, Calendar.getInstance().getTimeInMillis());
+
+        return db.insert(TABLE_NOTIFICATIONS, null, values);
+    }
+
+    public ArrayList<NotificationDB> getNotification(String id) {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor rs = db.query(TABLE_NOTIFICATIONS, new String[]{NOTIFICATION_TYPE_COLUMN, NOTIFICATION_ID_COLUMN}
+                , NOTIFICATION_ID_COLUMN, new String[] {id}, null, null, null);
+
+        ArrayList<NotificationDB> notificationArray = new ArrayList<NotificationDB>();
+
+        if (rs.moveToFirst()) {
+            while (!rs.isAfterLast()) {
+                NotificationDB notification = new NotificationDB();
+                notification.type = rs.getString(rs.getColumnIndex(NOTIFICATION_TYPE_COLUMN));
+                notification.id = rs.getString(rs.getColumnIndex(NOTIFICATION_ID_COLUMN));
+                notificationArray.add(notification);
+                rs.moveToNext();
+            }
+        }
+
+        return notificationArray;
+    }
+
+    public ArrayList<NotificationDB> getAllNotifications() {
+        SQLiteDatabase db = getReadableDatabase();
+        Cursor rs = db.query(TABLE_NOTIFICATIONS, new String[]{NOTIFICATION_TYPE_COLUMN, NOTIFICATION_ID_COLUMN}
+                , null, null, null, null, NOTIFICATION_TIMESTAMP + " DESC");
+
+        ArrayList<NotificationDB> notificationArray = new ArrayList<NotificationDB>();
+
+        if (rs.moveToFirst()) {
+            while (!rs.isAfterLast()) {
+                NotificationDB notification = new NotificationDB();
+                notification.type = rs.getString(rs.getColumnIndex(NOTIFICATION_TYPE_COLUMN));
+                notification.id = rs.getString(rs.getColumnIndex(NOTIFICATION_ID_COLUMN));
+                notificationArray.add(notification);
+                rs.moveToNext();
+            }
+        }
+
+        return notificationArray;
+    }
+
+    public int deleteNotification(String id) {
+        SQLiteDatabase db = getWritableDatabase();
+        return db.delete(TABLE_NOTIFICATIONS, NOTIFICATION_ID_COLUMN + " like " + id, null);
+    }
 
     public int saveCriteria(SearchCriteria bo){
         SQLiteDatabase db = getWritableDatabase();

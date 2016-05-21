@@ -13,7 +13,9 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.dreamcard.app.R;
+import com.dreamcard.app.common.DatabaseController;
 import com.dreamcard.app.constants.Params;
+import com.dreamcard.app.entity.NotificationDB;
 import com.dreamcard.app.utils.PreferencesGCM;
 import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.activity.ReviewStore;
@@ -55,15 +57,30 @@ public class DreamGcmListenerService extends GcmListenerService {
             }
             else if (topic.equalsIgnoreCase(PreferencesGCM.OFFER_TOPIC)) {
                 Utils.updateOffersBadge(this, 1);
+                NotificationDB notification = new NotificationDB();
+                notification.type = NotificationDB.OFFER_TYPE;
+                notification.id = message;
+                DatabaseController.getInstance(this).saveNotificaiton(notification);
+
                 sendGeneralNotification("New offers are available on Dream Card.");
                 return;
             }
             else if (topic.equalsIgnoreCase(PreferencesGCM.STORE_TOPIC)) {
                 Utils.updateStoreBadge(this, 1);
+                NotificationDB notification = new NotificationDB();
+                notification.type = NotificationDB.STORE_TYPE;
+                notification.id = message;
+                DatabaseController.getInstance(this).saveNotificaiton(notification);
+
                 sendGeneralNotification("New store just joined Dream Card.");
                 return;
             }
         }
+
+        NotificationDB notification = new NotificationDB();
+        notification.type = NotificationDB.REVIEW_TYPE;
+        notification.id = message;
+        DatabaseController.getInstance(this).saveNotificaiton(notification);
 
         sendReviewNotification(message);
     }
@@ -92,19 +109,6 @@ public class DreamGcmListenerService extends GcmListenerService {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
-
-        SharedPreferences prefs = getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
-        HashSet<String> newSet = new HashSet<String>();
-        newSet.add(storeId);
-        HashSet<String> set = (HashSet<String>) prefs.getStringSet(Params.STORES_TO_REVIEW_KEY, new HashSet<String>());
-        if (set.size() > 0) {
-            newSet.addAll(set);
-        }
-
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.remove(Params.STORES_TO_REVIEW_KEY);
-        editor.putStringSet(Params.STORES_TO_REVIEW_KEY, newSet);
-        editor.apply();
 
         Utils.updateNotificationBadge(this, 1);
     }

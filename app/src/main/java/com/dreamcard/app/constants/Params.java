@@ -131,7 +131,7 @@ public class Params {
      * Database
      */
     public static final String SYSTEM_DB="DREAMCARD";
-    public static final int DB_VERSION=2;
+    public static final int DB_VERSION=3;
 
     /**
      * FAQ

@@ -80,12 +80,10 @@
                     android:layout_marginBottom="10dp"
                     android:layout_below="@+id/thanks_text"
                     android:layout_toStartOf="@+id/review_store_logo"
-                    android:visibility="gone"
                      />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="220"
                     android:textColor="@color/button_login"
                     android:textSize="20sp"
                     android:id="@+id/you_saved_val"

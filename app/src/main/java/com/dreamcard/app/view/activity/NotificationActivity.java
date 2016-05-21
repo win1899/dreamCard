@@ -10,8 +10,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dreamcard.app.R;
+import com.dreamcard.app.common.DatabaseController;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.entity.ErrorMessageInfo;
+import com.dreamcard.app.entity.NotificationDB;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.services.AllBusinessAsync;
@@ -52,17 +54,16 @@ public class NotificationActivity extends Activity implements IServiceListener {
     }
 
     private void filterStores() {
-        SharedPreferences prefs = getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
-        HashSet<String> storesReviewdId = (HashSet<String>) prefs.getStringSet(Params.STORES_TO_REVIEW_KEY, new HashSet<String>());
+        ArrayList<NotificationDB> storesReviewdId = DatabaseController.getInstance(this).getAllNotifications();
         if (storesReviewdId == null || storesReviewdId.size() == 0) {
             noMatchsFound();
             return;
         }
 
         ArrayList<Stores> storesToReview = new ArrayList<Stores>();
-        for (String storeId : storesReviewdId) {
+        for (NotificationDB storeId : storesReviewdId) {
             for (int i = 0; i < stores.size(); i++) {
-                if (storeId.equalsIgnoreCase(stores.get(i).getId())) {
+                if (storeId.id.equalsIgnoreCase(stores.get(i).getId())) {
                     storesToReview.add(stores.get(i));
                     break;
                 }

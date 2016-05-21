@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dreamcard.app.R;
+import com.dreamcard.app.common.DatabaseController;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.ErrorMessageInfo;
@@ -63,12 +64,14 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
         if (intent == null) {
             //TODO: fallback ...
             finish();
+            return;
         }
 
         _storeId = intent.getExtras().getString(BUSINESS_ID_EXTRA);
         if (_storeId == null || _storeId.isEmpty()) {
             Log.e(LOG, "Store id is empty ... finishing");
             finish();
+            return;
         }
 
         _count = new AtomicInteger(0);
@@ -206,23 +209,8 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
     }
 
     private void removeStore() {
-        SharedPreferences prefs = getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
-
-        HashSet<String> set = (HashSet<String>) prefs.getStringSet(Params.STORES_TO_REVIEW_KEY, new HashSet<String>());
-        if (set != null && set.size() > 0) {
-            HashSet<String> newStores = new HashSet<String>();
-            for (String storeId : set) {
-                if (!storeId.equalsIgnoreCase(_store.getId())) {
-                    newStores.add(storeId);
-                }
-            }
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.remove(Params.STORES_TO_REVIEW_KEY);
-            editor.putStringSet(Params.STORES_TO_REVIEW_KEY, newStores);
-            editor.commit();
-
-            Utils.updateNotificationBadge(ReviewStore.this, -1);
-        }
+        DatabaseController.getInstance(this).deleteNotification(_store.getId());
+        Utils.updateNotificationBadge(ReviewStore.this, -1);
     }
 
     @Override
