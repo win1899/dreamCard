@@ -2,40 +2,34 @@ package com.dreamcard.app.view.fragments;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.GridView;
-import android.widget.TextView;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
-import com.dreamcard.app.entity.ConsumerInfo;
 import com.dreamcard.app.entity.ErrorMessageInfo;
-import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.services.ConsumerDiscountAsyncTask;
-import com.dreamcard.app.services.TotalCashPointsAsync;
-import com.dreamcard.app.services.TotalSavingAsync;
 import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.adapters.NotificationGridAdapter;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 /**
  * A simple {@link} subclass.
@@ -52,27 +46,18 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
 
     private String mParam1;
     private String mParam2;
-    private String _totalSavings = "0";
 
     private OnFragmentInteractionListener mListener;
 
-    private TextView txtYouSaved;
-    private TextView txtTotalShop;
-    private TextView txtLastUse;
-    private TextView txtUserName;
     private GridView grid;
     private NotificationGridAdapter adapter;
 
-    private TotalSavingAsync totalSavingAsync;
     private ConsumerDiscountAsyncTask consumerDiscountAsyncTask;
-    private TotalCashPointsAsync _totaTotalCashPointsAsync;
     private ArrayList<Offers> notificationList = new ArrayList<Offers>();
-    private Button btnGas;
-    private Button btnCashPoints;
-    private Button btnCash;
-    private Button btnMobile;
-
-    private double totalSave = 0.0;
+    private ImageButton btnGas;
+    private ImageButton btnCashPoints;
+    private ImageButton btnCash;
+    private ImageButton btnMobile;
 
     public static DashboardFragment newInstance(String param1, String param2) {
         DashboardFragment fragment = new DashboardFragment();
@@ -102,42 +87,30 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
 
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
+        showCashFragment();
 
-        txtLastUse = (TextView) view.findViewById(R.id.txt_last_used);
-        txtTotalShop = (TextView) view.findViewById(R.id.txt_total_shop);
-        txtYouSaved = (TextView) view.findViewById(R.id.txt_total_saved);
-        txtUserName = (TextView) view.findViewById(R.id.txt_username);
         grid = (GridView) view.findViewById(R.id.notifications_grid);
 
-        btnCash = (Button) view.findViewById(R.id.btn_cash);
+        btnCash = (ImageButton) view.findViewById(R.id.btn_cash);
         btnCash.setOnClickListener(this);
 
-        btnGas = (Button) view.findViewById(R.id.btn_gas);
+        btnGas = (ImageButton) view.findViewById(R.id.btn_gas);
         btnGas.setOnClickListener(this);
 
-        btnCashPoints = (Button) view.findViewById(R.id.btn_cash_points);
+        btnCashPoints = (ImageButton) view.findViewById(R.id.btn_cash_points);
         btnCashPoints.setOnClickListener(this);
 
-        btnMobile = (Button) view.findViewById(R.id.btn_mobile);
+        btnMobile = (ImageButton) view.findViewById(R.id.btn_mobile);
         btnMobile.setOnClickListener(this);
 
         SharedPreferences prefs = getActivity().getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
         String id = prefs.getString(Params.USER_INFO_ID, "");
         String name = Utils.getUserName(getActivity());
 
-        txtUserName.setText(name);
-
-        totalSavingAsync = new TotalSavingAsync(this, ServicesConstants.getTotalSavingRequestList(id)
-                , Params.SERVICE_PROCESS_1);
-        totalSavingAsync.execute(getActivity());
-
         consumerDiscountAsyncTask = new ConsumerDiscountAsyncTask(this
                 , ServicesConstants.getTotalSavingRequestList(id)
                 , Params.SERVICE_PROCESS_3);
         consumerDiscountAsyncTask.execute(getActivity());
-
-        _totaTotalCashPointsAsync = new TotalCashPointsAsync(this, ServicesConstants.getTotalPointsSaved(id), Params.SERVICE_PROCESS_4);
-        _totaTotalCashPointsAsync.execute(getActivity());
 
         ArrayList<ServiceRequest> list = ServicesConstants.getLatestOfferRequestList("100");
         return view;
@@ -158,14 +131,9 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
     @Override
     public void onDetach() {
         super.onDetach();
-        if (totalSavingAsync != null && totalSavingAsync.getStatus() == AsyncTask.Status.RUNNING) {
-            totalSavingAsync.cancel(true);
-        }
+
         if (consumerDiscountAsyncTask != null && consumerDiscountAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
             consumerDiscountAsyncTask.cancel(true);
-        }
-        if (_totaTotalCashPointsAsync != null && _totaTotalCashPointsAsync.getStatus() == AsyncTask.Status.RUNNING) {
-            _totaTotalCashPointsAsync.cancel(true);
         }
 
         mListener = null;
@@ -185,91 +153,96 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
         }
 
         if (view.getId() == R.id.btn_cash) {
-            btnCashPoints.setBackground(getResources().getDrawable(R.color.button_not_seleted));
-            btnMobile.setBackground(getResources().getDrawable(R.color.button_not_seleted));
-            btnGas.setBackground(getResources().getDrawable(R.color.button_not_seleted));
+            btnCashPoints.setImageDrawable(getResources().getDrawable(R.drawable.points_icon_inactive));
+            btnMobile.setImageDrawable(getResources().getDrawable(R.drawable.mobile_icon_inactive));
+            btnGas.setImageDrawable(getResources().getDrawable(R.drawable.gas_inactive));
 
-            btnCash.setBackgroundColor(getResources().getColor(R.color.button_selected));
+            btnCash.setImageDrawable(getResources().getDrawable(R.drawable.cash_icon_active));
 
-            if (Utils.promoteActivation(getActivity())) {
-                return;
+            if (!Utils.promoteActivation(getActivity())) {
+                showCashFragment();
             }
+        }
+        else if (view.getId() == R.id.btn_cash_points) {
+            btnCash.setImageDrawable(getResources().getDrawable(R.drawable.cash_icon_inactive));
+            btnMobile.setImageDrawable(getResources().getDrawable(R.drawable.mobile_icon_inactive));
+            btnGas.setImageDrawable(getResources().getDrawable(R.drawable.gas_inactive));
 
-            showSavedAmountDialog("Cash saved", totalSave);
-        } else if (view.getId() == R.id.btn_cash_points) {
-            btnCash.setBackgroundColor(getResources().getColor(R.color.button_not_seleted));
-            btnMobile.setBackground(getResources().getDrawable(R.color.button_not_seleted));
-            btnGas.setBackground(getResources().getDrawable(R.color.button_not_seleted));
+            btnCashPoints.setImageDrawable(getResources().getDrawable(R.drawable.points_icon));
 
-            btnCashPoints.setBackground(getResources().getDrawable(R.color.button_selected));
-
-            if (Utils.promoteActivation(getActivity())) {
-                return;
+            if (!Utils.promoteActivation(getActivity())) {
+                showCashPointsFragment("Total Cash points");
             }
-            showTotalSavingDialog("Total Cash points");
+        }
+        else if (view.getId() == R.id.btn_mobile) {
+            btnCash.setImageDrawable(getResources().getDrawable(R.drawable.cash_icon_inactive));
+            btnGas.setImageDrawable(getResources().getDrawable(R.drawable.gas_inactive));
+            btnCashPoints.setImageDrawable(getResources().getDrawable(R.drawable.points_icon_inactive));
 
-        } else if (view.getId() == R.id.btn_mobile) {
-            btnCash.setBackgroundColor(getResources().getColor(R.color.button_not_seleted));
-            btnGas.setBackground(getResources().getDrawable(R.color.button_not_seleted));
-            btnCashPoints.setBackground(getResources().getDrawable(R.color.button_not_seleted));
+            btnMobile.setImageDrawable(getResources().getDrawable(R.drawable.mobile_icon_active));
 
-            btnMobile.setBackground(getResources().getDrawable(R.color.button_selected));
-
-            if (Utils.promoteActivation(getActivity())) {
-                return;
+            if (!Utils.promoteActivation(getActivity())) {
+                showMobileFragment();
             }
-            comingSoonDialog();
         }
         else if (view.getId() == R.id.btn_gas) {
-            btnCash.setBackgroundColor(getResources().getColor(R.color.button_not_seleted));
-            btnMobile.setBackground(getResources().getDrawable(R.color.button_not_seleted));
-            btnCashPoints.setBackground(getResources().getDrawable(R.color.button_not_seleted));
+            btnCash.setImageDrawable(getResources().getDrawable(R.drawable.cash_icon_inactive));
+            btnMobile.setImageDrawable(getResources().getDrawable(R.drawable.mobile_icon_inactive));
+            btnCashPoints.setImageDrawable(getResources().getDrawable(R.drawable.points_icon_inactive));
 
-            btnGas.setBackground(getResources().getDrawable(R.color.button_selected));
+            btnGas.setImageDrawable(getResources().getDrawable(R.drawable.gas_active));
 
-            if (Utils.promoteActivation(getActivity())) {
-                return;
+            if (!Utils.promoteActivation(getActivity())) {
+                showGasFragment();
             }
-            comingSoonDialog();
         }
+
+        btnCash.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        btnMobile.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        btnCashPoints.setScaleType(ImageView.ScaleType.FIT_CENTER);
+        btnGas.setScaleType(ImageView.ScaleType.FIT_CENTER);
     }
 
-    private void showSavedAmountDialog(String title, double amount) {
-        new AlertDialog.Builder(this.getActivity())
-                .setTitle(title)
-                .setMessage(amount + getResources().getString(R.string.ils))
-                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .show();
+    private void showCashFragment() {
+        CashDashboardFragment fragment = CashDashboardFragment.newInstance();
+        if (fragment == null) {
+            return;
+        }
+
+        FragmentManager fm = getChildFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.dashboard_fragment_holder, fragment);
+        ft.commit();
     }
 
-    private void showTotalSavingDialog(String title) {
-        new AlertDialog.Builder(this.getActivity())
-                .setTitle(title)
-                .setMessage(_totalSavings)
-                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_info)
-                .show();
+    private void showGasFragment() {
+        GasDashboardFragment fragment = GasDashboardFragment.newInstance();
+        if (fragment == null) {
+            return;
+        }
+
+        FragmentManager fm = getChildFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.dashboard_fragment_holder, fragment);
+        ft.commit();
     }
 
+    private void showMobileFragment() {
+        MobileDashboardFragment fragment = MobileDashboardFragment.newInstance();
+        if (fragment == null) {
+            return;
+        }
 
-    private void comingSoonDialog() {
-        new AlertDialog.Builder(this.getActivity())
-                .setTitle(getResources().getString(R.string.coming_soon))
-                .setMessage(getString(R.string.coming_soon))
-                .setPositiveButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .setIcon(android.R.drawable.ic_dialog_alert)
-                .show();
+        FragmentManager fm = getChildFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.dashboard_fragment_holder, fragment);
+        ft.commit();
     }
+
+    private void showCashPointsFragment(String title) {
+
+    }
+
 
     @Override
     public void onServiceSuccess(Object b, int processType) {
@@ -277,46 +250,18 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
             Log.e(this.getClass().getName(), "Activity is null, avoid callback");
             return;
         }
-        if (processType == Params.SERVICE_PROCESS_1) {
-            ConsumerInfo bean = (ConsumerInfo) b;
-            try {
-                totalSave = Double.parseDouble(bean.getTotalSaving());
-                txtYouSaved.setText(Integer.toString((int) totalSave) + getResources().getString(R.string.ils));
-            }
-            catch (Exception e) {
-                Log.e(DashboardFragment.class.getName(), "Unable to parse double: " + bean.getTotalSaving());
-                txtYouSaved.setText(bean.getTotalSaving() + getResources().getString(R.string.ils));
-            }
-        } else if (processType == Params.SERVICE_PROCESS_3) {
+        if (processType == Params.SERVICE_PROCESS_3) {
             ArrayList<Offers> list = (ArrayList<Offers>) b;
             Params.DISCOUNT_LIST = list;
             if (list.size() > 0) {
                 setDiscountInfo(list);
             }
-        } else if (processType == Params.SERVICE_PROCESS_4) {
-            _totalSavings = ((MessageInfo) b).getValue();
-            _totalSavings = _totalSavings.replaceAll("\"", "");
         }
     }
 
     private void setDiscountInfo(ArrayList<Offers> list) {
         if (list != null && !list.isEmpty()) {
             Offers bean = list.get(list.size() - 1);
-
-            if (bean.getDate() != null && bean.getDate().length() > 0 && !bean.getDate().equalsIgnoreCase("null")) {
-                Date date = new Date(Long.parseLong(bean.getDate().replaceAll(".*?(\\d+).*", "$1")));
-                android.text.format.DateFormat df = new android.text.format.DateFormat();
-                Calendar c = Calendar.getInstance();
-                c.setTime(date);
-
-                String x = df.format("dd/MM", c.getTime()).toString();
-                txtLastUse.setText(x);
-            }
-
-            if (bean.getAmount() != null && bean.getAmount().length() > 0)
-                txtTotalShop.setText(bean.getAmount());
-            else
-                txtTotalShop.setText("" + 0);
 
             //build notification list
             notificationList = new ArrayList<Offers>();

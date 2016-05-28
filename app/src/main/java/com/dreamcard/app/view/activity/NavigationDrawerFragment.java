@@ -116,8 +116,7 @@ public class NavigationDrawerFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
-        mDrawerListView = (ListView) view.findViewById(
-                R.id.list);
+        mDrawerListView = (ListView) view.findViewById(R.id.list);
         TextView txtUser = (TextView) view.findViewById(R.id.txt_username);
         TextView txtCardNum = (TextView) view.findViewById(R.id.txt_card_num);
 

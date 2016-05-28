@@ -300,10 +300,6 @@ public class NavDrawerActivity extends FragmentActivity
                 tvTitle.setVisibility(View.GONE);
                 imgLogo.setVisibility(View.VISIBLE);
 
-                btnCategories.setBackground(getResources().getDrawable(R.drawable.categories_bg));
-                btnLatestOffers.setBackground(getResources().getDrawable(R.drawable.latest_offers_active_bg));
-                btnStores.setBackground(getResources().getDrawable(R.drawable.store_button_bg));
-                btnLocations.setBackground(getResources().getDrawable(R.drawable.location_button_bg));
                 break;
             case 2:
                 fragment = CategoriesListFragment.newInstance(null, "");
@@ -314,10 +310,6 @@ public class NavDrawerActivity extends FragmentActivity
                 tvTitle.setVisibility(View.GONE);
                 imgLogo.setVisibility(View.VISIBLE);
 
-                btnCategories.setBackground(getResources().getDrawable(R.drawable.categories_bg_active));
-                btnLatestOffers.setBackground(getResources().getDrawable(R.drawable.latest_offers_bg));
-                btnStores.setBackground(getResources().getDrawable(R.drawable.store_button_bg));
-                btnLocations.setBackground(getResources().getDrawable(R.drawable.location_button_bg));
                 break;
             case 3:
                 fragment = new StoresListFragment();
@@ -327,10 +319,7 @@ public class NavDrawerActivity extends FragmentActivity
                 btnSetting.setVisibility(View.GONE);
                 tvTitle.setVisibility(View.GONE);
                 imgLogo.setVisibility(View.VISIBLE);
-                btnCategories.setBackground(getResources().getDrawable(R.drawable.categories_bg));
-                btnLatestOffers.setBackground(getResources().getDrawable(R.drawable.latest_offers_bg));
-                btnStores.setBackground(getResources().getDrawable(R.drawable.stores_active_bg));
-                btnLocations.setBackground(getResources().getDrawable(R.drawable.location_button_bg));
+
                 break;
             case 4:
                 fragment = new LocationFragment();
@@ -340,10 +329,6 @@ public class NavDrawerActivity extends FragmentActivity
                 btnSetting.setVisibility(View.GONE);
                 tvTitle.setVisibility(View.GONE);
                 imgLogo.setVisibility(View.VISIBLE);
-                btnCategories.setBackground(getResources().getDrawable(R.drawable.categories_bg));
-                btnLatestOffers.setBackground(getResources().getDrawable(R.drawable.latest_offers_bg));
-                btnStores.setBackground(getResources().getDrawable(R.drawable.store_button_bg));
-                btnLocations.setBackground(getResources().getDrawable(R.drawable.location_active));
 
                 break;
             case 5:
@@ -413,7 +398,7 @@ public class NavDrawerActivity extends FragmentActivity
             if (fragment instanceof FAQFragment || fragment instanceof AboutUsFragment) {
                 fragmentTransaction.addToBackStack(fragmentTag);
             }
-            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commitAllowingStateLoss();
         }
     }
@@ -643,7 +628,7 @@ public class NavDrawerActivity extends FragmentActivity
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             fragmentTransaction.replace(R.id.activity_main_content_fragment, fragment, fragmentTag).addToBackStack(fragmentTag);
-                            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                             fragmentTransaction.commit();
                         }
                     });
@@ -678,7 +663,7 @@ public class NavDrawerActivity extends FragmentActivity
                         FragmentManager fragmentManager = getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.replace(R.id.activity_main_content_fragment, fragment, fragmentTag).addToBackStack(fragmentTag);
-                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                         fragmentTransaction.commit();
                     }
                 });
