@@ -103,12 +103,19 @@ public class ConsumerDiscountAsyncTask extends AbstractAsyncTask<Object, Void, O
 
                                 if(offerObject.getString("TotalAfterDiscount")!=null
                                         && !offerObject.getString("TotalAfterDiscount").equalsIgnoreCase("null")){
-                                    bean.setAmountAfterDiscount(Double.parseDouble(offerObject.getString("TotalAfterDiscount")));
+                                    try {
+                                        bean.setAmountAfterDiscount(Double.parseDouble(offerObject.getString("TotalAfterDiscount")));
+                                    } catch (Exception e) {
+                                    }
                                 }
 
                                 if(offerObject.getString("TotalAmount")!=null
                                         && !offerObject.getString("TotalAmount").equalsIgnoreCase("null")){
-                                    bean.setAmountBeforeDicount(Double.parseDouble(offerObject.getString("TotalAmount")));
+                                    try {
+                                        bean.setAmountBeforeDicount(Double.parseDouble(offerObject.getString("TotalAmount")));
+                                    } catch (Exception e) {
+
+                                    }
                                 }
                             }
 
@@ -178,12 +185,20 @@ public class ConsumerDiscountAsyncTask extends AbstractAsyncTask<Object, Void, O
 
                                 if(businessObject.getString("Lat")!=null){
                                     if(businessObject.getString("Lat").length()>0){
-                                        bean.setLatitude(Double.parseDouble(businessObject.getString("Lat")));
+                                        try {
+                                            bean.setLatitude(Double.parseDouble(businessObject.getString("Lat")));
+                                        } catch (Exception e) {
+
+                                        }
                                     }
                                 }
                                 if(businessObject.getString("Long")!=null){
                                     if(businessObject.getString("Long").length()>0){
-                                        bean.setLongitude(Double.parseDouble(businessObject.getString("Long")));
+                                        try {
+                                            bean.setLongitude(Double.parseDouble(businessObject.getString("Long")));
+                                        } catch (Exception e) {
+
+                                        }
                                     }
                                 }
                                 String rating=businessObject.getString("Rating");

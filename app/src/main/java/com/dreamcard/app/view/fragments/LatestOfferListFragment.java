@@ -106,7 +106,9 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
     }
 
     public void referesh() {
-        progressBar.setVisibility(View.VISIBLE);
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
         grid.setVisibility(View.GONE);
         this.process = Params.SERVICE_PROCESS_1;
         ArrayList<ServiceRequest> list = ServicesConstants.getLatestOfferRequestList("100");
@@ -170,7 +172,9 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
             adapter = new LatestOffersListAdapter(getActivity(), list, this);
             grid.setAdapter(adapter);
             adapter.notifyDataSetChanged();
-            progressBar.setVisibility(View.GONE);
+            if (progressBar != null) {
+                progressBar.setVisibility(View.GONE);
+            }
             grid.setVisibility(View.VISIBLE);
 
         }
@@ -202,7 +206,9 @@ public class LatestOfferListFragment extends Fragment implements View.OnClickLis
                 adapter = new LatestOffersListAdapter(getActivity(), list, this);
                 grid.setAdapter(adapter);
                 adapter.notifyDataSetChanged();
-                progressBar.setVisibility(View.GONE);
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.GONE);
+                }
                 grid.setVisibility(View.VISIBLE);
             }
         }

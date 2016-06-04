@@ -86,7 +86,9 @@ public class CategoriesListFragment extends Fragment implements View.OnClickList
         View view = inflater.inflate(R.layout.fragment_categorieslistfragment, container, false);
         grid = (GridView) view.findViewById(R.id.products_grid);
         progressBar = (ProgressBar) view.findViewById(R.id.progress);
-        progressBar.setVisibility(View.VISIBLE);
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
         grid.setVisibility(View.GONE);
         if (this.parentId == null) {
             categoriesAsync = new CategoriesAsync(this, new ArrayList<ServiceRequest>(), Params.SERVICE_PROCESS_1
@@ -140,7 +142,9 @@ public class CategoriesListFragment extends Fragment implements View.OnClickList
         customGridAdapter = new CustomGridViewAdapterButton(getActivity(), R.layout.row_grid_button
                 , gridArray, this, null);
         grid.setAdapter(customGridAdapter);
-        progressBar.setVisibility(View.GONE);
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
         grid.setVisibility(View.VISIBLE);
     }
 
@@ -150,7 +154,9 @@ public class CategoriesListFragment extends Fragment implements View.OnClickList
             Log.e(this.getClass().getName(), "Activity is null, avoid callback");
             return;
         }
-        progressBar.setVisibility(View.GONE);
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
         grid.setVisibility(View.VISIBLE);
         Toast.makeText(getActivity(), info.getMessage(), Toast.LENGTH_LONG).show();
     }

@@ -171,7 +171,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
             btnCashPoints.setImageDrawable(getResources().getDrawable(R.drawable.points_icon));
 
             if (!Utils.promoteActivation(getActivity())) {
-                showCashPointsFragment("Total Cash points");
+                showCashPointsFragment();
             }
         }
         else if (view.getId() == R.id.btn_mobile) {
@@ -239,8 +239,16 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
         ft.commit();
     }
 
-    private void showCashPointsFragment(String title) {
+    private void showCashPointsFragment() {
+        PointsDashboardFragment fragment = PointsDashboardFragment.newInstance();
+        if (fragment == null) {
+            return;
+        }
 
+        FragmentManager fm = getChildFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.dashboard_fragment_holder, fragment);
+        ft.commit();
     }
 
 

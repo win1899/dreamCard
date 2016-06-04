@@ -1,0 +1,60 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:background="@drawable/points_background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_cashpoints_dashboard"
+            android:layout_width="251dp"
+            android:layout_height="102dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager" />
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/right_arrow_cashpoints"
+            android:src="@drawable/right_arrow"
+            android:layout_alignTop="@+id/recycler_cashpoints_dashboard"
+            android:layout_toEndOf="@+id/recycler_cashpoints_dashboard"
+            android:layout_marginTop="36dp"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/left_arrow_cashpoints"
+            android:src="@drawable/left_arrow"
+            android:layout_alignTop="@+id/right_arrow_cashpoints"
+            android:layout_toStartOf="@+id/recycler_cashpoints_dashboard"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="You Earned"
+            android:textColor="#ffffff"
+            android:layout_below="@+id/recycler_cashpoints_dashboard"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:textSize="14sp"
+            android:id="@+id/you_earned_cashponts"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="500"
+            android:textColor="#ffffff"
+            android:layout_below="@+id/you_earned_cashponts"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:textSize="26sp"
+            android:id="@+id/store_earnings_cashpoints"/>
+    </RelativeLayout>
+
+</RelativeLayout>

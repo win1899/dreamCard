@@ -354,8 +354,13 @@ public class ServicesConstants {
             bean = new ServiceRequest();
             bean.setName("consumerID");
             bean.setType(PropertyInfo.STRING_CLASS);
-            bean.setValue(Integer.parseInt(info.getId()));
-            list.add(bean);
+            try {
+                bean.setValue(Integer.parseInt(info.getId()));
+                list.add(bean);
+            }
+            catch (Exception e) {
+
+            }
         }
 
         bean = new ServiceRequest();

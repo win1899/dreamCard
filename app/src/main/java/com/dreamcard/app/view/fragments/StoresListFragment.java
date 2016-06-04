@@ -122,7 +122,9 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
         progressBar=(ProgressBar)view.findViewById(R.id.progress);
         storeListMainLayout = (LinearLayout) view.findViewById(R.id.store_list_main_layout);
         silverScroll=(HorizontalScrollView)view.findViewById(R.id.silver_scroll);
-        progressBar.setVisibility(View.VISIBLE);
+        if (progressBar != null) {
+            progressBar.setVisibility(View.VISIBLE);
+        }
         storeListMainLayout.setVisibility(View.GONE);
         mainScroll = (ScrollView) view.findViewById(R.id.scroll_view_main_stores);
         allBusinessAsync=new AllBusinessAsync(this, new ArrayList<ServiceRequest>(), Params.SERVICE_PROCESS_1);
@@ -181,7 +183,9 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
             grid.setAdapter(adapter);
             grid.setExpanded(true);
 
-            progressBar.setVisibility(View.GONE);
+            if (progressBar != null) {
+                progressBar.setVisibility(View.GONE);
+            }
             storeListMainLayout.setVisibility(View.VISIBLE);
         }
     }
@@ -192,7 +196,9 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
             Log.e(this.getClass().getName(), "Activity is null, avoid callback");
             return;
         }
-        progressBar.setVisibility(View.GONE);
+        if (progressBar != null) {
+            progressBar.setVisibility(View.GONE);
+        }
         storeListMainLayout.setVisibility(View.VISIBLE);
         Toast.makeText(this.activity, info.getMessage(), Toast.LENGTH_LONG).show();
     }
