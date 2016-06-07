@@ -620,11 +620,6 @@ public class NavDrawerActivity extends FragmentActivity
                             FrameLayout mainFrameLayout = (FrameLayout) findViewById(R.id.activity_main_content_fragment);
                             mainFrameLayout.setBackgroundColor(getResources().getColor(R.color.location_bg));
 
-                            btnCategories.setBackground(getResources().getDrawable(R.drawable.categories_bg));
-                            btnLatestOffers.setBackground(getResources().getDrawable(R.drawable.latest_offers_bg));
-                            btnStores.setBackground(getResources().getDrawable(R.drawable.store_button_bg));
-                            btnLocations.setBackground(getResources().getDrawable(R.drawable.location_active));
-
                             FragmentManager fragmentManager = getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                             fragmentTransaction.replace(R.id.activity_main_content_fragment, fragment, fragmentTag).addToBackStack(fragmentTag);
