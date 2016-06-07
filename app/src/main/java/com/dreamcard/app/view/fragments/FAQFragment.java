@@ -1,6 +1,7 @@
 package com.dreamcard.app.view.fragments;
 
 import android.app.Activity;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -136,7 +137,9 @@ public class FAQFragment extends Fragment implements AbsListView.OnItemClickList
     @Override
     public void onDetach() {
         super.onDetach();
-        faqAsync.cancel(true);
+        if (faqAsync != null && faqAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            faqAsync.cancel(true);
+        }
         mListener = null;
     }
 
