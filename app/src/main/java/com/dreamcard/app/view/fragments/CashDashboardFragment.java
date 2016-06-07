@@ -121,7 +121,7 @@ public class CashDashboardFragment extends Fragment implements IServiceListener 
             for (Offers offer : list) {
                 try {
                     totalShoppings += Double.parseDouble(offer.getAmount());
-                    totalSavings += offer.getAmountAfterDiscount();
+                    totalSavings += (offer.getAmountBeforeDicount() - offer.getAmountAfterDiscount());
                 } catch (Exception e){
 
                 }
