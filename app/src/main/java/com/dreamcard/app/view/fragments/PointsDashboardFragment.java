@@ -109,7 +109,7 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
 
                     @Override
                     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                        if (dx > 10 && _scrollPosition <= _storesList.size() - 3) {
+                        if (dx > 10 && _storesList != null && _scrollPosition <= _storesList.size() - 3) {
                             _scrollPosition ++;
                         }
                         if (dx < -10 && _scrollPosition > 0) {
@@ -175,7 +175,10 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
     private void estimateSelected() {
         int firstItem = _scrollPosition;
 
-        if (firstItem == _lastEstimation) {
+        if (firstItem == _lastEstimation
+                || _recycler == null
+                || _storesList == null
+                || _layoutManager == null) {
             return;
         }
 
@@ -221,7 +224,7 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.right_arrow_cashpoints) {
-            if (_scrollPosition >= _storesList.size() - 3) {
+            if (_storesList == null || _scrollPosition >= _storesList.size() - 3) {
                 return;
             }
             _scrollPosition++;
@@ -229,7 +232,7 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
             return;
         }
         if (v.getId() == R.id.left_arrow_cashpoints) {
-            if (_scrollPosition <= 0) {
+            if (_storesList == null || _scrollPosition <= 0) {
                 return;
             }
             _scrollPosition--;
