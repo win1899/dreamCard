@@ -8,7 +8,7 @@ public class CashPointsTransaction {
     private String id;
     private int businessId;
     private String consumerId;
-    private int pointsValue;
+    private double pointsValue;
     private String status;
     private String date;
     private String offerUsageId;
@@ -39,11 +39,11 @@ public class CashPointsTransaction {
         this.consumerId = consumerId;
     }
 
-    public int getPointsValue() {
+    public double getPointsValue() {
         return pointsValue;
     }
 
-    public void setPointsValue(int pointsValue) {
+    public void setPointsValue(double pointsValue) {
         this.pointsValue = pointsValue;
     }
 

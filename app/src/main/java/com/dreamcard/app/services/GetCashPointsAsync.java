@@ -99,7 +99,7 @@ public class GetCashPointsAsync extends AbstractAsyncTask {
                             bean.setId(oneObject.getString("Id"));
                             bean.setStoreName(oneObject.getString("StoreName"));
                             bean.setBusinessId(oneObject.getInt("BusinessId"));
-                            bean.setPointsValue(Integer.parseInt(oneObject.getString("PointsValue")));
+                            bean.setPointsValue(Double.parseDouble(oneObject.getString("PointsValue")));
                             bean.setConsumerId(oneObject.getString("ConsumerId"));
                             bean.setDate(oneObject.getString("Date"));
                             bean.setOfferUsageId(oneObject.getString("OfferUsageId"));

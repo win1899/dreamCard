@@ -521,8 +521,6 @@ public class NavDrawerActivity extends FragmentActivity
             fragmentManager.beginTransaction()
                     .replace(R.id.activity_main_content_fragment, fragment1)
                     .commit();
-            btnCategories.setBackground(getResources().getDrawable(R.drawable.categories_bg));
-            btnLatestOffers.setBackground(getResources().getDrawable(R.drawable.latest_offers_active_bg));
 
             mNavigationDrawerFragment.selectItem(1);
             String currentMenu=getResources().getString(R.string.offers)+" "+bean.getTitle();
@@ -540,8 +538,6 @@ public class NavDrawerActivity extends FragmentActivity
             fragmentManager.beginTransaction()
                     .replace(R.id.activity_main_content_fragment, fragment1)
                     .commit();
-            btnCategories.setBackground(getResources().getDrawable(R.drawable.categories_bg));
-            btnLatestOffers.setBackground(getResources().getDrawable(R.drawable.latest_offers_active_bg));
 
             String currentMenu=getResources().getString(R.string.offers)+" "+bean.getTitle();
 
