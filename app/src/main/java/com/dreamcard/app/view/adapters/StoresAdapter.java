@@ -6,15 +6,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import com.dreamcard.app.R;
-import com.dreamcard.app.entity.Stores;
+import com.dreamcard.app.entity.CashPointsTransaction;
 import com.dreamcard.app.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -23,17 +22,19 @@ import java.util.List;
 public class StoresAdapter extends
         RecyclerView.Adapter<StoresAdapter.ViewHolder> {
 
-    private List<Stores> _stores;
+    private HashMap<Integer, ArrayList<CashPointsTransaction>> _transactions;
+    private HashMap<Integer, Integer> _positionToId;
     private List<ImageView> _images;
     private Context _context;
     private LinearLayoutManager _layoutManager;
     private RecyclerView _recyclerView;
 
     // Pass in the contact array into the constructor
-    public StoresAdapter(List<Stores> contacts, Context context, LinearLayoutManager layoutManager, RecyclerView recyclerView) {
-        _stores = contacts;
+    public StoresAdapter(HashMap<Integer, ArrayList<CashPointsTransaction>> transactions, HashMap<Integer, Integer> idToPosition, Context context, LinearLayoutManager layoutManager, RecyclerView recyclerView) {
+        _transactions = transactions;
+        _positionToId = idToPosition;
         _context = context;
-        _images = new ArrayList<>(_stores.size());
+        _images = new ArrayList<>(_transactions.size());
         _layoutManager = layoutManager;
         _recyclerView = recyclerView;
     }
@@ -63,24 +64,29 @@ public class StoresAdapter extends
     @Override
     public void onBindViewHolder(StoresAdapter.ViewHolder viewHolder, int position) {
         // Get the data model based on position
-        Stores store = _stores.get(position);
+        ArrayList<CashPointsTransaction> trans = _transactions.get(_positionToId.get(position));
 
        // _images.add(position, viewHolder.storeImageView);
         // Set item views based on the data model
         ImageView image = viewHolder.storeImageView;
-        if (store.getLogo() == null || store.getLogo().equalsIgnoreCase("")) {
+        CashPointsTransaction transaction = new CashPointsTransaction();
+        if (trans.size() > 0) {
+            transaction = trans.get(0);
+        }
+
+        if (transaction == null || transaction.getStoreLogo() == null || transaction.getStoreLogo().equalsIgnoreCase("")) {
             viewHolder.storeImageView.setImageDrawable(null);
             viewHolder.storeImageView.setVisibility(View.INVISIBLE);
             return;
         }
-        Utils.loadImage(_context, store.getLogo(), image);
+        Utils.loadImage(_context, transaction.getStoreLogo(), image);
         viewHolder.storeImageView.setVisibility(View.VISIBLE);
     }
 
     // Return the total count of items
     @Override
     public int getItemCount() {
-        return _stores.size();
+        return _transactions.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {

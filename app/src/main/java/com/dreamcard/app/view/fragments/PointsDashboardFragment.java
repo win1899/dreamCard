@@ -1,6 +1,7 @@
 package com.dreamcard.app.view.fragments;
 
-import android.media.Image;
+import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -10,31 +11,33 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
+import com.dreamcard.app.constants.ServicesConstants;
+import com.dreamcard.app.entity.CashPointsTransaction;
 import com.dreamcard.app.entity.ErrorMessageInfo;
-import com.dreamcard.app.entity.ServiceRequest;
-import com.dreamcard.app.entity.Stores;
-import com.dreamcard.app.services.AllBusinessAsync;
+import com.dreamcard.app.services.GetCashPointsAsync;
 import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.adapters.StoresAdapter;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Created by WIN on 5/28/2016.
  */
 public class PointsDashboardFragment extends Fragment implements IServiceListener, View.OnClickListener {
 
-    private AllBusinessAsync _allBusinessAsync;
+    private GetCashPointsAsync _getPointsAsync;
 
-    private static ArrayList<Stores> _storesList;
+    private HashMap<Integer, ArrayList<CashPointsTransaction>> _transactions;
+    private HashMap<Integer, Integer> _positionToId;
     private RecyclerView _recycler;
     private LinearLayoutManager _layoutManager;
     private View.OnLayoutChangeListener _layoutChangeListener;
@@ -58,6 +61,7 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        _positionToId = new HashMap<>();
     }
 
     @Override
@@ -68,8 +72,11 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
 
         buildUI(view);
 
-        _allBusinessAsync = new AllBusinessAsync(this, new ArrayList<ServiceRequest>(), Params.SERVICE_PROCESS_1);
-        _allBusinessAsync.execute(getActivity());
+        SharedPreferences prefs = getActivity().getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
+        String id = prefs.getString(Params.USER_INFO_ID, "");
+
+        _getPointsAsync = new GetCashPointsAsync(this, ServicesConstants.getPointsRequestList(id), Params.SERVICE_PROCESS_1);
+        _getPointsAsync.execute(getActivity());
         return view;
     }
 
@@ -95,7 +102,7 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
                 _layoutManager = new LinearLayoutManager(getActivity());
                 _layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
 
-                final StoresAdapter adapter = new StoresAdapter(_storesList, getActivity().getApplicationContext(), _layoutManager, _recycler);
+                final StoresAdapter adapter = new StoresAdapter(_transactions, _positionToId, getActivity().getApplicationContext(), _layoutManager, _recycler);
 
                 _recycler.setLayoutManager(_layoutManager);
                 _recycler.setAdapter(adapter);
@@ -109,7 +116,7 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
 
                     @Override
                     public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                        if (dx > 10 && _storesList != null && _scrollPosition <= _storesList.size() - 3) {
+                        if (dx > 10 && _transactions != null && _scrollPosition <= _transactions.size() - 3) {
                             _scrollPosition ++;
                         }
                         if (dx < -10 && _scrollPosition > 0) {
@@ -130,28 +137,31 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
         _recycler.addOnLayoutChangeListener(_layoutChangeListener);
     }
 
-    private void filterStores(ArrayList<Stores> stores) {
-        if (_storesList == null) {
-            _storesList = new ArrayList<>();
+    private void filterStores(HashMap<Integer, ArrayList<CashPointsTransaction>> hash) {
+        if (_transactions == null) {
+            _transactions = new HashMap<>();
         }
         else {
-            _storesList.clear();
+            _transactions.clear();
         }
-        _storesList.add(new Stores());
+        _transactions.put(-1, new ArrayList<CashPointsTransaction>());
+        _positionToId.put(0, -1);
 
-        for (Stores store : stores) {
-            if (store.getCashPoints() != null && !"".equalsIgnoreCase(store.getCashPoints())
-                    && !"null".equalsIgnoreCase(store.getCashPoints()) && !"0".equalsIgnoreCase(store.getCashPoints())) {
-                _storesList.add(store);
-            }
+        Set<Integer> set = hash.keySet();
+        int index = 1;
+        for (Integer integer : set) {
+            _positionToId.put(index, integer);
+            _transactions.put(integer, hash.get(integer));
+            index++;
         }
-        _storesList.add(new Stores());
+        _transactions.put(Integer.MAX_VALUE, new ArrayList<CashPointsTransaction>());
+        _positionToId.put(index, Integer.MAX_VALUE);
     }
 
     @Override
     public void onDetach() {
-        if (_allBusinessAsync != null && _allBusinessAsync.getStatus() == AsyncTask.Status.RUNNING) {
-            _allBusinessAsync.cancel(true);
+        if (_getPointsAsync != null && _getPointsAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            _getPointsAsync.cancel(true);
         }
         _recycler.clearOnScrollListeners();
         _recycler.removeOnLayoutChangeListener(_layoutChangeListener);
@@ -161,7 +171,7 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
     @Override
     public void onServiceSuccess(Object b, int processType) {
         if (processType == Params.SERVICE_PROCESS_1) {
-            filterStores((ArrayList<Stores>) b);
+            filterStores((HashMap<Integer, ArrayList<CashPointsTransaction>>) b);
 
             prepareRecyclerView();
         }
@@ -177,7 +187,7 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
 
         if (firstItem == _lastEstimation
                 || _recycler == null
-                || _storesList == null
+                || _transactions == null
                 || _layoutManager == null) {
             return;
         }
@@ -218,13 +228,19 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
 
         _youEarnedText.setVisibility(View.VISIBLE);
         _totalEarnings.setVisibility(View.VISIBLE);
-        _totalEarnings.setText(_storesList.get(firstItem + 1).getCashPoints());
+        int key = _positionToId.get(_scrollPosition + 1);
+        int totalPoints = 0;
+        for (CashPointsTransaction trans : _transactions.get(key))
+        {
+            totalPoints += trans.getPointsValue();
+        }
+        _totalEarnings.setText(Integer.toString(totalPoints));
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.right_arrow_cashpoints) {
-            if (_storesList == null || _scrollPosition >= _storesList.size() - 3) {
+            if (_transactions == null || _scrollPosition >= _transactions.size() - 3) {
                 return;
             }
             _scrollPosition++;
@@ -232,7 +248,7 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
             return;
         }
         if (v.getId() == R.id.left_arrow_cashpoints) {
-            if (_storesList == null || _scrollPosition <= 0) {
+            if (_transactions == null || _scrollPosition <= 0) {
                 return;
             }
             _scrollPosition--;

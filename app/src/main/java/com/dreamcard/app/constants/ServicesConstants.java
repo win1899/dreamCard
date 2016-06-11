@@ -31,6 +31,7 @@ public class ServicesConstants {
     public static final String WS_METHOD_ALL_SELLING_STORES="SelectCardSellingStores";
     public static final String WS_METHOD_CATEGORIES="SelectAllCategories";
     public static final String WS_METHOD_TOTAL_SEVING="GetTotalSavings";
+    public static final String WS_METHOD_GET_POINTS_BY_CONSUMER = "GetConsumerPointsByConsumerId";
     public static final String WS_METHOD_TOTAL_OFFER_LIKES="GetLikesCountForOffer";
     public static final String WS_METHOD_OFFER_COMMENTS="SelectCommentsByOffer";
     public static final String WS_METHOD_OFFER_BY_BUSINESS= "SelectOffersByBusinessId";
@@ -848,6 +849,18 @@ public class ServicesConstants {
 
         ServiceRequest bean = new ServiceRequest();
         bean.setName(CONSUMER_ID);
+        bean.setType(PropertyInfo.STRING_CLASS);
+        bean.setValue(id);
+        list.add(bean);
+
+        return list;
+    }
+
+    public static ArrayList<ServiceRequest> getPointsRequestList(String id) {
+        ArrayList<ServiceRequest> list=new ArrayList<ServiceRequest>();
+
+        ServiceRequest bean = new ServiceRequest();
+        bean.setName("consumerId");
         bean.setType(PropertyInfo.STRING_CLASS);
         bean.setValue(id);
         list.add(bean);
