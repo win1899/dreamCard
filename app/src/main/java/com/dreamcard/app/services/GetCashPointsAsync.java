@@ -104,6 +104,7 @@ public class GetCashPointsAsync extends AbstractAsyncTask {
                             bean.setDate(oneObject.getString("Date"));
                             bean.setOfferUsageId(oneObject.getString("OfferUsageId"));
                             bean.setStoreLogo(oneObject.getString("StoreLogo"));
+                            bean.setStatus(oneObject.getString("Status"));
 
                             if (hash.containsKey(bean.getBusinessId())) {
                                 ArrayList<CashPointsTransaction> storeArray = hash.get(bean.getBusinessId());

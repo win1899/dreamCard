@@ -13,21 +13,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.dreamcard.app.R;
+import com.dreamcard.app.components.NonScrollableListView;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
+import com.dreamcard.app.entity.Categories;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.ServiceRequest;
+import com.dreamcard.app.entity.Voucher;
+import com.dreamcard.app.services.AllVouchersAsync;
 import com.dreamcard.app.services.ConsumerDiscountAsyncTask;
 import com.dreamcard.app.utils.Utils;
-import com.dreamcard.app.view.adapters.NotificationGridAdapter;
+import com.dreamcard.app.view.adapters.VoucerListAdapter;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -49,10 +55,11 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
 
     private OnFragmentInteractionListener mListener;
 
-    private GridView grid;
-    private NotificationGridAdapter adapter;
+    private NonScrollableListView voucherList;
+    private VoucerListAdapter adapter;
 
     private ConsumerDiscountAsyncTask consumerDiscountAsyncTask;
+    private AllVouchersAsync _allVouchersAsync;
     private ArrayList<Offers> notificationList = new ArrayList<Offers>();
     private ImageButton btnGas;
     private ImageButton btnCashPoints;
@@ -87,9 +94,14 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
 
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
-        showCashFragment();
+        if (!Utils.promoteActivation(getActivity(), false)) {
+            showCashFragment();
+        }
+        else {
+            showNoUserFragment();
+        }
 
-        grid = (GridView) view.findViewById(R.id.notifications_grid);
+        voucherList = (NonScrollableListView) view.findViewById(R.id.notifications_grid);
 
         btnCash = (ImageButton) view.findViewById(R.id.btn_cash);
         btnCash.setOnClickListener(this);
@@ -103,6 +115,21 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
         btnMobile = (ImageButton) view.findViewById(R.id.btn_mobile);
         btnMobile.setOnClickListener(this);
 
+        TextView allCats = (TextView) view.findViewById(R.id.all_cats_text);
+        allCats.setOnClickListener(this);
+
+        ImageView fashion = (ImageView) view.findViewById(R.id.fashion_cat_button);
+        fashion.setOnClickListener(this);
+
+        ImageView joy = (ImageView) view.findViewById(R.id.joy_cat_button);
+        joy.setOnClickListener(this);
+
+        ImageView electronics = (ImageView) view.findViewById(R.id.electronics_cat_button);
+        electronics.setOnClickListener(this);
+
+        ImageView food = (ImageView) view.findViewById(R.id.food_cat_button);
+        food.setOnClickListener(this);
+
         SharedPreferences prefs = getActivity().getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
         String id = prefs.getString(Params.USER_INFO_ID, "");
         String name = Utils.getUserName(getActivity());
@@ -112,6 +139,8 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
                 , Params.SERVICE_PROCESS_3);
         consumerDiscountAsyncTask.execute(getActivity());
 
+        _allVouchersAsync = new AllVouchersAsync(this, Params.SERVICE_PROCESS_1);
+        _allVouchersAsync.execute(getActivity());
         ArrayList<ServiceRequest> list = ServicesConstants.getLatestOfferRequestList("100");
         return view;
     }
@@ -135,23 +164,15 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
         if (consumerDiscountAsyncTask != null && consumerDiscountAsyncTask.getStatus() == AsyncTask.Status.RUNNING) {
             consumerDiscountAsyncTask.cancel(true);
         }
+        if (_allVouchersAsync != null && _allVouchersAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            _allVouchersAsync.cancel(true);
+        }
 
         mListener = null;
     }
 
     @Override
     public void onClick(View view) {
-        Offers info = null;
-        for (Offers bean : this.notificationList) {
-            if (view.getId() == bean.getPosition()) {
-                info = bean;
-                break;
-            }
-        }
-        if (info != null) {
-            mListener.doAction(info, Params.FRAGMENT_LATEST_OFFERS);
-        }
-
         if (view.getId() == R.id.btn_cash) {
             btnCashPoints.setImageDrawable(getResources().getDrawable(R.drawable.points_icon_inactive));
             btnMobile.setImageDrawable(getResources().getDrawable(R.drawable.mobile_icon_inactive));
@@ -196,6 +217,50 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
                 showGasFragment();
             }
         }
+        else if (view.getId() == R.id.all_cats_text) {
+            mListener.onFragmentInteraction("", Params.FRAGMENT_CATEGORIES);
+            return;
+        }
+        else if (view.getId() == R.id.fashion_cat_button) {
+            Categories fashion = new Categories();
+            fashion.setId("228");
+            fashion.setTitle("fashion");
+            fashion.setLogo("http://dream-card.net/Thumbnail/sweaters_1.png");
+            fashion.setPosition(3);
+
+            mListener.doAction(fashion, Params.FRAGMENT_CATEGORIES);
+            return;
+        }
+        else if (view.getId() == R.id.food_cat_button) {
+            Categories fashion = new Categories();
+            fashion.setId("151");
+            fashion.setTitle("Food & Drink");
+            fashion.setLogo("http://dream-card.net/Thumbnail/sweaters_1.png");
+            fashion.setPosition(4);
+
+            mListener.doAction(fashion, Params.FRAGMENT_CATEGORIES);
+            return;
+        }
+        else if (view.getId() == R.id.joy_cat_button) {
+            Categories fashion = new Categories();
+            fashion.setId("159");
+            fashion.setTitle("Fun & Joy");
+            fashion.setLogo("http://dream-card.net/Thumbnail/entertainment_1.png");
+            fashion.setPosition(5);
+
+            mListener.doAction(fashion, Params.FRAGMENT_CATEGORIES);
+            return;
+        }
+        else if (view.getId() == R.id.electronics_cat_button) {
+            Categories fashion = new Categories();
+            fashion.setId("280");
+            fashion.setTitle("Electronics");
+            fashion.setLogo("http://dream-card.net/Thumbnail/Electronics_1.png");
+            fashion.setPosition(2);
+
+            mListener.doAction(fashion, Params.FRAGMENT_CATEGORIES);
+            return;
+        }
 
         btnCash.setScaleType(ImageView.ScaleType.FIT_CENTER);
         btnMobile.setScaleType(ImageView.ScaleType.FIT_CENTER);
@@ -204,6 +269,10 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
     }
 
     private void showCashFragment() {
+        if (Utils.promoteActivation(getActivity(), false)) {
+            showNoUserFragment();
+            return;
+        }
         CashDashboardFragment fragment = CashDashboardFragment.newInstance();
         if (fragment == null) {
             return;
@@ -216,6 +285,10 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
     }
 
     private void showGasFragment() {
+        if (Utils.promoteActivation(getActivity(), false)) {
+            showNoUserFragment();
+            return;
+        }
         GasDashboardFragment fragment = GasDashboardFragment.newInstance();
         if (fragment == null) {
             return;
@@ -227,7 +300,24 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
         ft.commit();
     }
 
+    private void showNoUserFragment() {
+        NoUserDashboardFragment fragment = NoUserDashboardFragment.newInstance();
+        if (fragment == null) {
+            return;
+        }
+
+        FragmentManager fm = getChildFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.dashboard_fragment_holder, fragment);
+        ft.commit();
+    }
+
     private void showMobileFragment() {
+        if (Utils.promoteActivation(getActivity(), false)) {
+            showNoUserFragment();
+            return;
+        }
+
         MobileDashboardFragment fragment = MobileDashboardFragment.newInstance();
         if (fragment == null) {
             return;
@@ -261,33 +351,19 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
         if (processType == Params.SERVICE_PROCESS_3) {
             ArrayList<Offers> list = (ArrayList<Offers>) b;
             Params.DISCOUNT_LIST = list;
-            if (list.size() > 0) {
-                setDiscountInfo(list);
+        }
+        else if (processType == Params.SERVICE_PROCESS_1) {
+            ArrayList<Voucher> list = (ArrayList<Voucher>) b;
+            if (list != null && list.size() > 0) {
+                //setVoucherList(list);
             }
         }
     }
 
-    private void setDiscountInfo(ArrayList<Offers> list) {
-        if (list != null && !list.isEmpty()) {
-            Offers bean = list.get(list.size() - 1);
-
-            //build notification list
-            notificationList = new ArrayList<Offers>();
-            if (list.size() > 0) {
-                int i = 0;
-                for (int index = list.size() - 1; index >= 0; index--) {
-                    Offers offer = list.get(index);
-                    notificationList.add(offer);
-                    i++;
-                    if (i == 3)
-                        break;
-                }
-                adapter = null;
-                adapter = new NotificationGridAdapter(getActivity(), this.notificationList);
-                grid.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
-            }
-        }
+    private void setVoucherList(ArrayList<Voucher> list) {
+        adapter = new VoucerListAdapter(getActivity(), list);
+        voucherList.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
     @Override

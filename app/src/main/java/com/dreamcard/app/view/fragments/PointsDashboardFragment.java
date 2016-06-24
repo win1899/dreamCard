@@ -232,7 +232,9 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
         int totalPoints = 0;
         for (CashPointsTransaction trans : _transactions.get(key))
         {
-            totalPoints += trans.getPointsValue();
+            if (trans.getStatus() != null && trans.getStatus().equalsIgnoreCase("Earned")) {
+                totalPoints += trans.getPointsValue();
+            }
         }
         _totalEarnings.setText(Integer.toString(totalPoints));
     }

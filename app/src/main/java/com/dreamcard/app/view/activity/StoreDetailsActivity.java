@@ -328,7 +328,9 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
                 if (_currentStore.getId().equalsIgnoreCase(Integer.toString(id))) {
                     ArrayList<CashPointsTransaction> trans = transactions.get(id);
                     for (CashPointsTransaction t : trans) {
-                        totalCashpoints += t.getPointsValue();
+                        if (t.getStatus() != null && t.getStatus().equalsIgnoreCase("Earned")) {
+                            totalCashpoints += t.getPointsValue();
+                        }
                     }
                     break;
                 }

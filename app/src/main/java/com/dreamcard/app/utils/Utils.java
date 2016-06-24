@@ -291,8 +291,11 @@ public class Utils {
             return null;
         }
     }
-
     public static boolean promoteActivation(Context context) {
+        return promoteActivation(context, true);
+    }
+
+    public static boolean promoteActivation(Context context, boolean show) {
         SharedPreferences pref = context.getSharedPreferences(Params.APP_DATA, context.MODE_PRIVATE);
         boolean isFacebook = pref.getBoolean(Params.USER_FACEBOOK_LOGIN, false);
         if (isFacebook) {
@@ -305,7 +308,11 @@ public class Utils {
                             dialog.dismiss();
                         }
                     });
-            dialog.show();
+
+            if (show) {
+                dialog.show();
+            }
+
             return true;
         }
         return false;

@@ -57,6 +57,7 @@ public class ServicesConstants {
     public static final String WS_METHOD_REMOVE_INTEREST_CATEGORY="RemoveCategoryFromInterestListForConsumer";
     public static final String WS_METHOD_ADD_OFFER_COMMENT="AddOfferComment";
     public static final String WS_METHOD_CONSUMER_DISCOUNT="GetDiscountsForConsumer";
+    public static final String WS_METHOD_SELECT_ALL_VOUCHERS = "SelectAllVouchers";
     public static final String WS_METHOD_GET_INTEREST_CATEGORY="GetInterestedCategoriesByConsumer";
     public static final String WS_METHOD_CITIES="GetAllCities";
     public static final String WS_METHOD_OFFER_RATE="RateOffer";

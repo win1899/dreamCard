@@ -1,114 +1,108 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/cash_background">
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/cicle"
-        android:layout_below="@+id/textView" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/last_used"
-        android:textColor="#ffffff"
-        android:textSize="14sp" />
-
-    <TextView
-        android:id="@+id/txt_last_used"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textView"
-        android:layout_marginLeft="10dp"
-        android:textColor="#ffffff"
-        android:textSize="18sp"
-        android:text="---"
-        android:layout_alignParentStart="true" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="25dp"
-        android:layout_height="20dp"
-        android:src="@drawable/arrows"
-        android:layout_below="@+id/txt_total_shop"
-        android:layout_alignEnd="@+id/textView3" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="5dp"
-        android:text="@string/total_shop"
-        android:textColor="#ffffff"
-        android:textSize="14sp"
-        android:layout_toStartOf="@+id/imageView6" />
-
-    <ImageView
-        android:layout_width="18dp"
-        android:layout_height="18dp"
-        android:id="@+id/imageView6"
-        android:src="@drawable/cart_main_page"
-        android:layout_alignBottom="@+id/textView3"
-        android:layout_marginRight="10dp"
-        android:layout_alignParentRight="true" />
-
-    <TextView
-        android:id="@+id/txt_total_shop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/txt_last_used"
-        android:layout_marginRight="28dp"
-        android:textColor="#ffffff"
-        android:textSize="18sp"
-        android:layout_alignParentEnd="true"
-        android:gravity="center"
-        android:singleLine="true"
-        android:text="0"
-        />
-
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:background="@drawable/points_background">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignLeft="@+id/imageView"
-        android:layout_alignRight="@+id/imageView"
-        android:layout_below="@+id/txt_total_shop"
-        android:padding="34dp">
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/recycler_cashpoints_dashboard"
+            android:layout_width="251dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal"
+            android:src="@drawable/cash_icon"
+        />
 
         <TextView
-            android:id="@+id/textView5"
-            android:padding="0dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/you_saved"
+            android:text="You Saved"
             android:textColor="#ffffff"
-            android:textSize="22sp"
-            android:layout_alignParentTop="true"
+            android:layout_below="@+id/recycler_cashpoints_dashboard"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:id="@+id/you_earned_cashponts"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0₪"
+            android:textColor="#ffffff"
+            android:layout_below="@+id/you_earned_cashponts"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:textSize="30sp"
+            android:id="@+id/txt_total_saved"/>
+
+
+        <TextView
+            android:id="@+id/total_items_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="#ffffff"
+            android:layout_centerHorizontal="true"
+            android:textStyle="bold"
+            android:layout_marginTop="15dp"
+            android:textSize="20sp"
+            android:layout_below="@+id/txt_total_saved"/>
+
+        <TextView
+            android:id="@+id/text_total_items"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Total Items"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            android:layout_alignTop="@+id/text_different_stores"
             android:layout_centerHorizontal="true"/>
 
         <TextView
-            android:id="@+id/txt_total_saved"
+            android:id="@+id/different_stores_value"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:textColor="#ffffff"
-            android:paddingTop="5dp"
-            android:gravity="center"
-            android:textSize="30sp"
-            android:layout_below="@+id/textView5"
-            android:layout_centerHorizontal="true"
             android:text="0"
+            android:gravity="center"
+            android:textColor="#ffffff"
+            android:layout_marginEnd="90dp"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:layout_alignTop="@+id/total_items_value"
+            android:layout_toLeftOf="@+id/total_items_value"
             />
+
+        <TextView
+            android:id="@+id/text_different_stores"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Different Stores"
+            android:textColor="#ffffff"
+            android:textSize="12sp"
+            android:layout_below="@+id/different_stores_value"
+            android:layout_toLeftOf="@+id/total_items_value"
+            android:layout_marginRight="60dp"/>
+
+        <Button
+            android:id="@+id/more_details_cash"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="View Details"
+            android:layout_marginStart="30dp"
+            android:background="@drawable/eleptic_button"
+            android:padding="7dp"
+            android:textSize="13sp"
+            android:textColor="@color/button_login"
+            android:textStyle="bold"
+            android:layout_alignBottom="@+id/text_total_items"
+            android:layout_toEndOf="@+id/you_earned_cashponts"/>
+
     </RelativeLayout>
+
 </RelativeLayout>

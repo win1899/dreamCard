@@ -1,8 +1,6 @@
 package com.dreamcard.app.view.fragments;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -12,28 +10,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
-import com.dreamcard.app.entity.ConsumerInfo;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.entity.Offers;
-import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.services.ConsumerDiscountAsyncTask;
 import com.dreamcard.app.services.TotalCashPointsAsync;
-import com.dreamcard.app.services.TotalSavingAsync;
-import com.dreamcard.app.utils.Utils;
-import com.dreamcard.app.view.adapters.NotificationGridAdapter;
 import com.dreamcard.app.view.interfaces.IServiceListener;
-import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * Created by WIN on 5/27/2016.
@@ -42,13 +35,11 @@ public class CashDashboardFragment extends Fragment implements IServiceListener 
     private String _totalSavings = "0";
 
     private TextView txtYouSaved;
-    private TextView txtTotalShop;
-    private TextView txtLastUse;
-
+    private TextView _totalItems;
+    private TextView _differnetStores;
+    private Button _detailsButton;
     private TotalCashPointsAsync _totalCashPointsAsync;
     private ConsumerDiscountAsyncTask consumerDiscountAsyncTask;
-
-    private double totalSave = 0.0;
 
     public static CashDashboardFragment newInstance() {
         CashDashboardFragment fragment = new CashDashboardFragment();
@@ -72,9 +63,16 @@ public class CashDashboardFragment extends Fragment implements IServiceListener 
 
         View view = inflater.inflate(R.layout.fragment_dashboard_cash, container, false);
 
-        txtLastUse = (TextView) view.findViewById(R.id.txt_last_used);
-        txtTotalShop = (TextView) view.findViewById(R.id.txt_total_shop);
         txtYouSaved = (TextView) view.findViewById(R.id.txt_total_saved);
+        _totalItems = (TextView) view.findViewById(R.id.total_items_value);
+        _differnetStores = (TextView) view.findViewById(R.id.different_stores_value);
+        _detailsButton = (Button) view.findViewById(R.id.more_details_cash);
+        _detailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Coming soon ...", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         SharedPreferences prefs = getActivity().getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
         String id = prefs.getString(Params.USER_INFO_ID, "");
@@ -103,33 +101,22 @@ public class CashDashboardFragment extends Fragment implements IServiceListener 
 
     private void setDiscountInfo(ArrayList<Offers> list) {
         if (list != null && !list.isEmpty()) {
-            Offers bean = list.get(list.size() - 1);
-
-            if (bean.getDate() != null && bean.getDate().length() > 0 && !bean.getDate().equalsIgnoreCase("null")) {
-                Date date = new Date(Long.parseLong(bean.getDate().replaceAll(".*?(\\d+).*", "$1")));
-                android.text.format.DateFormat df = new android.text.format.DateFormat();
-                Calendar c = Calendar.getInstance();
-                c.setTime(date);
-
-                String x = df.format("dd/MM", c.getTime()).toString();
-                txtLastUse.setText(x);
-            }
-
-            double totalShoppings = 0.0;
             double totalSavings = 0.0;
+            int diffStores = 0;
+            int totalItems = 0;
+            HashMap<String, Boolean> storesCounted = new HashMap<>();
 
             for (Offers offer : list) {
-                try {
-                    totalShoppings += Double.parseDouble(offer.getAmount());
-                    totalSavings += (offer.getAmountBeforeDicount() - offer.getAmountAfterDiscount());
-                } catch (Exception e){
-
+                totalSavings += (offer.getAmountBeforeDicount() - offer.getAmountAfterDiscount());
+                totalItems++;
+                if (storesCounted.get(offer.getBusinessId()) == null) {
+                    diffStores++;
+                    storesCounted.put(offer.getBusinessId(), true);
                 }
             }
-
-            txtTotalShop.setText(Integer.toString((int)totalShoppings));
             txtYouSaved.setText((int)totalSavings + getResources().getString(R.string.ils));
-
+            _differnetStores.setText(Integer.toString(diffStores));
+            _totalItems.setText(Integer.toString(totalItems));
         }
     }
 

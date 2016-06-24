@@ -20,7 +20,7 @@
     <string name="card_not_valid_title">البطاقة غير صالحة</string>
     <string name="title_activity_slider_menu">Dream Card</string>
     <string name="desc_list_item_icon">Item Icon</string>
-    <string name="notifications">الفعاليات</string>
+    <string name="voucher_list">عروض خاصة</string>
     <string name="latest_offers">اخر العروض</string>
     <string name="categories">الاقسام</string>
     <string name="stores">المحلات</string>

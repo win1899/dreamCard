@@ -1,0 +1,73 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:background="@drawable/points_background">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/no_user_imageview"
+            android:layout_width="251dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:orientation="horizontal"
+            android:src="@drawable/no_user_icon"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="26sp"
+            android:textColor="#ffffff"
+            android:textStyle="bold"
+            android:text="Welcome"
+            android:layout_below="@+id/no_user_imageview"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/welcome_no_user"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="#ffffff"
+            android:text="Please add DreamCard number to access all data"
+            android:layout_below="@+id/welcome_no_user"
+            android:layout_centerHorizontal="true"
+            android:id="@+id/text"/>
+
+        <Button
+            android:id="@+id/buy_card_button"
+            android:layout_width="115dp"
+            android:layout_height="40dp"
+            android:text="Buy Card"
+            android:background="@drawable/eleptic_button"
+            android:padding="7dp"
+            android:textSize="13sp"
+            android:textColor="@color/button_login"
+            android:textStyle="bold"
+            android:layout_below="@+id/text"
+            android:layout_toRightOf="@+id/add_card_button"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="22dp"
+            android:layout_alignEnd="@+id/no_user_imageview"/>
+
+        <Button
+            android:id="@+id/add_card_button"
+            android:layout_width="115dp"
+            android:layout_height="40dp"
+            android:text="Add Card"
+            android:background="@drawable/eleptic_button"
+            android:padding="7dp"
+            android:textSize="13sp"
+            android:textColor="@color/button_login"
+            android:textStyle="bold"
+            android:layout_alignTop="@+id/buy_card_button"
+            android:layout_alignStart="@+id/no_user_imageview"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

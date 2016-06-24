@@ -20,7 +20,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -95,8 +97,8 @@ public class NavDrawerActivity extends FragmentActivity
 //    private RelativeLayout headerPnl;
 
     private DrawerLayout mDrawer;
-    private int currentFragment=0;
-    private boolean isOfferListSelected=false;
+    private int currentFragment = 0;
+    private boolean isOfferListSelected = false;
     private Button btnStores;
     private Button btnCategories;
     private Button btnLatestOffers;
@@ -110,18 +112,18 @@ public class NavDrawerActivity extends FragmentActivity
     private BroadcastReceiver mRegistrationBroadcastReceiver;
 
 
-    private void fakeNotificationsGenerator () {
+    private void fakeNotificationsGenerator() {
 
 
-            Utils.updateStoreBadge(NavDrawerActivity.this, 1);
-            storeNotificationsCount = Utils.getStoreBadge(NavDrawerActivity.this);
-            txtStoresBadge.setVisibility(View.VISIBLE);
-            txtStoresBadge.setText("" + storeNotificationsCount);
+        Utils.updateStoreBadge(NavDrawerActivity.this, 1);
+        storeNotificationsCount = Utils.getStoreBadge(NavDrawerActivity.this);
+        txtStoresBadge.setVisibility(View.VISIBLE);
+        txtStoresBadge.setText("" + storeNotificationsCount);
 
-            Utils.updateOffersBadge(NavDrawerActivity.this, 1);
-            offersNotificationsCount = Utils.getOffersBadge(NavDrawerActivity.this);
-            txtOffersBadge.setVisibility(View.VISIBLE);
-            txtOffersBadge.setText("" + offersNotificationsCount);
+        Utils.updateOffersBadge(NavDrawerActivity.this, 1);
+        offersNotificationsCount = Utils.getOffersBadge(NavDrawerActivity.this);
+        txtOffersBadge.setVisibility(View.VISIBLE);
+        txtOffersBadge.setText("" + offersNotificationsCount);
     }
 
     @Override
@@ -136,7 +138,7 @@ public class NavDrawerActivity extends FragmentActivity
                 getSupportFragmentManager().findFragmentById(R.id.left_navigation_drawer);
 
 
-        mDrawer=(DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -157,20 +159,20 @@ public class NavDrawerActivity extends FragmentActivity
                 mDrawer.openDrawer(Gravity.RIGHT);
             }
         });
-        btnSetting=(ImageButton)findViewById(R.id.btn_notifications);
+        btnSetting = (ImageButton) findViewById(R.id.btn_notifications);
         btnSetting.setOnClickListener(this);
 
         // Get title textview
         tvTitle = (TextView) findViewById(R.id.txt_menu_title);
-        imgLogo=(ImageView)findViewById(R.id.img_menu_logo);
+        imgLogo = (ImageView) findViewById(R.id.img_menu_logo);
         imgLogo.setOnClickListener(this);
 
-        btnCategories= (Button) findViewById(R.id.btn_category);
-        btnLatestOffers=(Button)findViewById(R.id.btn_browse);
-        btnLocations=(Button)findViewById(R.id.btn_location);
-        btnStores=(Button)findViewById(R.id.btn_store);
-        txtStoresBadge = (TextView)findViewById(R.id.txt_store_badge);
-        txtOffersBadge = (TextView)findViewById(R.id.txt_offers_badge);
+        btnCategories = (Button) findViewById(R.id.btn_category);
+        btnLatestOffers = (Button) findViewById(R.id.btn_browse);
+        btnLocations = (Button) findViewById(R.id.btn_location);
+        btnStores = (Button) findViewById(R.id.btn_store);
+        txtStoresBadge = (TextView) findViewById(R.id.txt_store_badge);
+        txtOffersBadge = (TextView) findViewById(R.id.txt_offers_badge);
         txtNotificationBadge = (TextView) findViewById(R.id.txt_notification_badge);
         notificationLogo = (ImageView) findViewById(R.id.notifications_icon);
         notificationLogo.setOnClickListener(this);
@@ -231,10 +233,10 @@ public class NavDrawerActivity extends FragmentActivity
 
         loadIcons();
 
-        if(btnSetting!=null) {
+        if (btnSetting != null) {
             btnSetting.setVisibility(View.GONE);
         }
-        currentFragment=0;
+        currentFragment = 0;
 //        onNavigationDrawerItemSelected(0);
 
         mRegistrationBroadcastReceiver = new BroadcastReceiver() {
@@ -272,20 +274,20 @@ public class NavDrawerActivity extends FragmentActivity
 //                .commit();
 
         Fragment fragment = null;
-        String fragmentTag=Params.FRAGMENT_DASHBOARD;
-        FrameLayout mainFrameLayout=(FrameLayout)findViewById(R.id.activity_main_content_fragment);
+        String fragmentTag = Params.FRAGMENT_DASHBOARD;
+        FrameLayout mainFrameLayout = (FrameLayout) findViewById(R.id.activity_main_content_fragment);
         Intent intent;
         switch (position) {
             case 0:
                 fragment = new DashboardFragment();
-                this.isOfferListSelected=false;
-                if(btnSetting!=null) {
+                this.isOfferListSelected = false;
+                if (btnSetting != null) {
                     btnSetting.setVisibility(View.GONE);
                 }
-                if(tvTitle != null) {
+                if (tvTitle != null) {
                     tvTitle.setVisibility(View.GONE);
                 }
-                if(imgLogo !=null) {
+                if (imgLogo != null) {
                     imgLogo.setVisibility(View.VISIBLE);
                 }
                 currentFragment = 0;
@@ -293,9 +295,9 @@ public class NavDrawerActivity extends FragmentActivity
             case 1:
                 LatestOfferListFragment.getType();
                 fragment = LatestOfferListFragment.newInstance(Params.TYPE_OFFER, "");
-                fragmentTag= Params.FRAGMENT_LATEST_OFFERS;
+                fragmentTag = Params.FRAGMENT_LATEST_OFFERS;
 //                mainFrameLayout.setBackgroundColor(getResources().getColor(R.color.latest_offer_bg));
-                this.isOfferListSelected=true;
+                this.isOfferListSelected = true;
                 btnSetting.setVisibility(View.VISIBLE);
                 tvTitle.setVisibility(View.GONE);
                 imgLogo.setVisibility(View.VISIBLE);
@@ -303,9 +305,9 @@ public class NavDrawerActivity extends FragmentActivity
                 break;
             case 2:
                 fragment = CategoriesListFragment.newInstance(null, "");
-                fragmentTag=Params.FRAGMENT_CATEGORIES;
+                fragmentTag = Params.FRAGMENT_CATEGORIES;
 //                mainFrameLayout.setBackgroundColor(getResources().getColor(R.color.categories_bg));
-                this.isOfferListSelected=false;
+                this.isOfferListSelected = false;
                 btnSetting.setVisibility(View.GONE);
                 tvTitle.setVisibility(View.GONE);
                 imgLogo.setVisibility(View.VISIBLE);
@@ -313,9 +315,9 @@ public class NavDrawerActivity extends FragmentActivity
                 break;
             case 3:
                 fragment = new StoresListFragment();
-                fragmentTag=Params.FRAGMENT_STORES;
+                fragmentTag = Params.FRAGMENT_STORES;
 //                mainFrameLayout.setBackgroundColor(getResources().getColor(R.color.stores_bg));
-                this.isOfferListSelected=false;
+                this.isOfferListSelected = false;
                 btnSetting.setVisibility(View.GONE);
                 tvTitle.setVisibility(View.GONE);
                 imgLogo.setVisibility(View.VISIBLE);
@@ -323,9 +325,9 @@ public class NavDrawerActivity extends FragmentActivity
                 break;
             case 4:
                 fragment = new LocationFragment();
-                fragmentTag=Params.FRAGMENT_LOCATIONS;
+                fragmentTag = Params.FRAGMENT_LOCATIONS;
 //                mainFrameLayout.setBackgroundColor(getResources().getColor(R.color.location_bg));
-                this.isOfferListSelected=false;
+                this.isOfferListSelected = false;
                 btnSetting.setVisibility(View.GONE);
                 tvTitle.setVisibility(View.GONE);
                 imgLogo.setVisibility(View.VISIBLE);
@@ -335,34 +337,34 @@ public class NavDrawerActivity extends FragmentActivity
                 if (Utils.promoteActivation(this)) {
                     return;
                 }
-                intent=new Intent(this,SettingActivity.class);
+                intent = new Intent(this, SettingActivity.class);
                 startActivity(intent);
                 overridePendingTransition(R.anim.push_down_in, R.anim.push_down_in);
-                this.isOfferListSelected=false;
+                this.isOfferListSelected = false;
                 break;
 
             case 6:
                 if (Utils.isCardActivated(this)) {
                     return;
                 }
-                Intent activationIntent=new Intent(this, MainActivationFormActivity.class);
+                Intent activationIntent = new Intent(this, MainActivationFormActivity.class);
                 activationIntent.putExtra(Params.FACEBOOK_EXTRA, true);
                 startActivity(activationIntent);
-                overridePendingTransition( R.anim.push_right_in, R.anim.push_right_out );
+                overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
                 finish();
                 break;
 
             case 7:
                 fragment = new FAQFragment();
-                fragmentTag=Params.FRAGMENT_FAQ;
-                this.isOfferListSelected=false;
+                fragmentTag = Params.FRAGMENT_FAQ;
+                this.isOfferListSelected = false;
                 btnSetting.setVisibility(View.GONE);
                 break;
 
             case 8:
                 fragment = new AboutUsFragment();
-                fragmentTag=Params.FRAGMENT_ABOUTUS;
-                this.isOfferListSelected=false;
+                fragmentTag = Params.FRAGMENT_ABOUTUS;
+                this.isOfferListSelected = false;
                 btnSetting.setVisibility(View.GONE);
                 break;
 
@@ -371,26 +373,26 @@ public class NavDrawerActivity extends FragmentActivity
                     return;
                 }
                 fragment = new FeedbackFragment();
-                fragmentTag=Params.FRAGMENT_FEEDBACK;
-                this.isOfferListSelected=false;
+                fragmentTag = Params.FRAGMENT_FEEDBACK;
+                this.isOfferListSelected = false;
                 btnSetting.setVisibility(View.GONE);
                 break;
 
             case 10:
                 DatabaseController.getInstance(this).deleteLogin();
-                SharedPreferences pref=getSharedPreferences(Params.APP_DATA,MODE_PRIVATE);
+                SharedPreferences pref = getSharedPreferences(Params.APP_DATA, MODE_PRIVATE);
                 pref.edit().clear().commit();
                 Utils.updateMainBadge(NavDrawerActivity.this);
                 LoginManager.getInstance().logOut();
-                intent=new Intent(this, MainActivity.class);
+                intent = new Intent(this, MainActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
-                overridePendingTransition( R.anim.push_down_in, R.anim.push_down_out );
+                overridePendingTransition(R.anim.push_down_in, R.anim.push_down_out);
                 finish();
                 break;
         }
 
-        if(fragment != null) {
+        if (fragment != null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
 
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -433,12 +435,14 @@ public class NavDrawerActivity extends FragmentActivity
 
     @Override
     public void onFragmentInteraction(String uri, String type) {
-        if(type.equalsIgnoreCase(Params.FRAGMENT_STORES)){
-            Intent intent=new Intent(this,StoreDetailsActivity.class);
-            startActivityForResult(intent,2);
-            overridePendingTransition( R.anim.push_down_in, R.anim.push_down_in );
-        }else if(type.equalsIgnoreCase(Params.FRAGMENT_FEEDBACK)){
+        if (type.equalsIgnoreCase(Params.FRAGMENT_STORES)) {
+            Intent intent = new Intent(this, StoreDetailsActivity.class);
+            startActivityForResult(intent, 2);
+            overridePendingTransition(R.anim.push_down_in, R.anim.push_down_in);
+        } else if (type.equalsIgnoreCase(Params.FRAGMENT_FEEDBACK)) {
             onNavigationDrawerItemSelected(0);
+        } else if (type.equalsIgnoreCase(Params.FRAGMENT_CATEGORIES)) {
+            onNavigationDrawerItemSelected(2);
         }
     }
 
@@ -463,42 +467,43 @@ public class NavDrawerActivity extends FragmentActivity
     private void checkForCrashes() {
         CrashManager.register(this, APP_ID);
     }
+
     @Override
     public void doAction(Object b, String fragment) {
-        if(fragment.equalsIgnoreCase(Params.FRAGMENT_LATEST_OFFERS)){
-            Offers bean= (Offers) b;
-            Intent intent=new Intent(this,OfferDetailsActivity.class);
-            intent.putExtra(Params.DATA,bean);
+        if (fragment.equalsIgnoreCase(Params.FRAGMENT_LATEST_OFFERS)) {
+            Offers bean = (Offers) b;
+            Intent intent = new Intent(this, OfferDetailsActivity.class);
+            intent.putExtra(Params.DATA, bean);
             intent.putExtra(Params.PICTURE_LIST, bean.getPicturesList());
             startActivityForResult(intent, 1);
-            overridePendingTransition( R.anim.push_right_in, R.anim.push_right_out );
+            overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
 
-        }else if(fragment.equalsIgnoreCase(Params.FRAGMENT_CATEGORIES)){
-            Categories bean= (Categories) b;
+        } else if (fragment.equalsIgnoreCase(Params.FRAGMENT_CATEGORIES)) {
+            Categories bean = (Categories) b;
 
-            FrameLayout mainFrameLayout=(FrameLayout)findViewById(R.id.activity_main_content_fragment);
+            FrameLayout mainFrameLayout = (FrameLayout) findViewById(R.id.activity_main_content_fragment);
             mainFrameLayout.setBackgroundColor(getResources().getColor(R.color.categories_bg));
 
             //Any dummy number
             currentFragment = 11;
-            subCategoryFragment=SubcategoryFragment.newInstance(bean,bean.getId());
+            subCategoryFragment = SubcategoryFragment.newInstance(bean, bean.getId());
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.activity_main_content_fragment, subCategoryFragment)
                     .commit();
             fragmentManager.executePendingTransactions();
 
-        }else if(fragment.equalsIgnoreCase(Params.FRAGMENT_STORES)){
-            Stores bean= (Stores) b;
-            Intent intent=new Intent(this,StoreDetailsActivity.class);
-            intent.putExtra(Params.DATA,bean);
+        } else if (fragment.equalsIgnoreCase(Params.FRAGMENT_STORES)) {
+            Stores bean = (Stores) b;
+            Intent intent = new Intent(this, StoreDetailsActivity.class);
+            intent.putExtra(Params.DATA, bean);
             intent.putExtra(Params.PICTURE_LIST, bean.getPictures());
             startActivityForResult(intent, 2);
-            overridePendingTransition( R.anim.push_down_in, R.anim.push_down_in );
-        }else if(fragment.equalsIgnoreCase(Params.FRAGMENT_LEFT_DRAWER)){
-            if(this.isOfferListSelected){
+            overridePendingTransition(R.anim.push_down_in, R.anim.push_down_in);
+        } else if (fragment.equalsIgnoreCase(Params.FRAGMENT_LEFT_DRAWER)) {
+            if (this.isOfferListSelected) {
                 LatestOfferListFragment.getType();
-                LatestOfferListFragment f= LatestOfferListFragment.newInstance(Params.TYPE_OFFER, "");
+                LatestOfferListFragment f = LatestOfferListFragment.newInstance(Params.TYPE_OFFER, "");
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
                         .replace(R.id.activity_main_content_fragment, f)
@@ -510,36 +515,36 @@ public class NavDrawerActivity extends FragmentActivity
             }
 
 
-        }else if(fragment.equalsIgnoreCase(Params.FRAGMENT_SUB_CATEGORY)){
+        } else if (fragment.equalsIgnoreCase(Params.FRAGMENT_SUB_CATEGORY)) {
             Categories bean = (Categories) b;
 
-            FrameLayout mainFrameLayout=(FrameLayout)findViewById(R.id.activity_main_content_fragment);
+            FrameLayout mainFrameLayout = (FrameLayout) findViewById(R.id.activity_main_content_fragment);
             mainFrameLayout.setBackgroundColor(getResources().getColor(R.color.categories_bg));
             currentFragment = R.id.btn_browse;
-            LatestOfferListFragment fragment1=LatestOfferListFragment.newInstance(Params.TYPE_OFFERS_BY_CAT,bean.getId());
+            LatestOfferListFragment fragment1 = LatestOfferListFragment.newInstance(Params.TYPE_OFFERS_BY_CAT, bean.getId());
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.activity_main_content_fragment, fragment1)
                     .commit();
 
             mNavigationDrawerFragment.selectItem(1);
-            String currentMenu=getResources().getString(R.string.offers)+" "+bean.getTitle();
+            String currentMenu = getResources().getString(R.string.offers) + " " + bean.getTitle();
             tvTitle.setText(currentMenu);
             tvTitle.setVisibility(View.VISIBLE);
             imgLogo.setVisibility(View.GONE);
-        }else if(fragment.equalsIgnoreCase(Params.FRAGMANT_CATEGORY_EMPTY)){
+        } else if (fragment.equalsIgnoreCase(Params.FRAGMANT_CATEGORY_EMPTY)) {
             Categories bean = (Categories) b;
 
-            FrameLayout mainFrameLayout=(FrameLayout)findViewById(R.id.activity_main_content_fragment);
+            FrameLayout mainFrameLayout = (FrameLayout) findViewById(R.id.activity_main_content_fragment);
             mainFrameLayout.setBackgroundColor(getResources().getColor(R.color.categories_bg));
             currentFragment = R.id.btn_browse;
-            LatestOfferListFragment fragment1=LatestOfferListFragment.newInstance(Params.TYPE_OFFERS_BY_CAT,bean.getId());
+            LatestOfferListFragment fragment1 = LatestOfferListFragment.newInstance(Params.TYPE_OFFERS_BY_CAT, bean.getId());
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .replace(R.id.activity_main_content_fragment, fragment1)
                     .commit();
 
-            String currentMenu=getResources().getString(R.string.offers)+" "+bean.getTitle();
+            String currentMenu = getResources().getString(R.string.offers) + " " + bean.getTitle();
 
             tvTitle.setVisibility(View.GONE);
             imgLogo.setVisibility(View.VISIBLE);
@@ -550,42 +555,55 @@ public class NavDrawerActivity extends FragmentActivity
 
     @Override
     public void onClick(View view) {
-        if(view.getId()==R.id.btn_category) {
-            if(currentFragment!=R.id.btn_category) {
+        if (view.getId() == R.id.btn_category) {
+            if (currentFragment != R.id.btn_category) {
                 currentFragment = R.id.btn_category;
-                onNavigationDrawerItemSelected(2);
+                /*btnCategories.setCompoundDrawables(null, ContextCompat.getDrawable(NavDrawerActivity.this, R.drawable.categories_active), null, null);
+                btnLatestOffers.setCompoundDrawables(null, ContextCompat.getDrawable(NavDrawerActivity.this, R.drawable.sales_icon), null, null);
+                btnLocations.setCompoundDrawables(null, ContextCompat.getDrawable(NavDrawerActivity.this, R.drawable.location_icon_2), null, null);
+                btnStores.setCompoundDrawables(null, ContextCompat.getDrawable(NavDrawerActivity.this, R.drawable.stores_icon), null, null);
+                */onNavigationDrawerItemSelected(2);
             }
-        }
-        else if(view.getId()==R.id.btn_browse) {
+        } else if (view.getId() == R.id.btn_browse) {
             Utils.updateOffersBadge(NavDrawerActivity.this, 0);
             txtOffersBadge.setVisibility(View.GONE);
-            if(currentFragment!=R.id.btn_browse) {
+           /* btnCategories.setCompoundDrawables(null, getResources().getDrawable(R.drawable.categories_icon), null, null);
+            btnLatestOffers.setCompoundDrawables(null, getResources().getDrawable(R.drawable.sales_active), null, null);
+            btnLocations.setCompoundDrawables(null, getResources().getDrawable(R.drawable.location_icon_2), null, null);
+            btnStores.setCompoundDrawables(null, getResources().getDrawable(R.drawable.stores_icon), null, null);
+           */ if (currentFragment != R.id.btn_browse) {
                 currentFragment = R.id.btn_browse;
                 onNavigationDrawerItemSelected(1);
             }
-        }
-        else if(view.getId()==R.id.btn_location){
-            if(currentFragment!=view.getId()) {
-                currentFragment=view.getId();
+        } else if (view.getId() == R.id.btn_location) {
+           /* btnCategories.setCompoundDrawables(null, getResources().getDrawable(R.drawable.categories_icon), null, null);
+            btnLatestOffers.setCompoundDrawables(null, getResources().getDrawable(R.drawable.sales_icon), null, null);
+            btnLocations.setCompoundDrawables(null, getResources().getDrawable(R.drawable.location_active), null, null);
+            btnStores.setCompoundDrawables(null, getResources().getDrawable(R.drawable.stores_icon), null, null);
+*/
+            if (currentFragment != view.getId()) {
+                currentFragment = view.getId();
                 onNavigationDrawerItemSelected(4);
             }
-        }
-        else if(view.getId()==R.id.btn_store){
+        } else if (view.getId() == R.id.btn_store) {
             Utils.updateStoreBadge(NavDrawerActivity.this, 0);
             txtStoresBadge.setVisibility(View.GONE);
-            if(currentFragment!=R.id.btn_store) {
+
+            /*btnCategories.setCompoundDrawables(null, getResources().getDrawable(R.drawable.categories_icon), null, null);
+            btnLatestOffers.setCompoundDrawables(null, getResources().getDrawable(R.drawable.sales_icon), null, null);
+            btnLocations.setCompoundDrawables(null, getResources().getDrawable(R.drawable.location_icon_2), null, null);
+            btnStores.setCompoundDrawables(null, getResources().getDrawable(R.drawable.stores_active), null, null);
+*/
+            if (currentFragment != R.id.btn_store) {
                 currentFragment = R.id.btn_store;
                 onNavigationDrawerItemSelected(3);
             }
-        }
-        else if(view.getId()==R.id.btn_notifications) {
+        } else if (view.getId() == R.id.btn_notifications) {
             callSetting();
-        }
-        else if(view.getId()==R.id.img_menu_logo){
+        } else if (view.getId() == R.id.img_menu_logo) {
             LeftNavDrawerFragment.setDrawerMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
             onNavigationDrawerItemSelected(0);
-        }
-        else if (view.getId() == R.id.notifications_icon) {
+        } else if (view.getId() == R.id.notifications_icon) {
             if (Utils.promoteActivation(this)) {
                 return;
             }
@@ -606,7 +624,7 @@ public class NavDrawerActivity extends FragmentActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK || resultCode == Params.NAVIGATE) {
-                if(data != null) {
+                if (data != null) {
                     final LocationInfo location = data.getParcelableExtra("location");
                     currentFragment = R.id.btn_location;
                     new Handler().post(new Runnable() {
@@ -619,19 +637,24 @@ public class NavDrawerActivity extends FragmentActivity
                             fragmentTransaction.replace(R.id.activity_main_content_fragment, fragment, fragmentTag).addToBackStack(fragmentTag);
                             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                             fragmentTransaction.commit();
+
+                           // btnCategories.setCompoundDrawables(null, ResourcesCompat.getDrawable(getResources(), R.drawable.categories_icon, null), null, null);
+                          //  btnLatestOffers.setCompoundDrawables(null, getResources().getDrawable(R.drawable.sales_icon), null, null);
+                           // btnLocations.setCompoundDrawables(null, getResources().getDrawable(R.drawable.location_active), null, null);
+                           // btnStores.setCompoundDrawables(null, getResources().getDrawable(R.drawable.stores_icon), null, null);
                         }
                     });
                 }
-            }else if(resultCode == 100){
-                LatestOfferListFragment f= LatestOfferListFragment.newInstance(Params.TYPE_OFFER, "");
+            } else if (resultCode == 100) {
+                LatestOfferListFragment f = LatestOfferListFragment.newInstance(Params.TYPE_OFFER, "");
                 f.referesh();
-            }else if(resultCode == Params.STATUS_MOVE_TO_DASHBOARD){
+            } else if (resultCode == Params.STATUS_MOVE_TO_DASHBOARD) {
                 onNavigationDrawerItemSelected(0);
-            }else if(resultCode == Params.STATUS_NOTHING){
+            } else if (resultCode == Params.STATUS_NOTHING) {
                 finish();
             }
-        }else if(requestCode==2){
-            if(resultCode == Params.STATUS_MOVE_TO_DASHBOARD){
+        } else if (requestCode == 2) {
+            if (resultCode == Params.STATUS_MOVE_TO_DASHBOARD) {
                 onNavigationDrawerItemSelected(0);
             }
             if (resultCode == Params.NAVIGATE && data != null) {
@@ -646,10 +669,15 @@ public class NavDrawerActivity extends FragmentActivity
                         fragmentTransaction.replace(R.id.activity_main_content_fragment, fragment, fragmentTag).addToBackStack(fragmentTag);
                         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                         fragmentTransaction.commit();
-                    }
+
+              /*         btnCategories.setCompoundDrawables(null, getResources().getDrawable(R.drawable.categories_icon), null, null);
+                        btnLatestOffers.setCompoundDrawables(null, getResources().getDrawable(R.drawable.sales_icon), null, null);
+                        btnLocations.setCompoundDrawables(null, getResources().getDrawable(R.drawable.location_active), null, null);
+                        btnStores.setCompoundDrawables(null, getResources().getDrawable(R.drawable.stores_icon), null, null);
+                  */  }
                 });
             }
-        }else if(resultCode == Params.STATUS_NOTHING){
+        } else if (resultCode == Params.STATUS_NOTHING) {
             finish();
         }
     }
@@ -710,10 +738,10 @@ public class NavDrawerActivity extends FragmentActivity
 
         FragmentManager manager = getSupportFragmentManager();
         if (manager.getBackStackEntryCount() > 0) {
-            int i=manager.getBackStackEntryCount();
+            int i = manager.getBackStackEntryCount();
             Log.d("", "" + i);
             manager.popBackStackImmediate();
-        }else {
+        } else {
             finish();
         }
     }
