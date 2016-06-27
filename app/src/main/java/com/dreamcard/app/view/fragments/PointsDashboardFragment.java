@@ -11,9 +11,11 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.dreamcard.app.R;
 import com.dreamcard.app.constants.Params;
@@ -24,6 +26,8 @@ import com.dreamcard.app.services.GetCashPointsAsync;
 import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.adapters.StoresAdapter;
 import com.dreamcard.app.view.interfaces.IServiceListener;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +47,8 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
     private View.OnLayoutChangeListener _layoutChangeListener;
     private TextView _youEarnedText;
     private TextView _totalEarnings;
+    private TextView _totalItems;
+    private TextView _differentBills;
 
     private int _scrollPosition = 0;
     private int _lastEstimation = -1;
@@ -93,6 +99,17 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
 
         _youEarnedText.setVisibility(View.GONE);
         _totalEarnings.setVisibility(View.GONE);
+
+        _totalItems = (TextView) view.findViewById(R.id.total_items_value);
+        _differentBills = (TextView) view.findViewById(R.id.different_bills_value);
+
+        Button detailsButton = (Button) view.findViewById(R.id.more_details_cash);
+        detailsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "Coming soon ...", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void prepareRecyclerView() {
@@ -230,13 +247,26 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
         _totalEarnings.setVisibility(View.VISIBLE);
         int key = _positionToId.get(_scrollPosition + 1);
         int totalPoints = 0;
+        int totalBills = 0;
+        int diffStores = 0;
+        HashMap<Integer, Boolean> storesCounted = new HashMap<>();
+
         for (CashPointsTransaction trans : _transactions.get(key))
         {
             if (trans.getStatus() != null && trans.getStatus().equalsIgnoreCase("Earned")) {
                 totalPoints += trans.getPointsValue();
+                totalBills++;
+
+                if (storesCounted.get(trans.getBusinessId()) == null) {
+                    diffStores++;
+                    storesCounted.put(trans.getBusinessId(), true);
+                }
             }
         }
         _totalEarnings.setText(Integer.toString(totalPoints));
+        _totalItems.setText(totalBills + "");
+        _differentBills.setText(diffStores + "");
+
     }
 
     @Override
