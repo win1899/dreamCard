@@ -104,6 +104,13 @@
         </activity>
 
         <activity
+            android:name=".view.activity.CashDetailsActivity"
+            android:label="CashDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+
+        <activity
             android:name=".view.activity.MainActivationFormActivity"
             android:label="@string/title_activity_main_activation_form"
             android:screenOrientation="portrait"

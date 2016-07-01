@@ -1,6 +1,7 @@
 package com.dreamcard.app.view.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -21,6 +22,7 @@ import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.services.ConsumerDiscountAsyncTask;
 import com.dreamcard.app.services.TotalCashPointsAsync;
+import com.dreamcard.app.view.activity.CashDetailsActivity;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
 import java.util.ArrayList;
@@ -40,6 +42,7 @@ public class CashDashboardFragment extends Fragment implements IServiceListener 
     private Button _detailsButton;
     private TotalCashPointsAsync _totalCashPointsAsync;
     private ConsumerDiscountAsyncTask consumerDiscountAsyncTask;
+    private ArrayList<Offers> _transactions;
 
     public static CashDashboardFragment newInstance() {
         CashDashboardFragment fragment = new CashDashboardFragment();
@@ -70,7 +73,9 @@ public class CashDashboardFragment extends Fragment implements IServiceListener 
         _detailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Coming soon ...", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), CashDetailsActivity.class);
+                intent.putExtra("Data", _transactions);
+                startActivity(intent);
             }
         });
 
@@ -100,6 +105,7 @@ public class CashDashboardFragment extends Fragment implements IServiceListener 
     }
 
     private void setDiscountInfo(ArrayList<Offers> list) {
+        _transactions = list;
         if (list != null && !list.isEmpty()) {
             double totalSavings = 0.0;
             int diffStores = 0;
