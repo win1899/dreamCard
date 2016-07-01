@@ -9,7 +9,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Rect;
 import android.graphics.Typeface;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -277,6 +279,29 @@ public class NavDrawerActivity extends FragmentActivity
         String fragmentTag = Params.FRAGMENT_DASHBOARD;
         FrameLayout mainFrameLayout = (FrameLayout) findViewById(R.id.activity_main_content_fragment);
         Intent intent;
+
+        Rect catRect = null;
+        Rect offRect = null;
+        Rect strRect = null;
+        Rect locRect = null;
+
+        if (btnCategories != null) {
+            Drawable[] catDr = btnCategories.getCompoundDrawables();
+            catRect = catDr[1].getBounds();
+        }
+        if (btnLatestOffers != null) {
+            Drawable[] offDr = btnLatestOffers.getCompoundDrawables();
+            offRect = offDr[1].getBounds();
+        }
+        if (btnStores != null) {
+            Drawable[] strDr = btnStores.getCompoundDrawables();
+            strRect = strDr[1].getBounds();
+        }
+        if (btnLocations != null) {
+            Drawable[] locDr = btnLocations.getCompoundDrawables();
+            locRect = locDr[1].getBounds();
+        }
+
         switch (position) {
             case 0:
                 fragment = new DashboardFragment();
@@ -291,6 +316,21 @@ public class NavDrawerActivity extends FragmentActivity
                     imgLogo.setVisibility(View.VISIBLE);
                 }
                 currentFragment = 0;
+
+                if (catRect != null && offRect != null && strRect != null && locRect != null) {
+                    Drawable cat4 = getResources().getDrawable(R.drawable.categories_icon);
+                    cat4.setBounds(catRect);
+                    btnCategories.setCompoundDrawables(null, cat4, null, null);
+                    Drawable offer4 = getResources().getDrawable(R.drawable.sales_icon);
+                    offer4.setBounds(offRect);
+                    btnLatestOffers.setCompoundDrawables(null, offer4, null, null);
+                    Drawable location4 = getResources().getDrawable(R.drawable.location_icon_2);
+                    location4.setBounds(locRect);
+                    btnLocations.setCompoundDrawables(null, location4, null, null);
+                    Drawable store4 = getResources().getDrawable(R.drawable.stores_icon);
+                    store4.setBounds(strRect);
+                    btnStores.setCompoundDrawables(null, store4, null, null);
+                }
                 break;
             case 1:
                 LatestOfferListFragment.getType();
@@ -302,6 +342,20 @@ public class NavDrawerActivity extends FragmentActivity
                 tvTitle.setVisibility(View.GONE);
                 imgLogo.setVisibility(View.VISIBLE);
 
+                if (catRect != null && offRect != null && strRect != null && locRect != null) {
+                    Drawable cat = getResources().getDrawable(R.drawable.categories_icon);
+                    cat.setBounds(catRect);
+                    btnCategories.setCompoundDrawables(null, cat, null, null);
+                    Drawable offer = getResources().getDrawable(R.drawable.sales_active);
+                    offer.setBounds(offRect);
+                    btnLatestOffers.setCompoundDrawables(null, offer, null, null);
+                    Drawable location = getResources().getDrawable(R.drawable.location_icon_2);
+                    location.setBounds(locRect);
+                    btnLocations.setCompoundDrawables(null, location, null, null);
+                    Drawable store = getResources().getDrawable(R.drawable.stores_icon);
+                    store.setBounds(strRect);
+                    btnStores.setCompoundDrawables(null, store, null, null);
+                }
                 break;
             case 2:
                 fragment = CategoriesListFragment.newInstance(null, "");
@@ -312,6 +366,20 @@ public class NavDrawerActivity extends FragmentActivity
                 tvTitle.setVisibility(View.GONE);
                 imgLogo.setVisibility(View.VISIBLE);
 
+                if (catRect != null && offRect != null && strRect != null && locRect != null) {
+                    Drawable cat1 = getResources().getDrawable(R.drawable.categories_active);
+                    cat1.setBounds(catRect);
+                    btnCategories.setCompoundDrawables(null, cat1, null, null);
+                    Drawable offer1 = getResources().getDrawable(R.drawable.sales_icon);
+                    offer1.setBounds(offRect);
+                    btnLatestOffers.setCompoundDrawables(null, offer1, null, null);
+                    Drawable location1 = getResources().getDrawable(R.drawable.location_icon_2);
+                    location1.setBounds(locRect);
+                    btnLocations.setCompoundDrawables(null, location1, null, null);
+                    Drawable store1 = getResources().getDrawable(R.drawable.stores_icon);
+                    store1.setBounds(strRect);
+                    btnStores.setCompoundDrawables(null, store1, null, null);
+                }
                 break;
             case 3:
                 fragment = new StoresListFragment();
@@ -322,6 +390,20 @@ public class NavDrawerActivity extends FragmentActivity
                 tvTitle.setVisibility(View.GONE);
                 imgLogo.setVisibility(View.VISIBLE);
 
+                if (catRect != null && offRect != null && strRect != null && locRect != null) {
+                    Drawable cat2 = getResources().getDrawable(R.drawable.categories_icon);
+                    cat2.setBounds(catRect);
+                    btnCategories.setCompoundDrawables(null, cat2, null, null);
+                    Drawable offer2 = getResources().getDrawable(R.drawable.sales_icon);
+                    offer2.setBounds(offRect);
+                    btnLatestOffers.setCompoundDrawables(null, offer2, null, null);
+                    Drawable location2 = getResources().getDrawable(R.drawable.location_icon_2);
+                    location2.setBounds(locRect);
+                    btnLocations.setCompoundDrawables(null, location2, null, null);
+                    Drawable store2 = getResources().getDrawable(R.drawable.stores_active);
+                    store2.setBounds(strRect);
+                    btnStores.setCompoundDrawables(null, store2, null, null);
+                }
                 break;
             case 4:
                 fragment = new LocationFragment();
@@ -332,6 +414,20 @@ public class NavDrawerActivity extends FragmentActivity
                 tvTitle.setVisibility(View.GONE);
                 imgLogo.setVisibility(View.VISIBLE);
 
+                if (catRect != null && offRect != null && strRect != null && locRect != null) {
+                    Drawable cat3 = getResources().getDrawable(R.drawable.categories_icon);
+                    cat3.setBounds(catRect);
+                    btnCategories.setCompoundDrawables(null, cat3, null, null);
+                    Drawable offer3 = getResources().getDrawable(R.drawable.sales_icon);
+                    offer3.setBounds(offRect);
+                    btnLatestOffers.setCompoundDrawables(null, offer3, null, null);
+                    Drawable location3 = getResources().getDrawable(R.drawable.location_active);
+                    location3.setBounds(locRect);
+                    btnLocations.setCompoundDrawables(null, location3, null, null);
+                    Drawable store3 = getResources().getDrawable(R.drawable.stores_icon);
+                    store3.setBounds(strRect);
+                    btnStores.setCompoundDrawables(null, store3, null, null);
+                }
                 break;
             case 5:
                 if (Utils.promoteActivation(this)) {
@@ -558,29 +654,18 @@ public class NavDrawerActivity extends FragmentActivity
         if (view.getId() == R.id.btn_category) {
             if (currentFragment != R.id.btn_category) {
                 currentFragment = R.id.btn_category;
-                /*btnCategories.setCompoundDrawables(null, ContextCompat.getDrawable(NavDrawerActivity.this, R.drawable.categories_active), null, null);
-                btnLatestOffers.setCompoundDrawables(null, ContextCompat.getDrawable(NavDrawerActivity.this, R.drawable.sales_icon), null, null);
-                btnLocations.setCompoundDrawables(null, ContextCompat.getDrawable(NavDrawerActivity.this, R.drawable.location_icon_2), null, null);
-                btnStores.setCompoundDrawables(null, ContextCompat.getDrawable(NavDrawerActivity.this, R.drawable.stores_icon), null, null);
-                */onNavigationDrawerItemSelected(2);
+                onNavigationDrawerItemSelected(2);
             }
         } else if (view.getId() == R.id.btn_browse) {
             Utils.updateOffersBadge(NavDrawerActivity.this, 0);
             txtOffersBadge.setVisibility(View.GONE);
-           /* btnCategories.setCompoundDrawables(null, getResources().getDrawable(R.drawable.categories_icon), null, null);
-            btnLatestOffers.setCompoundDrawables(null, getResources().getDrawable(R.drawable.sales_active), null, null);
-            btnLocations.setCompoundDrawables(null, getResources().getDrawable(R.drawable.location_icon_2), null, null);
-            btnStores.setCompoundDrawables(null, getResources().getDrawable(R.drawable.stores_icon), null, null);
-           */ if (currentFragment != R.id.btn_browse) {
+
+            if (currentFragment != R.id.btn_browse) {
                 currentFragment = R.id.btn_browse;
                 onNavigationDrawerItemSelected(1);
             }
         } else if (view.getId() == R.id.btn_location) {
-           /* btnCategories.setCompoundDrawables(null, getResources().getDrawable(R.drawable.categories_icon), null, null);
-            btnLatestOffers.setCompoundDrawables(null, getResources().getDrawable(R.drawable.sales_icon), null, null);
-            btnLocations.setCompoundDrawables(null, getResources().getDrawable(R.drawable.location_active), null, null);
-            btnStores.setCompoundDrawables(null, getResources().getDrawable(R.drawable.stores_icon), null, null);
-*/
+
             if (currentFragment != view.getId()) {
                 currentFragment = view.getId();
                 onNavigationDrawerItemSelected(4);
@@ -589,11 +674,6 @@ public class NavDrawerActivity extends FragmentActivity
             Utils.updateStoreBadge(NavDrawerActivity.this, 0);
             txtStoresBadge.setVisibility(View.GONE);
 
-            /*btnCategories.setCompoundDrawables(null, getResources().getDrawable(R.drawable.categories_icon), null, null);
-            btnLatestOffers.setCompoundDrawables(null, getResources().getDrawable(R.drawable.sales_icon), null, null);
-            btnLocations.setCompoundDrawables(null, getResources().getDrawable(R.drawable.location_icon_2), null, null);
-            btnStores.setCompoundDrawables(null, getResources().getDrawable(R.drawable.stores_active), null, null);
-*/
             if (currentFragment != R.id.btn_store) {
                 currentFragment = R.id.btn_store;
                 onNavigationDrawerItemSelected(3);
@@ -638,10 +718,20 @@ public class NavDrawerActivity extends FragmentActivity
                             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                             fragmentTransaction.commit();
 
-                           // btnCategories.setCompoundDrawables(null, ResourcesCompat.getDrawable(getResources(), R.drawable.categories_icon, null), null, null);
-                          //  btnLatestOffers.setCompoundDrawables(null, getResources().getDrawable(R.drawable.sales_icon), null, null);
-                           // btnLocations.setCompoundDrawables(null, getResources().getDrawable(R.drawable.location_active), null, null);
-                           // btnStores.setCompoundDrawables(null, getResources().getDrawable(R.drawable.stores_icon), null, null);
+                            Drawable[] base = btnCategories.getCompoundDrawables();
+                            Rect rect = base[1].copyBounds();
+                            Drawable cat = getResources().getDrawable(R.drawable.categories_icon);
+                            cat.setBounds(rect);
+                            btnCategories.setCompoundDrawables(null, cat, null, null);
+                            Drawable offer = getResources().getDrawable(R.drawable.sales_icon);
+                            offer.setBounds(rect);
+                            btnLatestOffers.setCompoundDrawables(null, offer, null, null);
+                            Drawable location = getResources().getDrawable(R.drawable.location_active);
+                            location.setBounds(rect);
+                            btnLocations.setCompoundDrawables(null, location, null, null);
+                            Drawable store = getResources().getDrawable(R.drawable.stores_icon);
+                            store.setBounds(rect);
+                            btnStores.setCompoundDrawables(null, store, null, null);
                         }
                     });
                 }
@@ -670,11 +760,21 @@ public class NavDrawerActivity extends FragmentActivity
                         fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
                         fragmentTransaction.commit();
 
-              /*         btnCategories.setCompoundDrawables(null, getResources().getDrawable(R.drawable.categories_icon), null, null);
-                        btnLatestOffers.setCompoundDrawables(null, getResources().getDrawable(R.drawable.sales_icon), null, null);
-                        btnLocations.setCompoundDrawables(null, getResources().getDrawable(R.drawable.location_active), null, null);
-                        btnStores.setCompoundDrawables(null, getResources().getDrawable(R.drawable.stores_icon), null, null);
-                  */  }
+                        Drawable[] base = btnCategories.getCompoundDrawables();
+                        Rect rect = base[1].copyBounds();
+                        Drawable cat = getResources().getDrawable(R.drawable.categories_icon);
+                        cat.setBounds(rect);
+                        btnCategories.setCompoundDrawables(null, cat, null, null);
+                        Drawable offer = getResources().getDrawable(R.drawable.sales_icon);
+                        offer.setBounds(rect);
+                        btnLatestOffers.setCompoundDrawables(null, offer, null, null);
+                        Drawable location = getResources().getDrawable(R.drawable.location_active);
+                        location.setBounds(rect);
+                        btnLocations.setCompoundDrawables(null, location, null, null);
+                        Drawable store = getResources().getDrawable(R.drawable.stores_icon);
+                        store.setBounds(rect);
+                        btnStores.setCompoundDrawables(null, store, null, null);
+                    }
                 });
             }
         } else if (resultCode == Params.STATUS_NOTHING) {

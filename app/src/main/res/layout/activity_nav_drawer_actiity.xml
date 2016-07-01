@@ -214,9 +214,10 @@
                         android:background="@color/button_login"
                         android:drawableTop="@drawable/sales_icon"
                         android:textSize="12sp"
-                        android:paddingTop="2dp"
+                        android:paddingTop="5dp"
                         android:textColor="#ffffff"
-                        android:text="@string/latest_offers"/>
+                        android:text="@string/latest_offers"
+                        />
 
                     <TextView
                         android:visibility="gone"
