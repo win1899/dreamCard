@@ -95,6 +95,14 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar" >
         </activity>
+
+        <activity
+            android:name=".view.activity.PointsDetailsActivity"
+            android:label="PointsDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar" >
+        </activity>
+
         <activity
             android:name=".view.activity.MainActivationFormActivity"
             android:label="@string/title_activity_main_activation_form"

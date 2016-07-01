@@ -1,6 +1,7 @@
 package com.dreamcard.app.view.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import com.dreamcard.app.entity.CashPointsTransaction;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.services.GetCashPointsAsync;
 import com.dreamcard.app.utils.Utils;
+import com.dreamcard.app.view.activity.PointsDetailsActivity;
 import com.dreamcard.app.view.adapters.StoresAdapter;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
@@ -107,7 +109,9 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
         detailsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getActivity(), "Coming soon ...", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(getActivity(), PointsDetailsActivity.class);
+                intent.putExtra("Data", _transactions);
+                startActivity(intent);
             }
         });
     }

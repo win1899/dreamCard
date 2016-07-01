@@ -1,9 +1,11 @@
 package com.dreamcard.app.entity;
 
+import java.io.Serializable;
+
 /**
  * Created by WIN on 6/11/2016.
  */
-public class CashPointsTransaction {
+public class CashPointsTransaction implements Serializable{
 
     private String id;
     private int businessId;
