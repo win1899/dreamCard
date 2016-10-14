@@ -25,8 +25,10 @@ public class ServicesConstants {
     public static final String WS_ACTION="http://tempuri.org/IService1/";
     public static String WSDL_URL = "http://dream-card.net/b2bservice/service1.svc";
 
-    public static String WS_METHOD_NAME_ALL_OFFERS= "SelectAllOffers";
-    public static String WS_METHOD_NAME_BUSINESS_BY_ID="SelectBusinessByID";
+    public static final String WS_METHOD_NAME_ALL_OFFERS= "SelectAllOffers";
+    public static final String WS_METHOD_NAME_BUSINESS_BY_ID="SelectBusinessByID";
+    public static final String WS_METHOD_NAME_OFFER_BY_ID="SelectOfferByID";
+
     public static final String WS_METHOD_ALL_BUSINESS="SelectAllBusinesses";
     public static final String WS_METHOD_ALL_SELLING_STORES="SelectCardSellingStores";
     public static final String WS_METHOD_CATEGORIES="SelectAllCategories";
@@ -838,6 +840,18 @@ public class ServicesConstants {
 
         ServiceRequest bean = new ServiceRequest();
         bean.setName("businessID");
+        bean.setType(PropertyInfo.STRING_CLASS);
+        bean.setValue(businessId);
+        list.add(bean);
+
+        return list;
+    }
+
+    public static ArrayList<ServiceRequest> getOfferById(String businessId) {
+        ArrayList<ServiceRequest> list=new ArrayList<ServiceRequest>();
+
+        ServiceRequest bean = new ServiceRequest();
+        bean.setName("offerID");
         bean.setType(PropertyInfo.STRING_CLASS);
         bean.setValue(businessId);
         list.add(bean);

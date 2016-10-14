@@ -48,6 +48,7 @@ import com.dreamcard.app.services.AddBusinessCommentAsync;
 import com.dreamcard.app.services.AllOffersAsync;
 import com.dreamcard.app.services.CommentsAsync;
 import com.dreamcard.app.services.GetBussinesByIdAsync;
+import com.dreamcard.app.services.GetOfferById;
 import com.dreamcard.app.utils.ImageViewLoader;
 import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.adapters.CommentsAdapter;
@@ -116,6 +117,10 @@ public class OfferDetailsActivity extends Activity
 
     private GetBussinesByIdAsync getBussinesByIdAsync;
 
+    private Offers _offerData;
+    private String _offerId;
+    private GetOfferById _getOfferById;
+
     @Override
     protected void onPause() {
         if (commentsAsync != null && commentsAsync.getStatus() == AsyncTask.Status.RUNNING) {
@@ -137,6 +142,9 @@ public class OfferDetailsActivity extends Activity
         buildUI();
         setData();
 
+    }
+
+    private void continueLoading() {
         SharedPreferences prefs = getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
         String id = prefs.getString(Params.USER_INFO_ID, "");
 
@@ -262,36 +270,51 @@ public class OfferDetailsActivity extends Activity
 
     public void setData() {
         Intent intent = getIntent();
-        Offers bean = intent.getParcelableExtra(Params.DATA);
-        bean.setPicturesList(intent.getStringArrayExtra(Params.PICTURE_LIST));
-        this.bean = bean;
-        txtBusinessName.setText(bean.getTitle());
-        if (bean.getTitle().length() > 12) {
+        if (_offerData == null) {
+            _offerData = intent.getParcelableExtra(Params.DATA);
+
+            if (_offerData == null) {
+                _offerId = intent.getStringExtra(Offers.EXTRA_OFFER_ID);
+                if (_offerId == null) {
+                    finish();
+                    return;
+                }
+                _getOfferById = new GetOfferById(this, ServicesConstants.getOfferById(_offerId),
+                        Params.SERVICE_PROCESS_1);
+                _getOfferById.execute(this);
+                return;
+            }
+            _offerData.setPicturesList(intent.getStringArrayExtra(Params.PICTURE_LIST));
+        }
+
+        this.bean = _offerData;
+        txtBusinessName.setText(_offerData.getTitle());
+        if (_offerData.getTitle().length() > 12) {
             txtBusinessName.setTextSize(18);
         }
-        if (bean.getDescription() == null || bean.getDescription().equalsIgnoreCase("null"))
+        if (_offerData.getDescription() == null || _offerData.getDescription().equalsIgnoreCase("null"))
             txtDescription.setText("");
         else
-            txtDescription.setText(bean.getDescription());
+            txtDescription.setText(_offerData.getDescription());
 
-        if (bean.getCity() == null || bean.getCity().equalsIgnoreCase("null"))
+        if (_offerData.getCity() == null || _offerData.getCity().equalsIgnoreCase("null"))
             txtCity.setText("");
         else
-            txtCity.setText(bean.getCity());
+            txtCity.setText(_offerData.getCity());
 
         //Fix data, if null or empty set 0
-        if (bean.getSaleNewPrice() == null || bean.getSaleNewPrice().equalsIgnoreCase("null")
-                || bean.getSaleNewPrice().length() == 0) {
-            bean.setSaleNewPrice(String.valueOf(0));
+        if (_offerData.getSaleNewPrice() == null || _offerData.getSaleNewPrice().equalsIgnoreCase("null")
+                || _offerData.getSaleNewPrice().length() == 0) {
+            _offerData.setSaleNewPrice(String.valueOf(0));
         }
 
         //Fix data
-        if (bean.getSaleOldPrice() == null || bean.getSaleOldPrice().equalsIgnoreCase("null") || bean.getSaleOldPrice().length() == 0) {
+        if (_offerData.getSaleOldPrice() == null || _offerData.getSaleOldPrice().equalsIgnoreCase("null") || _offerData.getSaleOldPrice().length() == 0) {
             txtYouSaveLbl.setText("");
         } else {
 
             //some data sent from server with infinite numbers, so we truncate 2 digits after dot
-            String youSave = String.valueOf(Double.parseDouble(bean.getSaleOldPrice()) - Double.parseDouble(bean.getSaleNewPrice()));
+            String youSave = String.valueOf(Double.parseDouble(_offerData.getSaleOldPrice()) - Double.parseDouble(_offerData.getSaleNewPrice()));
             if (youSave.contains(".")) {
                 String fraction = youSave.substring(youSave.indexOf("."));
                 if (fraction.length() > 2) {
@@ -301,60 +324,60 @@ public class OfferDetailsActivity extends Activity
             }
             txtYouSaveLbl.setText(getString(R.string.you_saved) + " " + youSave);
         }
-        if (bean.getMobile() == null || bean.getMobile().equalsIgnoreCase("null"))
+        if (_offerData.getMobile() == null || _offerData.getMobile().equalsIgnoreCase("null"))
             txtMobile.setText("");
         else
-            txtMobile.setText(bean.getMobile());
-        if (bean.getPhone() == null || bean.getPhone().equalsIgnoreCase("null"))
+            txtMobile.setText(_offerData.getMobile());
+        if (_offerData.getPhone() == null || _offerData.getPhone().equalsIgnoreCase("null"))
             txtPhone.setText("");
         else
-            txtPhone.setText(bean.getPhone());
+            txtPhone.setText(_offerData.getPhone());
 
         //Fix data when number has infinite numbers after dot
-        if (bean.getSaleNewPrice().contains(".")) {
-            String fraction = bean.getSaleNewPrice().substring(bean.getSaleNewPrice().indexOf("."));
+        if (_offerData.getSaleNewPrice().contains(".")) {
+            String fraction = _offerData.getSaleNewPrice().substring(_offerData.getSaleNewPrice().indexOf("."));
             if (fraction.length() > 2) {
-                bean.setSaleNewPrice(bean.getSaleNewPrice().substring(0, (bean.getSaleNewPrice().indexOf(".") + 3))
-                        + bean.getSaleNewPrice().substring(bean.getSaleNewPrice().length() - 1));
+                _offerData.setSaleNewPrice(_offerData.getSaleNewPrice().substring(0, (_offerData.getSaleNewPrice().indexOf(".") + 3))
+                        + _offerData.getSaleNewPrice().substring(_offerData.getSaleNewPrice().length() - 1));
             }
         }
 
-        txtNewPrice.setText(bean.getSaleNewPrice());
-        txtOtherOfferBusiness.setText(bean.getBusinessName());
+        txtNewPrice.setText(_offerData.getSaleNewPrice());
+        txtOtherOfferBusiness.setText(_offerData.getBusinessName());
 
-        if (bean.getDiscount().contains(".")) {
-            String fraction = bean.getDiscount().substring(bean.getDiscount().indexOf("."));
+        if (_offerData.getDiscount().contains(".")) {
+            String fraction = _offerData.getDiscount().substring(_offerData.getDiscount().indexOf("."));
             if (fraction.length() > 2) {
-                bean.setDiscount(bean.getDiscount().substring(0, (bean.getDiscount().indexOf(".") + 3))
-                        + bean.getDiscount().substring(bean.getDiscount().length() - 1));
+                _offerData.setDiscount(_offerData.getDiscount().substring(0, (_offerData.getDiscount().indexOf(".") + 3))
+                        + _offerData.getDiscount().substring(_offerData.getDiscount().length() - 1));
             }
         }
 
-        txtOfferDiscount.setText(bean.getDiscount());
+        txtOfferDiscount.setText(_offerData.getDiscount());
 
-        if (bean.getCurrency() != null) {
-            if (bean.getCurrency().equalsIgnoreCase(Params.CURRENCY.ILS)) {
+        if (_offerData.getCurrency() != null) {
+            if (_offerData.getCurrency().equalsIgnoreCase(Params.CURRENCY.ILS)) {
                 txtNewPrice.setText(txtNewPrice.getText() + getString(R.string.ils));
                 txtYouSaveLbl.setText(txtYouSaveLbl.getText() + getString(R.string.ils));
-            } else if (bean.getCurrency().equalsIgnoreCase(Params.CURRENCY.USD)) {
+            } else if (_offerData.getCurrency().equalsIgnoreCase(Params.CURRENCY.USD)) {
                 txtNewPrice.setText(txtNewPrice.getText() + getString(R.string.usd));
                 txtYouSaveLbl.setText(txtYouSaveLbl.getText() + getString(R.string.usd));
             }
         }
 
-        imgAdapter = new ImagePagerAdapter(this, bean);
+        imgAdapter = new ImagePagerAdapter(this, _offerData);
         imgPager.setAdapter(imgAdapter);
 
-        setRating(bean.getOfferRating());
-        txtRatingPercentage.setText(String.valueOf(bean.getOfferRating()));
-        txtRatingTotal.setText(String.valueOf(bean.getRatingCount()));
+        setRating(_offerData.getOfferRating());
+        txtRatingPercentage.setText(String.valueOf(_offerData.getOfferRating()));
+        txtRatingTotal.setText(String.valueOf(_offerData.getRatingCount()));
 
         try {
-            Date date = new Date(Long.parseLong(bean.getValidFrom().replaceAll(".*?(\\d+).*", "$1")));
+            Date date = new Date(Long.parseLong(_offerData.getValidFrom().replaceAll(".*?(\\d+).*", "$1")));
             android.text.format.DateFormat df = new android.text.format.DateFormat();
             Calendar c = Calendar.getInstance();
             c.setTime(date);
-            String period = bean.getValidationPeriod();
+            String period = _offerData.getValidationPeriod();
             if (period != null) {
                 if (!period.equalsIgnoreCase("null") && period.length() > 0)
                     c.add(Calendar.DATE, Integer.parseInt(period));
@@ -363,7 +386,7 @@ public class OfferDetailsActivity extends Activity
          //    String x = df.format("dd/MM/yyyy", c.getTime()).toString();
          //   txtOfferPeriod.setText(x);
 
-            Date validUntil = new Date(Long.parseLong(bean.getValidFrom().replaceAll(".*?(\\d+).*", "$1")));
+            Date validUntil = new Date(Long.parseLong(_offerData.getValidFrom().replaceAll(".*?(\\d+).*", "$1")));
             Calendar valid = Calendar.getInstance();
             valid.setTime(validUntil);
 
@@ -389,12 +412,12 @@ public class OfferDetailsActivity extends Activity
             Log.e(OfferDetailsActivity.class.getName(), "Parsing error on date ...");
         }
 
-        if (bean.getType().equalsIgnoreCase("" + Params.OFFER_TYPE_EVENT)) {
+        if (_offerData.getType().equalsIgnoreCase("" + Params.OFFER_TYPE_EVENT)) {
             txtNewPrice.setVisibility(View.GONE);
             txtYouSaveLbl.setVisibility(View.GONE);
         }
 
-        Utils.loadImage(this, bean.getBusinessLogo(), imgStoreLogo);
+        Utils.loadImage(this, _offerData.getBusinessLogo(), imgStoreLogo);
         imgStoreLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -410,11 +433,13 @@ public class OfferDetailsActivity extends Activity
             }
         });
 
-        if (bean.getBusinessLogo() != null && bean.getBusinessLogo().length() > 0 && bean.getBusinessLogo().contains("http")) {
+        if (_offerData.getBusinessLogo() != null && _offerData.getBusinessLogo().length() > 0 && _offerData.getBusinessLogo().contains("http")) {
             RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) txtBusinessName.getLayoutParams();
             params.addRule(RelativeLayout.END_OF, R.id.img_store_logo);
             txtBusinessName.setLayoutParams(params);
         }
+
+        continueLoading();
     }
 
     private void setRating(int rating) {
@@ -509,6 +534,21 @@ public class OfferDetailsActivity extends Activity
                     if (s.getId().equalsIgnoreCase(this.bean.getBusinessId())) {
                         offerStore = s;
                         return;
+                    }
+                }
+            }
+        }
+        else if (processType == Params.SERVICE_PROCESS_1) {
+            ArrayList<Offers> list = (ArrayList<Offers>) b;
+            if (list != null && list.size() == 1) {
+                _offerData = list.get(0);
+                setData();
+            }
+            else {
+                for (Offers offer : list) {
+                    if (offer.getId().equalsIgnoreCase(_offerId)) {
+                        _offerData = offer;
+                        setData();
                     }
                 }
             }
