@@ -11,4 +11,5 @@ public class NotificationDB {
 
     public String id;
     public String type;
+    public Stores store;
 }

@@ -33,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="اضغط هنا لتقييم تعاملك"
-        android:id="@+id/tt"
+        android:id="@+id/notification_action_name"
         android:textSize="16sp"
         android:textColor="#444444"
         android:layout_marginRight="10dp"

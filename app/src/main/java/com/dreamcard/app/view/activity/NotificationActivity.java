@@ -1,6 +1,7 @@
 package com.dreamcard.app.view.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -22,6 +23,7 @@ import com.dreamcard.app.view.adapters.NotificationsAdapter;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -60,22 +62,31 @@ public class NotificationActivity extends Activity implements IServiceListener {
             return;
         }
 
-        ArrayList<Stores> storesToReview = new ArrayList<Stores>();
-        for (NotificationDB storeId : storesReviewdId) {
+        HashMap<Integer, NotificationDB> notifications = new HashMap<Integer, NotificationDB>();
+        int position = 0;
+        for (NotificationDB notification : storesReviewdId) {
+            if (notification.type.equalsIgnoreCase(NotificationDB.OFFER_TYPE)) {
+                notifications.put(position, notification);
+                position++;
+                continue;
+            }
+
             for (int i = 0; i < stores.size(); i++) {
-                if (storeId.id.equalsIgnoreCase(stores.get(i).getId())) {
-                    storesToReview.add(stores.get(i));
+                if (notification.id.equalsIgnoreCase(stores.get(i).getId())) {
+                    notification.store = stores.get(i);
+                    notifications.put(position, notification);
                     break;
                 }
             }
+            position++;
         }
 
-        if (storesToReview.size() == 0) {
+        if (notifications.size() == 0) {
             noMatchsFound();
             return;
         }
 
-        NotificationsAdapter adapter = new NotificationsAdapter(NotificationActivity.this, storesToReview);
+        NotificationsAdapter adapter = new NotificationsAdapter(NotificationActivity.this, notifications);
         list.setAdapter(adapter);
 
         progressBar.setVisibility(View.GONE);
@@ -111,5 +122,11 @@ public class NotificationActivity extends Activity implements IServiceListener {
     @Override
     public void onServiceFailed(ErrorMessageInfo info) {
         noMatchsFound();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        setResult(resultCode, data);
+        finish();
     }
 }

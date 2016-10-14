@@ -268,7 +268,7 @@ public class NavDrawerActivity extends FragmentActivity
             onNavigationDrawerItemSelected(1);
             Intent offerIntent = new Intent(NavDrawerActivity.this, OfferDetailsActivity.class);
             offerIntent.putExtra(Offers.EXTRA_OFFER_ID, offerId);
-            startActivity(offerIntent);
+            startActivityForResult(offerIntent, 1);
         }
 
         String storeId = intent.getStringExtra(Stores.EXTRA_STORE_ID);
@@ -276,7 +276,7 @@ public class NavDrawerActivity extends FragmentActivity
             onNavigationDrawerItemSelected(3);
             Intent storeIntent = new Intent(NavDrawerActivity.this, StoreDetailsActivity.class);
             storeIntent.putExtra(Stores.EXTRA_STORE_ID, storeId);
-            startActivity(storeIntent);
+            startActivityForResult(storeIntent, 2);
         }
     }
 
@@ -712,7 +712,7 @@ public class NavDrawerActivity extends FragmentActivity
             }
 
             Intent intent = new Intent(NavDrawerActivity.this, NotificationActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, 1);
 
             Utils.updateNotificationBadge(NavDrawerActivity.this, 0);
             txtNotificationBadge.setVisibility(View.GONE);
