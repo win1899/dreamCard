@@ -261,6 +261,23 @@ public class NavDrawerActivity extends FragmentActivity
             Intent intent = new Intent(this, DreamRegistrationIntentService.class);
             startService(intent);
         }
+
+        Intent intent = getIntent();
+        String offerId = intent.getStringExtra(Offers.EXTRA_OFFER_ID);
+        if (offerId != null) {
+            onNavigationDrawerItemSelected(1);
+            Intent offerIntent = new Intent(NavDrawerActivity.this, OfferDetailsActivity.class);
+            offerIntent.putExtra(Offers.EXTRA_OFFER_ID, offerId);
+            startActivity(offerIntent);
+        }
+
+        String storeId = intent.getStringExtra(Stores.EXTRA_STORE_ID);
+        if (storeId != null) {
+            onNavigationDrawerItemSelected(3);
+            Intent storeIntent = new Intent(NavDrawerActivity.this, StoreDetailsActivity.class);
+            storeIntent.putExtra(Stores.EXTRA_STORE_ID, storeId);
+            startActivity(storeIntent);
+        }
     }
 
     private void loadIcons() {
@@ -342,6 +359,9 @@ public class NavDrawerActivity extends FragmentActivity
                 tvTitle.setVisibility(View.GONE);
                 imgLogo.setVisibility(View.VISIBLE);
 
+                Utils.updateOffersBadge(NavDrawerActivity.this, 0);
+                txtOffersBadge.setVisibility(View.GONE);
+
                 if (catRect != null && offRect != null && strRect != null && locRect != null) {
                     Drawable cat = getResources().getDrawable(R.drawable.categories_icon);
                     cat.setBounds(catRect);
@@ -389,6 +409,9 @@ public class NavDrawerActivity extends FragmentActivity
                 btnSetting.setVisibility(View.GONE);
                 tvTitle.setVisibility(View.GONE);
                 imgLogo.setVisibility(View.VISIBLE);
+
+                Utils.updateStoreBadge(NavDrawerActivity.this, 0);
+                txtStoresBadge.setVisibility(View.GONE);
 
                 if (catRect != null && offRect != null && strRect != null && locRect != null) {
                     Drawable cat2 = getResources().getDrawable(R.drawable.categories_icon);

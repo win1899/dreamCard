@@ -319,8 +319,7 @@
                         android:id="@+id/store_address"
                         android:textSize="15sp"
                         android:layout_margin="5dp"
-                        android:textColor="#000000"
-                        android:text="dsadadas"/>
+                        android:textColor="#000000"/>
                 </LinearLayout>
 
                 <RelativeLayout

@@ -11,6 +11,7 @@ import java.util.Date;
  */
 public class Offers implements Parcelable {
 
+    public static final String EXTRA_OFFER_ID = "OfferId";
     private String id,type,saleOldPrice,saleNewPrice,businessId,validFrom,validationPeriod,title,description
             ,status,city,mobile,phone,fromDate,toDate,currency,numOfLikes,discount,businessName
             ,businessLogo,offerMainPhoto,businessClass;

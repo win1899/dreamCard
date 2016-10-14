@@ -16,6 +16,8 @@ import com.dreamcard.app.R;
 import com.dreamcard.app.common.DatabaseController;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.entity.NotificationDB;
+import com.dreamcard.app.entity.Offers;
+import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.utils.PreferencesGCM;
 import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.activity.ReviewStore;
@@ -62,7 +64,7 @@ public class DreamGcmListenerService extends GcmListenerService {
                 notification.id = message;
                 DatabaseController.getInstance(this).saveNotificaiton(notification);
 
-                sendGeneralNotification("New offers are available on Dream Card.");
+                sendOfferNotification(message);
                 return;
             }
             else if (topic.equalsIgnoreCase(PreferencesGCM.STORE_TOPIC)) {
@@ -72,7 +74,7 @@ public class DreamGcmListenerService extends GcmListenerService {
                 notification.id = message;
                 DatabaseController.getInstance(this).saveNotificaiton(notification);
 
-                sendGeneralNotification("New store just joined Dream Card.");
+                sendStoreNotification(message);
                 return;
             }
         }
@@ -112,6 +114,54 @@ public class DreamGcmListenerService extends GcmListenerService {
 
         Utils.updateNotificationBadge(this, 1);
     }
+
+    /**
+     * Create and show a simple notification containing the received GCM message, and splash intent.
+     *
+     * @param id store id that has been added
+     */
+    private void sendStoreNotification(String id) {
+        Intent intent = new Intent(this, SplashActivity.class);
+        intent.putExtra(Stores.EXTRA_STORE_ID, id);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, REQUEST_ID, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.dream_card_app_small)
+                .setContentTitle("Dream Card")
+                .setContentText("New store has just joined DreamCard.")
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
+    }
+
+    private void sendOfferNotification(String id) {
+        Intent intent = new Intent(this, SplashActivity.class);
+        intent.putExtra(Offers.EXTRA_OFFER_ID, id);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, REQUEST_ID, intent,
+                PendingIntent.FLAG_ONE_SHOT);
+
+        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
+                .setSmallIcon(R.drawable.dream_card_app_small)
+                .setContentTitle("Dream Card")
+                .setContentText("New offer has just been added to DreamCard.")
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent);
+
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+        notificationManager.notify(NOTIFICATION_ID, notificationBuilder.build());
+    }
+
 
     /**
      * Create and show a simple notification containing the received GCM message, and splash intent.

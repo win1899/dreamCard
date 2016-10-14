@@ -10,20 +10,19 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -40,12 +39,12 @@ import com.dreamcard.app.entity.CashPointsTransaction;
 import com.dreamcard.app.entity.Comments;
 import com.dreamcard.app.entity.ErrorMessageInfo;
 import com.dreamcard.app.entity.LocationInfo;
-import com.dreamcard.app.entity.MessageInfo;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.services.AllOffersAsync;
 import com.dreamcard.app.services.CommentsAsync;
+import com.dreamcard.app.services.GetBussinesByIdAsync;
 import com.dreamcard.app.services.GetCashPointsAsync;
 import com.dreamcard.app.services.IsOfferLikedAsyncTask;
 import com.dreamcard.app.utils.Utils;
@@ -99,10 +98,30 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     private TextView txtAbout;
     private TextView txtStoreName;
 
-    private Stores _currentStore = new Stores();
+    private Stores _storeData;
 
     private GetCashPointsAsync _getPointsAsync;
+    private GetBussinesByIdAsync _getBussinesByIdAsync;
+    private String _storeId;
+    @Override
+    public void onPause() {
+        if (_getBussinesByIdAsync != null && _getBussinesByIdAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            _getBussinesByIdAsync.cancel(true);
+        }
 
+        if (_getPointsAsync != null && _getPointsAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            _getPointsAsync.cancel(true);
+        }
+
+        if (commentsAsync != null && commentsAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            commentsAsync.cancel(true);
+        }
+
+        if (allOffersAsync != null && allOffersAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            allOffersAsync.cancel(true);
+        }
+        super.onPause();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,23 +135,25 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
 
         buildUI();
         setData();
+    }
 
+    private void continueLoading() {
         SharedPreferences prefs = getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
         String id = prefs.getString(Params.USER_INFO_ID, "");
 
         IsOfferLikedAsyncTask asyncTask = new IsOfferLikedAsyncTask(this
-                , ServicesConstants.getIsBusinessLikedRequestList(id, this._currentStore.getId())
+                , ServicesConstants.getIsBusinessLikedRequestList(id, this._storeData.getId())
                 , Params.SERVICE_PROCESS_6, Params.TYPE_BUSINESS);
         asyncTask.execute(this);
 
         progressBar.setVisibility(View.VISIBLE);
         grid.setVisibility(View.GONE);
 
-        ArrayList<ServiceRequest> list = ServicesConstants.getBusinessLikesNumRequestList(this._currentStore.getId());
+        ArrayList<ServiceRequest> list = ServicesConstants.getBusinessLikesNumRequestList(this._storeData.getId());
         allOffersAsync = new AllOffersAsync(this, list, Params.SERVICE_PROCESS_1, Params.TYPE_OFFERS_BY_BUSINESS);
         allOffersAsync.execute(this);
 
-        commentsAsync = new CommentsAsync(this, ServicesConstants.getBusinessLikesNumRequestList(this._currentStore.getId())
+        commentsAsync = new CommentsAsync(this, ServicesConstants.getBusinessLikesNumRequestList(this._storeData.getId())
                 , Params.SERVICE_PROCESS_2, Params.TYPE_BUSINESS);
         commentsAsync.execute(this);
 
@@ -195,14 +216,27 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
 
     public void setData() {
         Intent intent = getIntent();
-        final Stores bean = intent.getParcelableExtra(Params.DATA);
-        bean.setPictures(intent.getStringArrayExtra(Params.PICTURE_LIST));
-        this._currentStore = bean;
+        if (_storeData == null) {
+            _storeData = intent.getParcelableExtra(Params.DATA);
 
-        txtBusinessName.setText(bean.getStoreName());
-        txtStoreName.setText(bean.getStoreName());
-        if (bean.getDiscountPrecentage() > 0.0) {
-            txtAnnualDiscount.setText(Integer.toString((int)bean.getDiscountPrecentage()) + "%");
+            if (_storeData == null) {
+                _storeId = intent.getStringExtra(Stores.EXTRA_STORE_ID);
+                if (_storeId == null) {
+                    finish();
+                    return;
+                }
+                _getBussinesByIdAsync = new GetBussinesByIdAsync(this, ServicesConstants.getBusinessById(_storeId),
+                        Params.SERVICE_PROCESS_9);
+                _getBussinesByIdAsync.execute(this);
+                return;
+            }
+            _storeData.setPictures(intent.getStringArrayExtra(Params.PICTURE_LIST));
+        }
+
+        txtBusinessName.setText(_storeData.getStoreName());
+        txtStoreName.setText(_storeData.getStoreName());
+        if (_storeData.getDiscountPrecentage() > 0.0) {
+            txtAnnualDiscount.setText(Integer.toString((int)_storeData.getDiscountPrecentage()) + "%");
             txtAnnualDiscount.setVisibility(View.VISIBLE);
             ratingPnl.setVisibility(View.VISIBLE);
         }
@@ -211,54 +245,55 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
             ratingPnl.setVisibility(View.GONE);
         }
 
-        if (bean.getOurMessage() != null && !bean.getOurMessage().isEmpty() && !bean.getOurMessage().equalsIgnoreCase("null")) {
-            String about = bean.getOurMessage();
-            if (bean.getOurMessage().length() > 100) {
-                about = bean.getOurMessage().substring(0, 100) + "...";
+        if (_storeData.getOurMessage() != null && !_storeData.getOurMessage().isEmpty() && !_storeData.getOurMessage().equalsIgnoreCase("null")) {
+            String about = _storeData.getOurMessage();
+            if (_storeData.getOurMessage().length() > 100) {
+                about = _storeData.getOurMessage().substring(0, 100) + "...";
                 txtAbout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        txtAbout.setText(bean.getOurMessage());
+                        txtAbout.setText(_storeData.getOurMessage());
                     }
                 });
             }
             txtAbout.setText(about);
-        } else if (bean.getMission() != null && !bean.getMission().isEmpty() && !bean.getMission().equalsIgnoreCase("null")) {
-            String mission = bean.getMission();
-            if (bean.getMission().length() > 100) {
-                mission = bean.getMission().substring(0, 100) + "...";
+        } else if (_storeData.getMission() != null && !_storeData.getMission().isEmpty() && !_storeData.getMission().equalsIgnoreCase("null")) {
+            String mission = _storeData.getMission();
+            if (_storeData.getMission().length() > 100) {
+                mission = _storeData.getMission().substring(0, 100) + "...";
                 txtAbout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        txtAbout.setText(bean.getMission());
+                        txtAbout.setText(_storeData.getMission());
                     }
                 });
             }
             txtAbout.setText(mission);
-        } else if (bean.getVision() != null && !bean.getVision().isEmpty() && !bean.getVision().equalsIgnoreCase("null")) {
-            String vision = bean.getVision();
-            if (bean.getVision().length() > 100) {
-                vision = bean.getVision().substring(0, 100) + "...";
+        } else if (_storeData.getVision() != null && !_storeData.getVision().isEmpty() && !_storeData.getVision().equalsIgnoreCase("null")) {
+            String vision = _storeData.getVision();
+            if (_storeData.getVision().length() > 100) {
+                vision = _storeData.getVision().substring(0, 100) + "...";
                 txtAbout.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        txtAbout.setText(bean.getVision());
+                        txtAbout.setText(_storeData.getVision());
                     }
                 });
             }
             txtAbout.setText(vision);
         }
-        txtAddress.setText(bean.getAddress1());
+        txtAddress.setText(_storeData.getAddress1());
 
-//        _cashPointsTxt.setText(bean.getCashPoints());
+//        _cashPointsTxt.setText(_storeData.getCashPoints());
 
-        imgAdapter = new StoreImagePagerAdapter(this, bean);
+        imgAdapter = new StoreImagePagerAdapter(this, _storeData);
         imgPager.setAdapter(imgAdapter);
 
-        Utils.loadImage(this, bean.getLogo(), storeIcon);
-        if (bean.getLogo() == null && bean.getPictures() == null) {
+        Utils.loadImage(this, _storeData.getLogo(), storeIcon);
+        if (_storeData.getLogo() == null && _storeData.getPictures() == null) {
             txtBusinessName.setVisibility(View.VISIBLE);
         }
+        continueLoading();
     }
 
     private void setRating(int rating) {
@@ -325,7 +360,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
             Set<Integer> set = transactions.keySet();
             int totalCashpoints = 0;
             for (Integer id : set) {
-                if (_currentStore.getId().equalsIgnoreCase(Integer.toString(id))) {
+                if (_storeData.getId().equalsIgnoreCase(Integer.toString(id))) {
                     ArrayList<CashPointsTransaction> trans = transactions.get(id);
                     for (CashPointsTransaction t : trans) {
                         if (t.getStatus() != null && t.getStatus().equalsIgnoreCase("Earned")) {
@@ -336,6 +371,21 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
                 }
             }
             _cashPointsTxt.setText("" + totalCashpoints);
+        } else if (processType == Params.SERVICE_PROCESS_9) {
+            ArrayList<Stores> list = (ArrayList<Stores>) b;
+            if (list != null && list.size() == 1) {
+                _storeData = list.get(0);
+                setData();
+            }
+            else {
+                for (Stores s : list) {
+                    if (s.getId().equalsIgnoreCase(_storeId)) {
+                        _storeData = s;
+                        setData();
+                        return;
+                    }
+                }
+            }
         }
     }
 
@@ -356,7 +406,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
         }
         else if (view.getId() == R.id.img_offer_logo) {
             Intent intent = new Intent(this, ImageViewerActivity.class);
-            intent.putExtra("imageURL", _currentStore.getWideLogo());
+            intent.putExtra("imageURL", _storeData.getWideLogo());
             startActivity(intent);
             overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
         } else if (view.getId() == R.id.img_menu_logo) {
@@ -382,7 +432,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
             grid.setVisibility(View.GONE);
             firstLoad = false;
 
-            ArrayList<ServiceRequest> list = ServicesConstants.getBusinessLikesNumRequestList(this._currentStore.getId());
+            ArrayList<ServiceRequest> list = ServicesConstants.getBusinessLikesNumRequestList(this._storeData.getId());
             allOffersAsync = new AllOffersAsync(this, list, Params.SERVICE_PROCESS_1, Params.TYPE_OFFERS_BY_BUSINESS);
             allOffersAsync.execute(this);
 
@@ -397,15 +447,15 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
             grid.setVisibility(View.GONE);
             firstLoad = false;
 
-            ArrayList<ServiceRequest> list = ServicesConstants.getLatestOfferByStoreId(this._currentStore.getId(), 10);
+            ArrayList<ServiceRequest> list = ServicesConstants.getLatestOfferByStoreId(this._storeData.getId(), 10);
             allOffersAsync = new AllOffersAsync(this, list, Params.SERVICE_PROCESS_1, Params.TYPE_LATEST_OFFERS_BY_BUSINESS);
             allOffersAsync.execute(this);
         } else if (view.getId() == R.id.btn_location || view.getId() == R.id.store_address) {
             Intent data = new Intent();
             try {
                 LocationInfo info = new LocationInfo();
-                double latitude = Double.parseDouble(_currentStore.getLatitude());
-                double longitude = Double.parseDouble(_currentStore.getLongitude());
+                double latitude = Double.parseDouble(_storeData.getLatitude());
+                double longitude = Double.parseDouble(_storeData.getLongitude());
                 info.setLatitude(latitude);
                 info.setLongitude(longitude);
                 data.putExtra("location", info);
@@ -433,26 +483,26 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     }
 
     private void openFacebookPage() {
-        if (_currentStore.getFacebook() != null && _currentStore.getFacebook().length() > 0 && !_currentStore.getFacebook().equalsIgnoreCase("null")) {
+        if (_storeData.getFacebook() != null && _storeData.getFacebook().length() > 0 && !_storeData.getFacebook().equalsIgnoreCase("null")) {
             try {
-                if (!_currentStore.getFacebook().contains("http")) {
-                    _currentStore.setFacebook("https://" + _currentStore.getFacebook());
+                if (!_storeData.getFacebook().contains("http")) {
+                    _storeData.setFacebook("https://" + _storeData.getFacebook());
                 }
 
                 int versionCode = getPackageManager().getPackageInfo("com.facebook.katana", 0).versionCode;
                 if (versionCode >= 3002850) {
-                    Uri uri = Uri.parse("fb://facewebmodal/f?href=" + _currentStore.getFacebook());
+                    Uri uri = Uri.parse("fb://facewebmodal/f?href=" + _storeData.getFacebook());
                     startActivity(new Intent(Intent.ACTION_VIEW, uri));
-                    ;
+
                 } else {
                     // open the Facebook app using the old method (fb://profile/id or fb://page/id)
 //                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("fb://page/336227679757310")));
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(_currentStore.getFacebook())));
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(_storeData.getFacebook())));
                 }
             } catch (PackageManager.NameNotFoundException e) {
                 // Facebook is not installed. Open the browser
 //                String facebookUrl = "https://www.facebook.com/JRummyApps";
-                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(_currentStore.getFacebook())));
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(_storeData.getFacebook())));
             }
         } else {
             Toast.makeText(this, "Facebook page not available", Toast.LENGTH_LONG).show();
@@ -461,16 +511,16 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
 
     private void makePhoneCall() {
         Intent callIntent = new Intent(Intent.ACTION_DIAL);
-        callIntent.setData(Uri.parse("tel:" + Uri.encode(_currentStore.getPhone())));
+        callIntent.setData(Uri.parse("tel:" + Uri.encode(_storeData.getPhone())));
         startActivity(callIntent);
     }
 
     private void openWebsite() {
-        if (_currentStore.getWebsite() != null && _currentStore.getWebsite().length() > 0) {
-            if (!_currentStore.getWebsite().contains("http")) {
-                _currentStore.setWebsite("http://" + _currentStore.getWebsite());
+        if (_storeData.getWebsite() != null && _storeData.getWebsite().length() > 0) {
+            if (!_storeData.getWebsite().contains("http")) {
+                _storeData.setWebsite("http://" + _storeData.getWebsite());
             }
-            Uri uri = Uri.parse(_currentStore.getWebsite());
+            Uri uri = Uri.parse(_storeData.getWebsite());
             Intent intent = new Intent(Intent.ACTION_VIEW, uri);
             startActivity(intent);
         } else {
@@ -479,16 +529,16 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
     }
 
     private void sendEmail() {
-        if (_currentStore.getEmail() != null && _currentStore.getEmail().length() > 0) {
+        if (_storeData.getEmail() != null && _storeData.getEmail().length() > 0) {
         /* Create the Intent */
             final Intent emailIntent = new Intent(android.content.Intent.ACTION_SEND);
 
         /* Fill it with Data */
             emailIntent.setType("plain/text");
-            emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{_currentStore.getEmail()});
+            emailIntent.putExtra(android.content.Intent.EXTRA_EMAIL, new String[]{_storeData.getEmail()});
 
         /* Send it off to the Activity-Chooser */
-            startActivity(Intent.createChooser(emailIntent, "Send mail to " + _currentStore.getEmail()));
+            startActivity(Intent.createChooser(emailIntent, "Send mail to " + _storeData.getEmail()));
         } else {
             Toast.makeText(this, "Email not available", Toast.LENGTH_LONG).show();
         }
@@ -499,7 +549,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
             return;
         }
         Intent intent = new Intent(this, RateBusinessActivity.class);
-        intent.putExtra(Params.BUSINESS_ID, this._currentStore.getId());
+        intent.putExtra(Params.BUSINESS_ID, this._storeData.getId());
         startActivityForResult(intent, Params.STATUS_ADD_RATING);
         overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
     }
@@ -516,7 +566,7 @@ public class StoreDetailsActivity extends Activity implements View.OnClickListen
             ratingPnl.removeAllViews();
             setRating(Integer.parseInt(rating.substring(0, 1)));
         } else if (resultCode == Params.STATUS_ADD_COMMENT) {
-            commentsAsync = new CommentsAsync(this, ServicesConstants.getBusinessLikesNumRequestList(this._currentStore.getId())
+            commentsAsync = new CommentsAsync(this, ServicesConstants.getBusinessLikesNumRequestList(this._storeData.getId())
                     , Params.SERVICE_PROCESS_2, Params.TYPE_BUSINESS);
             commentsAsync.execute(this);
         }

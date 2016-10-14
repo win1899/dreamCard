@@ -8,6 +8,7 @@ import android.os.Parcelable;
  */
 public class Stores implements Parcelable{
 
+    public static final String EXTRA_STORE_ID = "StoreId";
     private String id,storeName,address1,address2,city,phone,mobile,website,facebook,representativeName,email
                ,logo,wideLogo,latitude,longitude;
     private int storeClass,position,rating;

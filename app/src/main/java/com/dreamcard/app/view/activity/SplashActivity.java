@@ -14,6 +14,8 @@ import com.dreamcard.app.common.DatabaseController;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.constants.ServicesConstants;
 import com.dreamcard.app.entity.ErrorMessageInfo;
+import com.dreamcard.app.entity.Offers;
+import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.entity.UserInfo;
 import com.dreamcard.app.services.LoginAsync;
 import com.dreamcard.app.view.interfaces.IServiceListener;
@@ -30,6 +32,12 @@ public class SplashActivity extends Activity implements IServiceListener {
 
     private String email, password;
 
+    private boolean _hasOffer;
+    private boolean _hasStore;
+
+    private String _offerId;
+    private String _storeId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,6 +47,18 @@ public class SplashActivity extends Activity implements IServiceListener {
         }
 
         setContentView(R.layout.activity_splash);
+
+        Intent startIntent = getIntent();
+        _offerId = startIntent.getStringExtra(Offers.EXTRA_OFFER_ID);
+        if (_offerId != null) {
+            _hasOffer = true;
+        }
+        else {
+            _storeId = startIntent.getStringExtra(Stores.EXTRA_STORE_ID);
+            if (_storeId != null) {
+                _hasStore = true;
+            }
+        }
 
         UserInfo bean = DatabaseController.getInstance(SplashActivity.this).getLoginInfo();
 
@@ -137,6 +157,12 @@ public class SplashActivity extends Activity implements IServiceListener {
             editor.putString(Params.USER_INFO_CITY, bean.getCity());
 
             Intent intent = new Intent(this, NavDrawerActivity.class);
+            if (_hasOffer) {
+                intent.putExtra(Offers.EXTRA_OFFER_ID, _offerId);
+            }
+            else if (_hasStore) {
+                intent.putExtra(Stores.EXTRA_STORE_ID, _storeId);
+            }
             startActivity(intent);
             overridePendingTransition(R.anim.push_right_in, R.anim.push_right_out);
         } else {

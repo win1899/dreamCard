@@ -184,8 +184,10 @@ public class PointsDashboardFragment extends Fragment implements IServiceListene
         if (_getPointsAsync != null && _getPointsAsync.getStatus() == AsyncTask.Status.RUNNING) {
             _getPointsAsync.cancel(true);
         }
-        _recycler.clearOnScrollListeners();
-        _recycler.removeOnLayoutChangeListener(_layoutChangeListener);
+        if (_recycler != null) {
+            _recycler.clearOnScrollListeners();
+            _recycler.removeOnLayoutChangeListener(_layoutChangeListener);
+        }
         super.onDestroy();
     }
 
