@@ -95,7 +95,7 @@ public class DashboardFragment extends Fragment implements View.OnClickListener,
         View view = inflater.inflate(R.layout.fragment_dashboard, container, false);
 
         if (!Utils.promoteActivation(getActivity(), false)) {
-            showCashFragment();
+            showCashPointsFragment();
         }
         else {
             showNoUserFragment();

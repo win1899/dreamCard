@@ -45,16 +45,6 @@
                     android:textColor="@android:color/darker_gray"
                     android:inputType="phone"/>
 
-                <EditText
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ems="16"
-                    android:layout_gravity="center_horizontal"
-                    android:hint="@string/id"
-                    android:id="@+id/txt_id"
-                    android:textColor="@android:color/darker_gray"
-                    android:inputType="text"/>
-
             </LinearLayout>
 
         </RelativeLayout>

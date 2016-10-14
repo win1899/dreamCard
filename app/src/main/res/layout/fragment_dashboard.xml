@@ -37,14 +37,14 @@
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/btn_cash"
-                    android:src="@drawable/cash_icon_active"
+                    android:id="@+id/btn_cash_points"
+                    android:src="@drawable/points_icon"
+                    android:text="Points"
                     style="@style/main_page_button"/>
 
                 <ImageButton
-                    android:id="@+id/btn_cash_points"
-                    android:src="@drawable/points_icon_inactive"
-                    android:text="Points"
+                    android:id="@+id/btn_cash"
+                    android:src="@drawable/cash_icon_inactive"
                     style="@style/main_page_button"/>
 
                 <ImageButton
@@ -70,15 +70,15 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:src="@drawable/cash_icon_inactive"
-                    android:gravity="center_horizontal"
-                    android:text="Cash"
-                    style="@style/main_page_button"/>
-
-                <TextView
                     android:src="@drawable/points_icon_inactive"
                     android:text="Points"
                     android:gravity="center_horizontal"
+                    style="@style/main_page_button"/>
+
+                <TextView
+                    android:src="@drawable/cash_icon_inactive"
+                    android:gravity="center_horizontal"
+                    android:text="Cash"
                     style="@style/main_page_button"/>
 
                 <TextView

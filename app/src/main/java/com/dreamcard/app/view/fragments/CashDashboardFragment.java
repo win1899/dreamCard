@@ -64,6 +64,8 @@ public class CashDashboardFragment extends Fragment implements IServiceListener 
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        View view = inflater.inflate(R.layout.fragment_dashboard_cash_coming_soon, container, false);
+/*      TODO: Enable this when he wants cash back :/
         View view = inflater.inflate(R.layout.fragment_dashboard_cash, container, false);
 
         txtYouSaved = (TextView) view.findViewById(R.id.txt_total_saved);
@@ -89,7 +91,7 @@ public class CashDashboardFragment extends Fragment implements IServiceListener 
 
         _totalCashPointsAsync = new TotalCashPointsAsync(this, ServicesConstants.getTotalPointsSaved(id), Params.SERVICE_PROCESS_4);
         _totalCashPointsAsync.execute(getActivity());
-
+*/
         return view;
     }
 

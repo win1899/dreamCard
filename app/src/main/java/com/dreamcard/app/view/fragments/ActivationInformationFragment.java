@@ -130,7 +130,6 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
         }
 
         txtMobile = (EditText) view.findViewById(R.id.txt_mobile);
-        txtId = (EditText) view.findViewById(R.id.txt_id);
 
         if (!isFacebook) {
             btnFemale = (Button) view.findViewById(R.id.btn_female);
@@ -146,6 +145,7 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
             txtEducation = (EditText) view.findViewById(R.id.txt_education);
             txtPhone = (EditText) view.findViewById(R.id.txt_phone);
             txtWork = (EditText) view.findViewById(R.id.txt_work);
+            txtId = (EditText) view.findViewById(R.id.txt_id);
 
             txtBirthday.setOnClickListener(this);
             txtBirthday.setClickable(false);
@@ -410,7 +410,7 @@ public class ActivationInformationFragment extends Fragment implements View.OnCl
         bean.setAddress("");
         bean.setCity("7");
         bean.setCountry("1");
-        bean.setIdNum(txtId.getText().toString());
+        bean.setIdNum("1");
 
         String fGender = pref.getString(Params.USER_INFO_GENDER, "Male");
         String gender = "F";
