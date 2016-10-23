@@ -36,6 +36,11 @@ public class PointsDetailsActivity extends Activity {
         if (intent != null) {
             HashMap<Integer, ArrayList<CashPointsTransaction>> hash =
                     (HashMap<Integer, ArrayList<CashPointsTransaction>>) intent.getSerializableExtra("Data");
+            if (hash == null) {
+                finish();
+                return;
+            }
+
             Set<Integer> keys = hash.keySet();
             for (Integer i : keys) {
                 ArrayList<CashPointsTransaction> transs = hash.get(i);

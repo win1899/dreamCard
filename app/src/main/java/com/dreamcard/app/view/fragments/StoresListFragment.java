@@ -125,7 +125,9 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
         if (progressBar != null) {
             progressBar.setVisibility(View.VISIBLE);
         }
-        storeListMainLayout.setVisibility(View.GONE);
+        if (storeListMainLayout != null) {
+            storeListMainLayout.setVisibility(View.GONE);
+        }
         mainScroll = (ScrollView) view.findViewById(R.id.scroll_view_main_stores);
         allBusinessAsync=new AllBusinessAsync(this, new ArrayList<ServiceRequest>(), Params.SERVICE_PROCESS_1);
         allBusinessAsync.execute(this.activity);
