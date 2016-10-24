@@ -25,79 +25,12 @@
                 android:layout_gravity="center"
                 android:layout_centerInParent="true"
                 android:indeterminateDrawable="@drawable/loading_progress"/>
-            <LinearLayout
+
+            <ListView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
-                android:id="@+id/store_list_main_layout"
-                android:background="#ffffff">
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="130dp"
-                android:layout_marginTop="10dp"
-                android:background="#ffffff">
-            <HorizontalScrollView
-                android:layout_width="match_parent"
-                android:layout_height="130dp"
-                android:layout_centerHorizontal="true"
-                android:id="@+id/gold_scroll">
-                <LinearLayout
-                    android:id="@+id/gold_gallery"
-                    android:layout_width="wrap_content"
-                    android:layout_height="130dp"
-                    android:orientation="horizontal"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center_vertical">
-
-                    </LinearLayout>
-            </HorizontalScrollView>
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="110dp"
-                android:background="#ffffff"
-                android:layout_marginTop="10dp"
-                >
-               <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="110dp"
-                    android:id="@+id/silver_scroll"
-                   android:layout_centerHorizontal="true">
-                    <LinearLayout
-                        android:id="@+id/silver_gallery"
-                        android:layout_width="wrap_content"
-                        android:layout_height="105dp"
-                        android:orientation="horizontal"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical">
-                    </LinearLayout>
-                </HorizontalScrollView>
-            </RelativeLayout>
-
-
-            <com.dreamcard.app.components.ExpandableHeightGridView
-                android:gravity="center"
-                android:layout_gravity="center_horizontal|center_vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:verticalSpacing="20dp"
-                android:id="@+id/regular_stores_grid"
-                android:layout_marginTop="10dp"
-                android:numColumns="4"
-                android:background="#eeeeee"
-                android:columnWidth="70dp"
-                android:isScrollContainer="false"
-                android:scrollingCache="false"
-                android:overScrollMode="never"
-                android:fastScrollEnabled="false"
-                android:smoothScrollbar="false"
-                android:focusableInTouchMode="false"
-                android:focusable="false"
-                />
-
-
-            </LinearLayout>
+                android:layout_margin="5dp"
+                android:id="@+id/stores_list_view"/>
         </RelativeLayout>
 
     </ScrollView>

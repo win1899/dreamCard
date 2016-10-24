@@ -5,39 +5,30 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
-import android.widget.TextView;
+
 import android.widget.Toast;
 
 import com.dreamcard.app.R;
-
-import com.dreamcard.app.components.ExpandableHeightGridView;
 import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.entity.ErrorMessageInfo;
-import com.dreamcard.app.entity.GridItem;
-import com.dreamcard.app.entity.ItemButton;
 import com.dreamcard.app.entity.ServiceRequest;
 import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.services.AllBusinessAsync;
 import com.dreamcard.app.utils.Utils;
-import com.dreamcard.app.view.adapters.RegularStoresGridAdapter;
+import com.dreamcard.app.view.adapters.StoresListAdapter;
 import com.dreamcard.app.view.fragments.dummy.DummyContent;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 import com.dreamcard.app.view.interfaces.OnFragmentInteractionListener;
@@ -61,21 +52,8 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
-    private LinearLayout goldLayout;
-    private LinearLayout silverLayout;
-    private ExpandableHeightGridView grid;
-    private ScrollView mainScroll;
-    private ListAdapter mAdapter;
-    private RegularStoresGridAdapter adapter;
-    private HorizontalScrollView goldScroll;
-    private TextView txtAdv1;
-    private TextView txtAdv2;
-    private HorizontalScrollView silverScroll;
     private ArrayList<Stores> list;
     private ArrayList<Stores> gridList=new ArrayList<Stores>();
     HashMap<String,Stores> storesMap=new HashMap<String,Stores>();
@@ -83,7 +61,7 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
     private AllBusinessAsync allBusinessAsync;
     private Activity activity;
     private ProgressBar progressBar;
-    private LinearLayout storeListMainLayout;
+    private ListView listView;
 
     public static StoresListFragment newInstance(String param1, String param2) {
         StoresListFragment fragment = new StoresListFragment();
@@ -100,13 +78,6 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-        mAdapter = new ArrayAdapter<DummyContent.DummyItem>(getActivity(),
-                android.R.layout.simple_list_item_1, android.R.id.text1, DummyContent.ITEMS);
     }
 
     @Override
@@ -114,21 +85,13 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_storeslist, container, false);
 
-        goldLayout=(LinearLayout)view.findViewById(R.id.gold_gallery);
-        silverLayout=(LinearLayout)view.findViewById(R.id.silver_gallery);
-        grid=(ExpandableHeightGridView)view.findViewById(R.id.regular_stores_grid);
-        goldScroll=(HorizontalScrollView)view.findViewById(R.id.gold_scroll);
-
         progressBar=(ProgressBar)view.findViewById(R.id.progress);
-        storeListMainLayout = (LinearLayout) view.findViewById(R.id.store_list_main_layout);
-        silverScroll=(HorizontalScrollView)view.findViewById(R.id.silver_scroll);
+        listView = (ListView) view.findViewById(R.id.stores_list_view);
+
         if (progressBar != null) {
             progressBar.setVisibility(View.VISIBLE);
         }
-        if (storeListMainLayout != null) {
-            storeListMainLayout.setVisibility(View.GONE);
-        }
-        mainScroll = (ScrollView) view.findViewById(R.id.scroll_view_main_stores);
+
         allBusinessAsync=new AllBusinessAsync(this, new ArrayList<ServiceRequest>(), Params.SERVICE_PROCESS_1);
         allBusinessAsync.execute(this.activity);
 
@@ -176,19 +139,10 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
             ArrayList<Stores> list = (ArrayList<Stores>) b;
             this.list = list;
             setGoldList();
-            ArrayList<GridItem> gridArray = new ArrayList<GridItem>();
-            for (Stores trans : this.gridList) {
-                gridArray.add(new ItemButton(trans.getLogo(), "", trans.getId(), trans.getPosition()));
-            }
-            adapter = new RegularStoresGridAdapter(getActivity(), R.layout.stores_grid_button
-                    , gridArray, this, null);
-            grid.setAdapter(adapter);
-            grid.setExpanded(true);
 
             if (progressBar != null) {
                 progressBar.setVisibility(View.GONE);
             }
-            storeListMainLayout.setVisibility(View.VISIBLE);
         }
     }
 
@@ -201,22 +155,40 @@ public class StoresListFragment extends Fragment implements AbsListView.OnItemCl
         if (progressBar != null) {
             progressBar.setVisibility(View.GONE);
         }
-        storeListMainLayout.setVisibility(View.VISIBLE);
         Toast.makeText(this.activity, info.getMessage(), Toast.LENGTH_LONG).show();
     }
 
     private void setGoldList() {
+        ArrayList<Stores> gold = new ArrayList<>();
+        ArrayList<Stores> silver = new ArrayList<>();
+        ArrayList<Stores> other = new ArrayList<>();
+
         for(Stores bean:list){
             if(bean.getStoreClass()==Params.STORE_CLASS_GOLD) {
-                goldLayout.addView(insertPhotoGold(bean.getLogo(), bean.getPosition(), dpToPx(130), dpToPx(130)));
-                this.storesMap.put(""+bean.getPosition(),bean);
+                gold.add(bean);
             }else if(bean.getStoreClass()==Params.STORE_CLASS_SILVER){
-                silverLayout.addView(insertPhoto(bean.getLogo(), bean.getPosition(), dpToPx(100) , dpToPx(100)));
+                silver.add(bean);
                 this.storesMap.put(""+bean.getPosition(),bean);
             }else{
+                other.add(bean);
                 this.gridList.add(bean);
             }
         }
+
+        this.list.clear();
+        this.list.addAll(gold);
+        list.addAll(silver);
+        list.addAll(other);
+
+        StoresListAdapter adapter = new StoresListAdapter(getActivity(), list);
+        listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                mListener.doAction(list.get(position), Params.FRAGMENT_STORES);
+            }
+        });
     }
 
     private int dpToPx(int dp) {

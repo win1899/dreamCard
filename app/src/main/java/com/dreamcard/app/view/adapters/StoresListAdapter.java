@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.dreamcard.app.R;
 import com.dreamcard.app.entity.Stores;
 import com.dreamcard.app.utils.ImageUtil;
+import com.dreamcard.app.utils.Utils;
 
 import java.util.ArrayList;
 
@@ -37,7 +38,7 @@ public class StoresListAdapter extends BaseAdapter {
     }
 
     public Object getItem(int position) {
-        return position;
+        return this.data.get(position);
     }
 
     public long getItemId(int position) {
@@ -46,14 +47,27 @@ public class StoresListAdapter extends BaseAdapter {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi = convertView;
-        if (convertView == null)
-            vi = inflater.inflate(R.layout.category_list_item, null);
 
-        TextView title = (TextView) vi.findViewById(R.id.txt_title);
+        StoresHolder holder;
+        if (convertView == null) {
+            vi = inflater.inflate(R.layout.stores_list_item, null);
+            holder = new StoresHolder();
+            holder.storeName = (TextView) vi.findViewById(R.id.store_name);
+            holder.storeIcon = (ImageView) vi.findViewById(R.id.store_icon);
+            vi.setTag(holder);
+        } else {
+            holder = (StoresHolder) vi.getTag();
+            holder.storeIcon.setImageBitmap(null);
+        }
 
         Stores bean = this.data.get(position);
-        title.setText(bean.getStoreName());
+        holder.storeName.setText(bean.getStoreName());
+        Utils.loadImage(activity, bean.getLogo(), holder.storeIcon);
         return vi;
     }
 
+    private class StoresHolder {
+        public ImageView storeIcon;
+        public TextView storeName;
+    }
 }
