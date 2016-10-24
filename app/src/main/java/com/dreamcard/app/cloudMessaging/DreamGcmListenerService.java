@@ -1,11 +1,9 @@
 package com.dreamcard.app.cloudMessaging;
 
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,7 +12,6 @@ import android.util.Log;
 
 import com.dreamcard.app.R;
 import com.dreamcard.app.common.DatabaseController;
-import com.dreamcard.app.constants.Params;
 import com.dreamcard.app.entity.NotificationDB;
 import com.dreamcard.app.entity.Offers;
 import com.dreamcard.app.entity.Stores;
@@ -23,9 +20,6 @@ import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.activity.ReviewStore;
 import com.dreamcard.app.view.activity.SplashActivity;
 import com.google.android.gms.gcm.GcmListenerService;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by WIN on 2/16/2016.
@@ -79,12 +73,14 @@ public class DreamGcmListenerService extends GcmListenerService {
             }
         }
 
+        String pointsVal = data.getString("points", "0");
         NotificationDB notification = new NotificationDB();
         notification.type = NotificationDB.REVIEW_TYPE;
         notification.id = message;
+        notification.pointsValue = pointsVal;
         DatabaseController.getInstance(this).saveNotificaiton(notification);
 
-        sendReviewNotification(message);
+        sendReviewNotification(message, pointsVal);
     }
 
     /**
@@ -92,10 +88,11 @@ public class DreamGcmListenerService extends GcmListenerService {
      *
      * @param storeId store id that purchase happened at.
      */
-    private void sendReviewNotification(String storeId) {
+    private void sendReviewNotification(String storeId, String pointsVal) {
         Intent intent = new Intent(this, ReviewStore.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         intent.putExtra(ReviewStore.BUSINESS_ID_EXTRA, storeId);
+        intent.putExtra(ReviewStore.POINTS_VALUE_EXTRA, pointsVal);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, REQUEST_ID, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 

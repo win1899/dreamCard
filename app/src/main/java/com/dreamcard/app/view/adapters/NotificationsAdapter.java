@@ -81,6 +81,7 @@ public class NotificationsAdapter extends BaseAdapter {
                 public void onClick(View v) {
                     Intent intent = new Intent(activity, ReviewStore.class);
                     intent.putExtra(ReviewStore.BUSINESS_ID_EXTRA, notification.store.getId());
+                    intent.putExtra(ReviewStore.POINTS_VALUE_EXTRA, notification.pointsValue);
                     activity.startActivity(intent);
                     activity.finish();
                 }

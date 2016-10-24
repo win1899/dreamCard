@@ -30,7 +30,6 @@ import com.dreamcard.app.utils.Utils;
 import com.dreamcard.app.view.interfaces.IServiceListener;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -40,6 +39,7 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
     private static final String LOG = ReviewStore.class.getName();
 
     public static final String BUSINESS_ID_EXTRA = "businessIdExtra";
+    public static final String POINTS_VALUE_EXTRA = "pointsValueExtra";
 
     private String _storeId;
     private GetBussinesByIdAsync _getBussinesByIdAsync;
@@ -56,6 +56,8 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
 
     private volatile AtomicInteger _count;
 
+    private boolean _earnPoints = true;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +70,16 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
         }
 
         _storeId = intent.getExtras().getString(BUSINESS_ID_EXTRA);
+        String discount = intent.getExtras().getString(POINTS_VALUE_EXTRA);
+        if (discount.startsWith("-")) {
+            _earnPoints = false;
+            _discount = discount.replaceAll("-", "");
+        }
+        else {
+            _earnPoints = true;
+            _discount = discount.replaceAll("\\+", "");
+        }
+
         if (_storeId == null || _storeId.isEmpty()) {
             Log.e(LOG, "Store id is empty ... finishing");
             finish();
@@ -97,7 +109,13 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
         if (_discount != null && !_discount.equalsIgnoreCase("")) {
             _youSaved.setVisibility(View.VISIBLE);
             _youSavedVal.setVisibility(View.VISIBLE);
-            _youSavedVal.setText(_discount);
+            if (_earnPoints) {
+                _youSaved.setText("لقد وفرت:");
+            }
+            else {
+                _youSaved.setText("لقد صرفت:");
+            }
+            _youSavedVal.setText(_discount + " نقاط ");
         }
         else {
             _youSaved.setVisibility(View.GONE);
@@ -106,7 +124,6 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
 
         Button finishButton = (Button) findViewById(R.id.finish_review);
         finishButton.setOnClickListener(this);
-
 
         _ratingBar = (RatingBar) findViewById(R.id.review_ratingBar);
         _reviewText = (EditText) findViewById(R.id.review_edit_text);
@@ -150,10 +167,10 @@ public class ReviewStore extends Activity implements View.OnClickListener, IServ
                 SharedPreferences prefs = getSharedPreferences(Params.APP_DATA, Activity.MODE_PRIVATE);
                 String id = prefs.getString(Params.USER_INFO_ID, "");
 
-                _consumerDiscountAsyncTask = new ConsumerDiscountAsyncTask(this
+/*                _consumerDiscountAsyncTask = new ConsumerDiscountAsyncTask(this
                         , ServicesConstants.getTotalSavingRequestList(id)
                         , Params.SERVICE_PROCESS_2);
-                _consumerDiscountAsyncTask.execute(this);
+                _consumerDiscountAsyncTask.execute(this);*/
                 buildUI();
             }
             else {

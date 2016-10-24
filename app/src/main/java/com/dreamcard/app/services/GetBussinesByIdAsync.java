@@ -143,6 +143,9 @@ public class GetBussinesByIdAsync extends AbstractAsyncTask<Object, Void, Object
 
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        ErrorMessageInfo bean=new ErrorMessageInfo();
+                        bean.setMessage(this.context.getString(R.string.error_in_access_server));
+                        return bean;
                     }
                 }else{
                     if(envelope.getResponse() instanceof Vector) {

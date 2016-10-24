@@ -65,6 +65,7 @@ public class DatabaseController extends SQLiteOpenHelper{
     private static final String NOTIFICATION_TYPE_COLUMN = "Type";
     private static final String NOTIFICATION_ID_COLUMN = "id";
     private static final String NOTIFICATION_TIMESTAMP = "TimeStamp";
+    private static final String NOTIFICATION_POINTS_VALUE = "PointsValue";
 
     private String LOGIN_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS "
             + TABLE_LOGIN
@@ -88,7 +89,8 @@ public class DatabaseController extends SQLiteOpenHelper{
             + "("
             + NOTIFICATION_TYPE_COLUMN + " VARCHAR, "
             + NOTIFICATION_ID_COLUMN + " VARCHAR, "
-            + NOTIFICATION_TIMESTAMP + " NUMBER"
+            + NOTIFICATION_TIMESTAMP + " NUMBER, "
+            + NOTIFICATION_POINTS_VALUE + " VARCHAR"
             + ")";
 
     public long saveNotificaiton(NotificationDB notification){
@@ -97,6 +99,7 @@ public class DatabaseController extends SQLiteOpenHelper{
         values.put(NOTIFICATION_TYPE_COLUMN, notification.type);
         values.put(NOTIFICATION_ID_COLUMN, notification.id);
         values.put(NOTIFICATION_TIMESTAMP, Calendar.getInstance().getTimeInMillis());
+        values.put(NOTIFICATION_POINTS_VALUE, notification.pointsValue);
 
         return db.insert(TABLE_NOTIFICATIONS, null, values);
     }
@@ -113,6 +116,7 @@ public class DatabaseController extends SQLiteOpenHelper{
                 NotificationDB notification = new NotificationDB();
                 notification.type = rs.getString(rs.getColumnIndex(NOTIFICATION_TYPE_COLUMN));
                 notification.id = rs.getString(rs.getColumnIndex(NOTIFICATION_ID_COLUMN));
+                notification.pointsValue = rs.getString(rs.getColumnIndex(NOTIFICATION_POINTS_VALUE));
                 notificationArray.add(notification);
                 rs.moveToNext();
             }
@@ -123,7 +127,7 @@ public class DatabaseController extends SQLiteOpenHelper{
 
     public ArrayList<NotificationDB> getAllNotifications() {
         SQLiteDatabase db = getReadableDatabase();
-        Cursor rs = db.query(TABLE_NOTIFICATIONS, new String[]{NOTIFICATION_TYPE_COLUMN, NOTIFICATION_ID_COLUMN}
+        Cursor rs = db.query(TABLE_NOTIFICATIONS, new String[]{NOTIFICATION_TYPE_COLUMN, NOTIFICATION_ID_COLUMN, NOTIFICATION_POINTS_VALUE}
                 , null, null, null, null, NOTIFICATION_TIMESTAMP + " DESC");
 
         ArrayList<NotificationDB> notificationArray = new ArrayList<NotificationDB>();
@@ -133,6 +137,7 @@ public class DatabaseController extends SQLiteOpenHelper{
                 NotificationDB notification = new NotificationDB();
                 notification.type = rs.getString(rs.getColumnIndex(NOTIFICATION_TYPE_COLUMN));
                 notification.id = rs.getString(rs.getColumnIndex(NOTIFICATION_ID_COLUMN));
+                notification.pointsValue = rs.getString(rs.getColumnIndex(NOTIFICATION_POINTS_VALUE));
                 notificationArray.add(notification);
                 rs.moveToNext();
             }
